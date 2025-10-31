@@ -20,7 +20,7 @@ import {
   Title,
 } from "chart.js";
 import { Doughnut, Bar, Line } from "react-chartjs-2";
-
+import { setAuthHeader } from "../api/apiService";
 // Import icons
 import {
   FiTrendingUp,
@@ -69,48 +69,59 @@ const DashboardPage = () => {
   const [dateRange, setDateRange] = useState([null, null]);
   const [startDate, endDate] = dateRange;
 
-  useEffect(() => {
+
+
     const fetchData = async () => {
-      setIsLoading(true);
-      setError("");
+        setIsLoading(true);
+        setError("");
 
-      let params = {};
-      if (filterPeriod === "custom" && startDate && endDate) {
-        params = {
-          startDate: format(startDate, "yyyy-MM-dd'T'00:00:00"),
-          endDate: format(endDate, "yyyy-MM-dd'T'23:59:59"),
-        };
-      } else if (filterPeriod !== "all" && filterPeriod !== "custom") {
-        const days = parseInt(filterPeriod.replace("d", ""));
-        params = {
-          startDate: format(subDays(new Date(), days), "yyyy-MM-dd'T'00:00:00"),
-        };
-      }
+        let params = {};
+        if (filterPeriod === "custom" && startDate && endDate) {
+            params = {
+                startDate: format(startDate, "yyyy-MM-dd'T'00:00:00"),
+                endDate: format(endDate, "yyyy-MM-dd'T'23:59:59"),
+            };
+        } else if (filterPeriod !== "all" && filterPeriod !== "custom") {
+            const days = parseInt(filterPeriod.replace("d", ""));
+            params = {
+                startDate: format(subDays(new Date(), days), "yyyy-MM-dd'T'00:00:00"),
+            };
+        }
 
-      try {
-        const [statsResponse, bonusResponse] = await Promise.all([
-          dashboardService.getDashboardStats(params),
-          dashboardService.getTotalApprovedBonusAmount(params),
-        ]);
+        try {
+            const [statsResponse, bonusResponse] = await Promise.all([
+                dashboardService.getDashboardStats(params),
+                dashboardService.getTotalApprovedBonusAmount(params),
+            ]);
 
-        const combinedStats = {
-          ...statsResponse.data,
-          totalApprovedBonusAmount: bonusResponse.data,
-        };
+            const combinedStats = {
+                ...statsResponse.data,
+                totalApprovedBonusAmount: bonusResponse.data,
+            };
 
-        setStats(combinedStats);
-      } catch (err) {
-        console.error("Failed to fetch dashboard data:", err);
-        setError("Ma'lumotlarni yuklashda xatolik yuz berdi.");
-      } finally {
-        setIsLoading(false);
-      }
+            setStats(combinedStats);
+        } catch (err) {
+            console.error("Failed to fetch dashboard data:", err);
+            setError("Ma'lumotlarni yuklashda xatolik yuz berdi.");
+        } finally {
+            setIsLoading(false);
+        }
     };
+    useEffect(() => {
+        const token = localStorage.getItem("authToken");
+        if (token) {
+            setAuthHeader(token);
+        } else {
+            setError("No authentication token found. Please log in.");
+        }
+        fetchData();
+    }, []);
 
-    fetchData();
-  }, [filterPeriod, dateRange]);
+    useEffect(() => {
+        fetchData();
+    }, [filterPeriod, dateRange]);
 
-  const getToggles = async () => {
+    const getToggles = async () => {
     setIsLoading(true);
     try {
       const res = await dashboardService.GetToggles(); // query param
