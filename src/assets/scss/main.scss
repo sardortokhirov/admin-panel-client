@@ -3175,3 +3175,125 @@ hr {
     transform: translateX(25px);
   }
 }
+ $primary-color: #3b82f6;      // A vibrant blue
+ $danger-color-light: #fee2e2; // A very light red for hover
+ $border-color: #e5e7eb;
+ $bg-light: #ffffff;
+ $text-primary: #111827;
+ $text-secondary: #6b7280;
+ $border-radius: 8px;
+
+/*
+ * ===================================================================
+ *  Final Polished Toggle Buttons (Blue & Red Theme)
+ * ===================================================================
+ */
+
+.form__group.form__group--toggle {
+  /*
+   * 1. Label Styling
+   *    - Fixed the color to be a professional dark gray instead of black.
+   */
+  > label {
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+    font-size: 1rem;
+    color: #4A5568; // A strong, professional dark gray.
+    // Or, for a branded look, uncomment the line below:
+    // color: $primary-color;
+  }
+
+  /*
+   * 2. Toggle Group Container
+   *    - The wrapper for the buttons.
+   */
+  .radio-toggle-group {
+    display: flex;
+    border-radius: $border-radius;
+    border: 1px solid $border-color;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); // A softer shadow
+  }
+
+  /*
+   * 3. Hidden Radio Input
+   *    - Kept for accessibility and state management.
+   */
+  input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  /*
+   * 4. The Visible Toggle Button (<label>)
+   *    - This is where the core styling and fixes are.
+   */
+  .toggle-option {
+    flex: 1;
+    text-align: center;
+    cursor: pointer;
+
+    // --- FIX: Increased vertical padding for better balance ---
+    padding: 0.9rem ;
+
+    // Use flexbox for perfect vertical and horizontal alignment
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+
+    // Font and color styling
+    font-size: 0.95rem; // Slightly larger for clarity
+    font-weight: 500;
+    color: $text-secondary;
+    background-color: $bg-light;
+    letter-spacing: 0.2px; // Improves readability
+
+    // A smoother, more refined transition
+    transition: all 0.2s ease-in-out;
+
+    // Separator border
+    border-right: 1px solid $border-color;
+    &:last-child {
+      border-right: none;
+    }
+
+    // --- HOVER State (The "Red" Hint) ---
+    &:hover {
+      background-color: $danger-color-light;
+      color: $text-primary;
+    }
+
+    // Icon is now perfectly centered by flexbox alone
+    svg {
+      width: 18px;
+      height: 18px;
+    }
+  }
+
+  /*
+   * 5. The Active/Checked State (Blue)
+   */
+  input[type="radio"]:checked + .toggle-option {
+    background-color: $primary-color;
+    color: white;
+    font-weight: 600;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15); // Slightly deeper inset shadow
+    border-right-color: darken($primary-color, 5%); // Darker border for depth
+
+    &:hover {
+      background-color: $primary-color; // No color change on hover when active
+    }
+  }
+
+  /*
+   * 6. Accessibility Focus Ring
+   */
+  input[type="radio"]:focus-visible + .toggle-option {
+    outline: 3px solid rgba($primary-color, 0.5);
+    outline-offset: 2px;
+    z-index: 1;
+  }
+}
