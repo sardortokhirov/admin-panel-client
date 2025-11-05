@@ -4,7 +4,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { lotteryService } from '../api/lotteryService';
 import Loader from '../components/common/Loader';
 import Button from '../components/common/Button';
-import { FiGift } from 'react-icons/fi';
+import { FiGift, FiUserCheck, FiChevronRight } from 'react-icons/fi';
+import { Link } from 'react-router-dom';
 
 const LotteryPage = () => {
     // General Page State
@@ -27,25 +28,34 @@ const LotteryPage = () => {
     const [randomAward, setRandomAward] = useState({ totalUsers: '', randomUsers: '', amount: '' });
     const [isAwarding, setIsAwarding] = useState(false);
 
+    // Approved Users State
+    const [approvedUsersChatIds, setApprovedUsersChatIds] = useState([]);
+    const [isFetchingUsers, setIsFetchingUsers] = useState(true);
+
     // --- Data Fetching ---
-    const fetchPrizes = useCallback(async () => {
+    const fetchPrizesAndApprovedUsers = useCallback(async () => {
+        setIsLoading(true);
+        setError('');
         try {
-            if (isLoading) {
-                setError('');
-                const response = await lotteryService.getPrizes();
-                setPrizes(response.data);
-            }
+            // Fetch prizes and approved user chat IDs in parallel
+            const [prizesResponse, usersResponse] = await Promise.all([
+                lotteryService.getPrizes(),
+                lotteryService.getApprovedUsersChatIds()
+            ]);
+            setPrizes(prizesResponse.data);
+            setApprovedUsersChatIds(usersResponse.data);
         } catch (err) {
-            setError("Sovrinlarni yuklab bo'lmadi.");
+            setError("Ma'lumotlarni yuklab bo'lmadi.");
             console.error(err);
         } finally {
             setIsLoading(false);
+            setIsFetchingUsers(false);
         }
-    }, [isLoading]);
+    }, []);
 
     useEffect(() => {
-        fetchPrizes();
-    }, [fetchPrizes]);
+        fetchPrizesAndApprovedUsers();
+    }, [fetchPrizesAndApprovedUsers]);
 
     // --- Prize Management Handlers ---
     const handlePrizeInputChange = (e) => {
@@ -62,7 +72,7 @@ const LotteryPage = () => {
         try {
             await lotteryService.addPrize(newPrize);
             setNewPrize({ amount: '', numberOfPrize: '' });
-            setIsLoading(true);
+            await fetchPrizesAndApprovedUsers(); // Refresh data
         } catch (err) {
             setError("Sovrin qo'shib bo'lmadi.");
             console.error(err);
@@ -73,7 +83,7 @@ const LotteryPage = () => {
         if (window.confirm("Haqiqatan ham bu sovrinni o'chirmoqchimisiz?")) {
             try {
                 await lotteryService.deletePrize(id);
-                setIsLoading(true);
+                await fetchPrizesAndApprovedUsers(); // Refresh data
             } catch (err) {
                 setError("Sovrinni o'chirib bo'lmadi.");
                 console.error(err);
@@ -188,7 +198,7 @@ const LotteryPage = () => {
 
     const totalNumberOfPrizes = prizes.reduce((total, prize) => total + (Number(prize.numberOfPrize) || 0), 0);
 
-    if (isLoading) return <Loader />;
+    if (isLoading && isFetchingUsers) return <Loader />;
 
     return (
         <div className="page-container lottery-page">
@@ -198,7 +208,8 @@ const LotteryPage = () => {
             {successMessage && <p className="success-message">{successMessage}</p>}
 
             <div className="lottery-content-grid">
-                {/* Prize Management Panel */}
+
+                {/* 1. Prize Management Panel (Top Left) */}
                 <div className="lottery-panel">
                     <h3>Sovrinlarni Boshqarish</h3>
                     <form onSubmit={handleAddPrize} className="form">
@@ -237,7 +248,7 @@ const LotteryPage = () => {
                     </ul>
                 </div>
 
-                {/* User Search & Actions Panel */}
+                {/* 2. User Search & Actions Panel (Top Right) */}
                 <div className="lottery-panel">
                     <h3>Foydalanuvchi Balansini Tekshirish</h3>
                     <form onSubmit={handleSearchSubmit} className="form">
@@ -273,31 +284,50 @@ const LotteryPage = () => {
                     )}
                 </div>
 
-                {/* Random Money Award Panel */}
+                {/* 3. Random Money Award Panel (Full Width - Pastki) */}
                 <div className="lottery-panel full-width-panel">
                     <h3>Tasodifiy Foydalanuvchilarga Pul Berish</h3>
-                    <p className="panel-description">
-                        Bu yerda siz foydalanuvchilarning umumiy sonidan tasodifiy tanlab olinganlarga ma'lum miqdorda pul mukofoti berishingiz mumkin.
-                    </p>
-                    <form onSubmit={handleRandomAwardSubmit} className="random-award-form">
-                        <div className="form__group">
-                            <label htmlFor="totalUsers">Umumiy Foydalanuvchilar Soni</label>
-                            <input type="number" name="totalUsers" value={randomAward.totalUsers} onChange={handleRandomAwardChange} placeholder="Masalan, 1000" required />
+
+                    <div className="random-award-layout-grid">
+
+                        {/* APPROVED USERS INFO BLOCK */}
+                        <div className="random-award-info-block">
+                            <p className="panel-description">
+                                Bu yerda siz oxirgi **{randomAward.totalUsers || 'N'}** ta tasdiqlangan so'rov egalari orasidan **{randomAward.randomUsers || 'X'}** tasiga **{randomAward.amount || 'Y'}** UZS miqdorida mukofot berishingiz mumkin.
+                            </p>
+
+                            <div className="lottery-summary-card approved-users-card">
+                                <FiUserCheck className="summary-icon" />
+                                <div className="summary-text">
+                                    <span className="summary-number">{approvedUsersChatIds.length.toLocaleString()}</span>
+                                    <span className="summary-label">Tasdiqlangan Unikal Chat ID'lar</span>
+                                </div>
+                            </div>
+
+
                         </div>
-                        <div className="form__group">
-                            <label htmlFor="randomUsers">Tasodifiy Foydalanuvchilar</label>
-                            <input type="number" name="randomUsers" value={randomAward.randomUsers} onChange={handleRandomAwardChange} placeholder="Masalan, 10" required />
-                        </div>
-                        <div className="form__group">
-                            <label htmlFor="amount">Pul Miqdori (har biriga)</label>
-                            <input type="number" name="amount" value={randomAward.amount} onChange={handleRandomAwardChange} placeholder="Masalan, 50000" required />
-                        </div>
-                        <div className="form__group submit-group">
-                            <Button type="submit" primary disabled={isAwarding}>
-                                {isAwarding ? 'Yuborilmoqda...' : 'Pulni Tarqatish'}
-                            </Button>
-                        </div>
-                    </form>
+
+                        {/* RANDOM AWARD FORM BLOCK */}
+                        <form onSubmit={handleRandomAwardSubmit} className="random-award-form">
+                            <div className="form__group">
+                                <label htmlFor="totalUsers">So'rovlar Soni (oxirgi)</label>
+                                <input type="number" name="totalUsers" value={randomAward.totalUsers} onChange={handleRandomAwardChange} placeholder="Masalan, 1000" required />
+                            </div>
+                            <div className="form__group">
+                                <label htmlFor="randomUsers">Tasodifiy Foydalanuvchilar Soni</label>
+                                <input type="number" name="randomUsers" value={randomAward.randomUsers} onChange={handleRandomAwardChange} placeholder="Masalan, 10" required />
+                            </div>
+                            <div className="form__group">
+                                <label htmlFor="amount">Pul Miqdori (har biriga)</label>
+                                <input type="number" name="amount" value={randomAward.amount} onChange={handleRandomAwardChange} placeholder="Masalan, 50000" required />
+                            </div>
+                            <div className="form__group submit-group">
+                                <Button type="submit" primary disabled={isAwarding}>
+                                    {isAwarding ? 'Yuborilmoqda...' : 'Pulni Tarqatish'}
+                                </Button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>

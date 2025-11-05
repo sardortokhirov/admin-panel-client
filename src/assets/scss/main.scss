@@ -289,6 +289,56 @@ $telegram-success: #4caf50;
         }
       }
     }
+
+    .random-award-layout-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.5fr; /* Info blok kichikroq, form kattaroq */
+      gap: 2rem;
+
+      @include tablet {
+        grid-template-columns: 1fr; /* Mobil qurilmalarda ustunlarni yig'ish */
+      }
+    }
+
+    .random-award-info-block {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .approved-users-card {
+      border-left-color: $primary-color;
+
+      .summary-icon {
+        color: $primary-color;
+      }
+    }
+
+    .users-link {
+      display: block;
+    }
+
+    // Original random-award-form style is reused here,
+    // but the inputs are now arranged by the parent grid
+    .random-award-form {
+      display: grid;
+      grid-template-columns: 1fr 1fr; /* Ikki ustunli inputlar */
+      gap: 1.5rem;
+      align-content: flex-start; /* Kontentni yuqoridan boshlash */
+
+      .submit-group {
+        grid-column: 1 / -1; /* Tugmani to'liq kenglikka yoyish */
+        .btn {
+          width: 100%;
+        }
+      }
+    }
+
+    @include mobile {
+      .random-award-form {
+        grid-template-columns: 1fr; /* Mobil qurilmalarda bitta ustun */
+      }
+    }
   }
 
   .simulation-results {
@@ -3295,5 +3345,134 @@ hr {
     outline: 3px solid rgba($primary-color, 0.5);
     outline-offset: 2px;
     z-index: 1;
+  }
+}
+
+// src/styles/main.scss (Finalized UsersPage - Pagination Block Text Color Fix)
+
+// ===============================================
+// Styles for Users Page (User Balances Table) - Final Design
+// ===============================================
+.users-page {
+  // 1. Table Container (The main outer box)
+  .transaction-list-container {
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    border: 1px solid $border-color;
+    border-radius: $border-radius;
+    overflow: hidden;
+    background-color: $bg-color;
+  }
+
+  // 2. Table Structure (UNCHANGED)
+  .transaction-table {
+    width: 100%; min-width: 600px; border-collapse: separate; border-spacing: 0 0.5rem; font-size: 1rem;
+    thead {
+      tr { background-color: $primary-color; color: white; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); td, th { border: none !important; padding: 1.2rem 1.5rem; } }
+      th { cursor: pointer; user-select: none; font-size: 1rem; white-space: nowrap; font-weight: 600;
+        &.active-sort { background-color: darken($primary-color, 5%); color: white; &:hover { background-color: darken($primary-color, 10%); } }
+        &:hover:not(.active-sort) { background-color: lighten($primary-color, 5%); }
+        svg { vertical-align: middle; margin-right: 0.5rem; font-size: 1.1rem; }
+      }
+    }
+    tbody tr {
+      background-color: rgba($primary-color, 0.05); border-radius: $border-radius; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05); transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      td { border: none !important; padding: 1.2rem 1.5rem; }
+      &:hover:not(.selected) { background-color: rgba($primary-color, 0.1); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); transform: translateY(-2px); }
+      &.selected { background-color: rgba($secondary-color, 0.15); border: 1px solid $secondary-color; box-shadow: 0 0 10px rgba($secondary-color, 0.2); transform: scale(1.005); }
+    }
+    tbody td:nth-child(2) { font-family: monospace; font-weight: 500; color: $text-secondary; }
+    tbody td:nth-child(3) { font-weight: 700; color: $secondary-color; font-family: "Courier New", Courier, monospace; }
+    tbody td:nth-child(4) { font-weight: 600; color: $primary-color; font-family: "Courier New", Courier, monospace; }
+    .no-data { padding: 4rem; font-size: 1.2rem; box-shadow: none; border: none; background-color: $bg-light; border-radius: $border-radius; }
+  }
+
+  // 3. Pagination Controls Style (FIXED: White Text)
+  .pagination-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.2rem 2rem;
+
+    // Changing background to a solid color to make white text pop
+    background-color: $text-primary; // Dark/Black color for the block
+    color: #fff; // DEFAULT TEXT COLOR IS NOW WHITE
+    border-radius: $border-radius;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+    border: 1px solid $text-primary;
+
+    margin-top: 1.5rem;
+    font-weight: 600;
+    transition: all 0.2s ease-in-out;
+
+    span {
+      color: #fff; // ALL TEXT WHITE
+      font-size: 1rem;
+
+      strong {
+        color: $secondary-color; // Page numbers different color for contrast
+        font-weight: 700;
+      }
+    }
+
+    .btn {
+      padding: 0.75rem 1.2rem;
+      font-weight: 600;
+      border: 1px solid transparent; // Buttons should not have a border on a dark background
+      transition: all 0.2s ease-in-out;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      // Default (Previous) Button Style: Light on Dark
+      background-color: $bg-lighter; // Use a contrasting light background
+      color: $text-primary; // Dark text
+      border-radius: 6px;
+
+      &:hover:not(:disabled) {
+        background-color: $bg-light;
+        color: $primary-color;
+      }
+
+      // Primary (Next) Button Style
+      &:last-child:not(:disabled) {
+        background-color: $secondary-color; // Use secondary color for clear contrast
+        color: $text-primary;
+        border: 1px solid $secondary-color;
+
+        &:hover {
+          background-color: darken($secondary-color, 10%);
+          color: $text-primary;
+        }
+      }
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        background-color: $bg-color; // Dim background for disabled
+        color: $text-secondary;
+      }
+    }
+
+    // 4. Mobile Responsiveness (UNCHANGED)
+    @include mobile {
+      .page-header { flex-direction: column; align-items: stretch; gap: 1rem; h1 { text-align: center; } a .btn { width: 100%; justify-content: center; } }
+      .table-actions .btn { width: 100%; justify-content: center; }
+      .transaction-table { min-width: 550px; font-size: 0.9rem; }
+
+      .pagination-controls {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+
+        span { font-size: 0.9rem; text-align: center; }
+
+        .btn {
+          width: 100%;
+          justify-content: center;
+          padding: 0.6rem 1rem;
+        }
+      }
+    }
   }
 }

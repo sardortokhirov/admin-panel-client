@@ -10,6 +10,7 @@ import PlatformsPage from "./pages/PlatformsPage";
 import TransactionsPage from "./pages/TransactionsPage";
 import LotteryPage from "./pages/LotteryPage";
 import LoginDevicesPage from "./pages/LoginDevicesPage"; // <-- Import the new page
+import UsersPage from "./pages/UsersPage"; // <-- Import the new page
 
 // Components
 import PrivateRoute from "./components/Auth/PrivateRoute";
@@ -70,6 +71,14 @@ function App() {
               </PrivateRoute>
             }
           />
+            <Route // YANGI YO'NALISH
+                path="/users"
+                element={
+                    <PrivateRoute>
+                        <UsersPage />
+                    </PrivateRoute>
+                }
+            />
           <Route
             path="/oson-configs"
             element={

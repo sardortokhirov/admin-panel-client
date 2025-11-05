@@ -29,6 +29,18 @@ const awardRandomUsers = ({ totalUsers, randomUsers, amount }) => {
     });
 };
 
+const getApprovedUsersChatIds = () => apiService.get(`${API_URL}/approved-users-chatids`);
+
+// 2. Foydalanuvchi balanslarini paginatsiya bilan oladi
+const getUserBalancesPaginated = (page = 0, size = 20, sortBy = 'balance', sortDirection = 'DESC') => {
+    return apiService.get(`${API_URL}/balances`, {
+        params: { page, size, sortBy, sortDirection }
+    });
+};
+
+
+
+
 export const lotteryService = {
     getPrizes,
     addPrize,
@@ -37,5 +49,7 @@ export const lotteryService = {
     addTickets,
     resetTickets,
     resetBalance,
-    awardRandomUsers, // Export the new function
+    awardRandomUsers,
+    getApprovedUsersChatIds,    // Export
+    getUserBalancesPaginated,   // Export
 };
