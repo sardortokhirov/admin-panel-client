@@ -44,9 +44,14 @@ const SystemConfigPage = () => {
 
     const handleInputChange = (e) => {
         const { name, value, type } = e.target;
+        let newValue = type === 'number' ? (value === '' ? 0 : parseFloat(value)) : value;
+
+        // Prevent negative numbers
+        if (type === 'number' && newValue < 0) newValue = 0;
+
         setConfig(prev => ({
             ...prev,
-            [name]: type === 'number' ? (value === '' ? 0 : parseFloat(value)) : value
+            [name]: newValue
         }));
     };
 
@@ -104,6 +109,7 @@ const SystemConfigPage = () => {
                                     name="topUpMinAmount"
                                     value={config.topUpMinAmount}
                                     onChange={handleInputChange}
+                                    min="0"
                                     required
                                 />
                                 <span className="currency">UZS</span>
@@ -118,6 +124,7 @@ const SystemConfigPage = () => {
                                     name="topUpMaxAmount"
                                     value={config.topUpMaxAmount}
                                     onChange={handleInputChange}
+                                    min="0"
                                     required
                                 />
                                 <span className="currency">UZS</span>
@@ -140,6 +147,7 @@ const SystemConfigPage = () => {
                                     name="bonusTopUpMinAmount"
                                     value={config.bonusTopUpMinAmount}
                                     onChange={handleInputChange}
+                                    min="0"
                                     required
                                 />
                                 <span className="currency">UZS</span>
@@ -155,6 +163,7 @@ const SystemConfigPage = () => {
                                     name="bonusTopUpMaxAmount"
                                     value={config.bonusTopUpMaxAmount}
                                     onChange={handleInputChange}
+                                    min="0"
                                     required
                                 />
                                 <span className="currency">UZS</span>
@@ -175,6 +184,7 @@ const SystemConfigPage = () => {
                                 name="minTickets"
                                 value={config.minTickets}
                                 onChange={handleInputChange}
+                                min="0"
                                 required
                             />
                         </div>
@@ -186,6 +196,7 @@ const SystemConfigPage = () => {
                                 name="maxTickets"
                                 value={config.maxTickets}
                                 onChange={handleInputChange}
+                                min="0"
                                 required
                             />
                         </div>
@@ -198,6 +209,7 @@ const SystemConfigPage = () => {
                                     name="ticketCalculationAmount"
                                     value={config.ticketCalculationAmount}
                                     onChange={handleInputChange}
+                                    min="0"
                                     required
                                 />
                                 <span className="currency">UZS</span>
@@ -221,6 +233,7 @@ const SystemConfigPage = () => {
                                     name="withdrawalCommissionPercentage"
                                     value={config.withdrawalCommissionPercentage}
                                     onChange={handleInputChange}
+                                    min="0"
                                     required
                                 />
                                 <span className="currency">%</span>
@@ -237,6 +250,7 @@ const SystemConfigPage = () => {
                                     name="referralCommissionPercentage"
                                     value={config.referralCommissionPercentage}
                                     onChange={handleInputChange}
+                                    min="0"
                                     required
                                 />
                                 <span className="currency">%</span>
