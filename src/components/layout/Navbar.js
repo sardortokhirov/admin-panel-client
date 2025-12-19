@@ -81,6 +81,9 @@ const Navbar = () => {
                         <NavLink to="/broadcast" onClick={closeMobileMenu}>
                             Broadcast
                         </NavLink>
+                        <NavLink to="/config" onClick={closeMobileMenu}>
+                            Tizim Sozlamalari
+                        </NavLink>
                         <NavLink to="/humo" onClick={closeMobileMenu}>
                             Humo Service
                         </NavLink>

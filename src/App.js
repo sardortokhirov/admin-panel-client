@@ -22,6 +22,8 @@ import OsonConfigDetailPage from "./pages/OsonConfigDetailPage";
 import BroadcastPage from "./pages/BroadcastPage";
 import HumoService from "./pages/HumoService";
 
+import SystemConfigPage from "./pages/SystemConfigPage";
+
 function App() {
   const { isAuthenticated } = useAuth();
 
@@ -36,6 +38,14 @@ function App() {
             element={
               <PrivateRoute>
                 <DashboardPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/config"
+            element={
+              <PrivateRoute>
+                <SystemConfigPage />
               </PrivateRoute>
             }
           />
@@ -71,14 +81,14 @@ function App() {
               </PrivateRoute>
             }
           />
-            <Route // YANGI YO'NALISH
-                path="/users"
-                element={
-                    <PrivateRoute>
-                        <UsersPage />
-                    </PrivateRoute>
-                }
-            />
+          <Route // YANGI YO'NALISH
+            path="/users"
+            element={
+              <PrivateRoute>
+                <UsersPage />
+              </PrivateRoute>
+            }
+          />
           <Route
             path="/oson-configs"
             element={
