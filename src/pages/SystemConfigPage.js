@@ -15,7 +15,8 @@ const SystemConfigPage = () => {
         maxTickets: 0,
         withdrawalCommissionPercentage: 0,
         referralCommissionPercentage: 0,
-        ticketCalculationAmount: 0
+        ticketCalculationAmount: 0,
+        dailyBonusTransferLimit: 0
     });
     const [isLoading, setIsLoading] = useState(true);
     const [isSaving, setIsSaving] = useState(false);
@@ -162,6 +163,21 @@ const SystemConfigPage = () => {
                                     step="0.01"
                                     name="bonusTopUpMaxAmount"
                                     value={config.bonusTopUpMaxAmount}
+                                    onChange={handleInputChange}
+                                    min="0"
+                                    required
+                                />
+                                <span className="currency">UZS</span>
+                            </div>
+                        </div>
+
+                        <div className="form__group">
+                            <label>Kunlik bonus o'tkazma limiti</label>
+                            <div className="input-wrapper">
+                                <input
+                                    type="number"
+                                    name="dailyBonusTransferLimit"
+                                    value={config.dailyBonusTransferLimit}
                                     onChange={handleInputChange}
                                     min="0"
                                     required
