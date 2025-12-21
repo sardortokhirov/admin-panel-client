@@ -149,6 +149,14 @@ function App() {
           />
 
           <Route
+            path="/blocked-users"
+            element={
+              <PrivateRoute>
+                <BlockedUsersPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
             path="/humo"
             element={
               <PrivateRoute>

@@ -19,11 +19,17 @@ const BlockedUsersPage = () => {
         setFetching(true);
         try {
             const response = await blockedUsersService.getAllBlockedUsers(pageNumber, size);
-            // Assuming backend returns Page object with content
+            // Handle both Page object and raw List response
             const data = response.data;
-            setBlockedUsers(data.content || []);
-            setTotalPages(data.totalPages || 0);
-            setTotalElements(data.totalElements || 0);
+            if (Array.isArray(data)) {
+                setBlockedUsers(data);
+                setTotalPages(1);
+                setTotalElements(data.length);
+            } else {
+                setBlockedUsers(data.content || []);
+                setTotalPages(data.totalPages || 0);
+                setTotalElements(data.totalElements || 0);
+            }
             setPage(pageNumber);
         } catch (err) {
             console.error("Failed to fetch users", err);
@@ -47,13 +53,15 @@ const BlockedUsersPage = () => {
         if (!window.confirm(`Haqiqatan ham foydalanuvchi ${chatId} ni blokdan chiqarmoqchimisiz?`)) return;
 
         try {
-            await blockedUsersService.unblockUser(chatId);
-            setMessage(`Foydalanuvchi [${chatId}] blokdan chiqarildi.`);
+            const response = await blockedUsersService.unblockUser(chatId);
+            // The response data contains the success message from backend
+            setMessage(response.data || `✅ Foydalanuvchi blokdan chiqarildi: ${chatId}`);
             fetchBlockedUsers(page); // Refresh current page list
-            setTimeout(() => setMessage(null), 3000);
+            setTimeout(() => setMessage(null), 5000);
         } catch (err) {
             console.error(err);
-            alert("Blokdan chiqarishda xatolik yuz berdi");
+            const errorMsg = err.response?.data || "Blokdan chiqarishda xatolik yuz berdi";
+            alert(errorMsg);
         }
     };
 
@@ -92,31 +100,44 @@ const BlockedUsersPage = () => {
                                         <tr>
                                             <th>#</th>
                                             <th>Chat ID</th>
-                                            <th>Bloklangan Vaqt</th>
+                                            <th>Til</th>
+                                            <th>Telefon</th>
+                                            <th>Holati</th>
                                             <th>Amallar</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {blockedUsers.length > 0 ? (
                                             blockedUsers.map((user, index) => (
-                                                <tr key={user.id || index}>
+                                                <tr key={user.chatId || index}>
                                                     <td>{page * size + index + 1}</td>
                                                     <td className="user-id-cell">{user.chatId}</td>
-                                                    <td>{user.createdAt ? new Date(user.createdAt).toLocaleString('uz-UZ') : '-'}</td>
+                                                    <td style={{ textTransform: 'uppercase' }}>{user.language || '-'}</td>
+                                                    <td>{user.phoneNumber || '-'}</td>
                                                     <td>
-                                                        <button
-                                                            onClick={() => handleUnblockUser(user.chatId)}
-                                                            className="delete-btn"
-                                                            title="Blokdan Chiqarish"
-                                                        >
-                                                            <FiUnlock />
-                                                        </button>
+                                                        <span className={`status-badge ${user.blocked ? 'blocked' : 'active'}`}>
+                                                            {user.blocked ? 'Bloklangan' : 'Faol'}
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        {user.blocked && (
+                                                            <button
+                                                                onClick={(e) => {
+                                                                    e.stopPropagation();
+                                                                    handleUnblockUser(user.chatId);
+                                                                }}
+                                                                className="delete-btn"
+                                                                title="Blokdan Chiqarish"
+                                                            >
+                                                                <FiUnlock />
+                                                            </button>
+                                                        )}
                                                     </td>
                                                 </tr>
                                             ))
                                         ) : (
                                             <tr>
-                                                <td colSpan="4" className="empty-text">Hozircha bloklangan foydalanuvchilar yo'q.</td>
+                                                <td colSpan="6" className="empty-text">Foydalanuvchilar topilmadi.</td>
                                             </tr>
                                         )}
                                     </tbody>
@@ -248,7 +269,26 @@ const BlockedUsersPage = () => {
 
                     .user-id-cell {
                         font-family: 'Roboto Mono', monospace;
+                        color: #fff;
+                    }
+
+                    .status-badge {
+                        padding: 0.3rem 0.8rem;
+                        border-radius: 20px;
+                        font-size: 0.85rem;
+                        font-weight: 500;
+                    }
+                    
+                    .status-badge.blocked {
+                        background: rgba(233, 69, 96, 0.15);
                         color: #e94560;
+                        border: 1px solid rgba(233, 69, 96, 0.3);
+                    }
+                    
+                    .status-badge.active {
+                        background: rgba(83, 191, 157, 0.15);
+                        color: #53bf9d;
+                        border: 1px solid rgba(83, 191, 157, 0.3);
                     }
 
                     .delete-btn {
