@@ -93,6 +93,9 @@ const Navbar = () => {
                         <NavLink to="/promo" onClick={closeMobileMenu}>
                             Promo
                         </NavLink>
+                        <NavLink to="/user-permissions" onClick={closeMobileMenu}>
+                            Huquqlar
+                        </NavLink>
                     </Dropdown>
                 </div>
 

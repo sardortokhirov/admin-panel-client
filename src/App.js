@@ -24,6 +24,7 @@ import HumoService from "./pages/HumoService";
 
 import PromoPage from "./pages/PromoPage";
 import BlockedUsersPage from "./pages/BlockedUsersPage";
+import UserPermissionsPage from "./pages/UserPermissionsPage";
 import SystemConfigPage from "./pages/SystemConfigPage";
 
 function App() {
@@ -161,6 +162,14 @@ function App() {
             element={
               <PrivateRoute>
                 <HumoService />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/user-permissions"
+            element={
+              <PrivateRoute>
+                <UserPermissionsPage />
               </PrivateRoute>
             }
           />
