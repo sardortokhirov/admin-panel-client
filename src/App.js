@@ -23,6 +23,7 @@ import BroadcastPage from "./pages/BroadcastPage";
 import HumoService from "./pages/HumoService";
 
 import PromoPage from "./pages/PromoPage";
+import BlockedUsersPage from "./pages/BlockedUsersPage";
 import SystemConfigPage from "./pages/SystemConfigPage";
 
 function App() {

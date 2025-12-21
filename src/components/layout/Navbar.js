@@ -66,6 +66,9 @@ const Navbar = () => {
                         <NavLink to="/login-devices" onClick={closeMobileMenu}>
                             Kirishlar Tarixi
                         </NavLink>
+                        <NavLink to="/blocked-users" onClick={closeMobileMenu}>
+                            Bloklangan Foydalanuvchilar
+                        </NavLink>
                     </Dropdown>
                 </div>
 
