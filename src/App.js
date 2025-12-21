@@ -22,6 +22,7 @@ import OsonConfigDetailPage from "./pages/OsonConfigDetailPage";
 import BroadcastPage from "./pages/BroadcastPage";
 import HumoService from "./pages/HumoService";
 
+import PromoPage from "./pages/PromoPage";
 import SystemConfigPage from "./pages/SystemConfigPage";
 
 function App() {
@@ -134,6 +135,14 @@ function App() {
             element={
               <PrivateRoute>
                 <BroadcastPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/promo"
+            element={
+              <PrivateRoute>
+                <PromoPage />
               </PrivateRoute>
             }
           />

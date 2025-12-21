@@ -87,6 +87,9 @@ const Navbar = () => {
                         <NavLink to="/humo" onClick={closeMobileMenu}>
                             Humo Service
                         </NavLink>
+                        <NavLink to="/promo" onClick={closeMobileMenu}>
+                            Promo
+                        </NavLink>
                     </Dropdown>
                 </div>
 
