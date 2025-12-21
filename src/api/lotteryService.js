@@ -41,6 +41,16 @@ const getUserBalancesPaginated = (page = 0, size = 20, sortBy = 'balance', sortD
 
 
 
+const awardRandomUsersFromReferrer = ({ referrerId, randomUsers, amount }) => {
+    return apiService.post(`${API_URL}/award-referral`, null, {
+        params: {
+            referrerId,
+            randomUsers,
+            amount
+        }
+    });
+};
+
 export const lotteryService = {
     getPrizes,
     addPrize,
@@ -50,6 +60,7 @@ export const lotteryService = {
     resetTickets,
     resetBalance,
     awardRandomUsers,
-    getApprovedUsersChatIds,    // Export
-    getUserBalancesPaginated,   // Export
+    awardRandomUsersFromReferrer,
+    getApprovedUsersChatIds,
+    getUserBalancesPaginated,
 };

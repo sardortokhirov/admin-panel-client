@@ -4,7 +4,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { lotteryService } from '../api/lotteryService';
 import Loader from '../components/common/Loader';
 import Button from '../components/common/Button';
-import { FiGift, FiUserCheck, FiChevronRight } from 'react-icons/fi';
+import { FiGift, FiUserCheck, FiChevronRight, FiShare2 } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 
 const LotteryPage = () => {
@@ -27,6 +27,10 @@ const LotteryPage = () => {
     // Random Award State
     const [randomAward, setRandomAward] = useState({ totalUsers: '', randomUsers: '', amount: '' });
     const [isAwarding, setIsAwarding] = useState(false);
+
+    // Referral Award State
+    const [referralAward, setReferralAward] = useState({ referrerId: 'ref_5692494190', randomUsers: '', amount: '' });
+    const [isReferralAwarding, setIsReferralAwarding] = useState(false);
 
     // Approved Users State
     const [approvedUsersChatIds, setApprovedUsersChatIds] = useState([]);
@@ -196,6 +200,49 @@ const LotteryPage = () => {
         }
     };
 
+    const handleReferralAwardChange = (e) => {
+        const { name, value } = e.target;
+        setReferralAward(prev => ({ ...prev, [name]: value }));
+    };
+
+    const handleReferralAwardSubmit = async (e) => {
+        e.preventDefault();
+        const { referrerId, randomUsers, amount } = referralAward;
+        if (!referrerId || !randomUsers || !amount) {
+            alert("Iltimos, barcha maydonlarni to'ldiring.");
+            return;
+        }
+
+        setIsReferralAwarding(true);
+        setError('');
+        setSuccessMessage('');
+
+        try {
+            // Remove 'ref_' prefix if present, as backend likely expects just the ID number
+            // or confirm if backend handles "ref_" prefix.
+            // Based on user request "default value make ref_5692494190", I'll send just the ID part to be safe
+            // assuming backend takes Long.
+            let cleanReferrerId = referrerId;
+            if (referrerId.startsWith('ref_')) {
+                cleanReferrerId = referrerId.replace('ref_', '');
+            }
+
+            await lotteryService.awardRandomUsersFromReferrer({
+                referrerId: cleanReferrerId,
+                randomUsers,
+                amount
+            });
+            setSuccessMessage("Referal mukofoti muvaffaqiyatli tarqatildi!");
+            // Reset fields but keep referrerId default
+            setReferralAward(prev => ({ ...prev, randomUsers: '', amount: '' }));
+        } catch (err) {
+            setError("Amalni bajarishda xatolik yuz berdi. Referrer ID to'g'riligini tekshiring.");
+            console.error(err);
+        } finally {
+            setIsReferralAwarding(false);
+        }
+    };
+
     const totalNumberOfPrizes = prizes.reduce((total, prize) => total + (Number(prize.numberOfPrize) || 0), 0);
 
     if (isLoading && isFetchingUsers) return <Loader />;
@@ -324,6 +371,69 @@ const LotteryPage = () => {
                             <div className="form__group submit-group">
                                 <Button type="submit" primary disabled={isAwarding}>
                                     {isAwarding ? 'Yuborilmoqda...' : 'Pulni Tarqatish'}
+                                </Button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                {/* 4. Referral Award Panel (Full Width) */}
+                <div className="lottery-panel full-width-panel">
+                    <h3>Referal Orqali Mukofotlash</h3>
+                    <div className="random-award-layout-grid">
+                        {/* REFERRAL INFO BLOCK */}
+                        <div className="random-award-info-block">
+                            <p className="panel-description">
+                                Bu panel orqali ma'lum bir <strong>Referal ID</strong> ga ega bo'lgan foydalanuvchilar orasidan tasodifiy tanlab olib, ularga mukofot berishingiz mumkin.
+                            </p>
+
+                            <div className="lottery-summary-card referral-card">
+                                <FiShare2 className="summary-icon" />
+                                <div className="summary-text">
+                                    <span className="summary-label">Referal Tizimi</span>
+                                    <small>Ma'lum referal orqali kelganlarni rag'batlantirish</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* REFERRAL FORM BLOCK */}
+                        <form onSubmit={handleReferralAwardSubmit} className="random-award-form">
+                            <div className="form__group">
+                                <label htmlFor="referrerId">Referrer ID (Kimning referali?)</label>
+                                <input
+                                    type="text"
+                                    name="referrerId"
+                                    value={referralAward.referrerId}
+                                    onChange={handleReferralAwardChange}
+                                    placeholder="Masalan, ref_5692494190"
+                                    required
+                                />
+                            </div>
+                            <div className="form__group">
+                                <label htmlFor="randomUsers">Tasodifiy Foydalanuvchilar Soni</label>
+                                <input
+                                    type="number"
+                                    name="randomUsers"
+                                    value={referralAward.randomUsers}
+                                    onChange={handleReferralAwardChange}
+                                    placeholder="Masalan, 5"
+                                    required
+                                />
+                            </div>
+                            <div className="form__group">
+                                <label htmlFor="amount">Pul Miqdori (har biriga)</label>
+                                <input
+                                    type="number"
+                                    name="amount"
+                                    value={referralAward.amount}
+                                    onChange={handleReferralAwardChange}
+                                    placeholder="Masalan, 50000"
+                                    required
+                                />
+                            </div>
+                            <div className="form__group submit-group">
+                                <Button type="submit" primary disabled={isReferralAwarding}>
+                                    {isReferralAwarding ? 'Yuborilmoqda...' : 'Referallarni Mukofotlash'}
                                 </Button>
                             </div>
                         </form>

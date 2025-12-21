@@ -71,57 +71,57 @@ const DashboardPage = () => {
 
 
 
-    const fetchData = async () => {
-        setIsLoading(true);
-        setError("");
+  const fetchData = async () => {
+    setIsLoading(true);
+    setError("");
 
-        let params = {};
-        if (filterPeriod === "custom" && startDate && endDate) {
-            params = {
-                startDate: format(startDate, "yyyy-MM-dd'T'00:00:00"),
-                endDate: format(endDate, "yyyy-MM-dd'T'23:59:59"),
-            };
-        } else if (filterPeriod !== "all" && filterPeriod !== "custom") {
-            const days = parseInt(filterPeriod.replace("d", ""));
-            params = {
-                startDate: format(subDays(new Date(), days), "yyyy-MM-dd'T'00:00:00"),
-            };
-        }
+    let params = {};
+    if (filterPeriod === "custom" && startDate && endDate) {
+      params = {
+        startDate: format(startDate, "yyyy-MM-dd'T'00:00:00"),
+        endDate: format(endDate, "yyyy-MM-dd'T'23:59:59"),
+      };
+    } else if (filterPeriod !== "all" && filterPeriod !== "custom") {
+      const days = parseInt(filterPeriod.replace("d", ""));
+      params = {
+        startDate: format(subDays(new Date(), days), "yyyy-MM-dd'T'00:00:00"),
+      };
+    }
 
-        try {
-            const [statsResponse, bonusResponse] = await Promise.all([
-                dashboardService.getDashboardStats(params),
-                dashboardService.getTotalApprovedBonusAmount(params),
-            ]);
+    try {
+      const [statsResponse, bonusResponse] = await Promise.all([
+        dashboardService.getDashboardStats(params),
+        dashboardService.getTotalApprovedBonusAmount(params),
+      ]);
 
-            const combinedStats = {
-                ...statsResponse.data,
-                totalApprovedBonusAmount: bonusResponse.data,
-            };
+      const combinedStats = {
+        ...statsResponse.data,
+        totalApprovedBonusAmount: bonusResponse.data,
+      };
 
-            setStats(combinedStats);
-        } catch (err) {
-            console.error("Failed to fetch dashboard data:", err);
-            setError("Ma'lumotlarni yuklashda xatolik yuz berdi.");
-        } finally {
-            setIsLoading(false);
-        }
-    };
-    useEffect(() => {
-        const token = localStorage.getItem("authToken");
-        if (token) {
-            setAuthHeader(token);
-        } else {
-            setError("No authentication token found. Please log in.");
-        }
-        fetchData();
-    }, []);
+      setStats(combinedStats);
+    } catch (err) {
+      console.error("Failed to fetch dashboard data:", err);
+      setError("Ma'lumotlarni yuklashda xatolik yuz berdi.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  useEffect(() => {
+    const token = localStorage.getItem("authToken");
+    if (token) {
+      setAuthHeader(token);
+    } else {
+      setError("No authentication token found. Please log in.");
+    }
+    fetchData();
+  }, []);
 
-    useEffect(() => {
-        fetchData();
-    }, [filterPeriod, dateRange]);
+  useEffect(() => {
+    fetchData();
+  }, [filterPeriod, dateRange]);
 
-    const getToggles = async () => {
+  const getToggles = async () => {
     setIsLoading(true);
     try {
       const res = await dashboardService.GetToggles(); // query param
@@ -160,6 +160,8 @@ const DashboardPage = () => {
       res = await dashboardService?.ToggleController?.toggleWithdraw(!value);
     } else if (key === "bonusEnabled") {
       res = await dashboardService?.ToggleController?.toggleBonus(!value);
+    } else if (key === "promoEnabled") {
+      res = await dashboardService?.ToggleController?.togglePromo(!value);
     }
     const toggles = await dashboardService.GetToggles();
 
@@ -185,8 +187,8 @@ const DashboardPage = () => {
         label: "So'rovlar",
         data: stats?.requestsByDate
           ? Object.keys(stats.requestsByDate)
-              .sort()
-              .map((key) => stats.requestsByDate[key])
+            .sort()
+            .map((key) => stats.requestsByDate[key])
           : [],
         borderColor: "#e94560",
         backgroundColor: "rgba(233, 69, 96, 0.1)",
@@ -303,9 +305,8 @@ const DashboardPage = () => {
           <p>Bonus:</p>
           <div className="toggle-switch">
             <div
-              className={`toggle-slider ${
-                toggleState.bonusEnabled ? "on" : "off"
-              }`}
+              className={`toggle-slider ${toggleState.bonusEnabled ? "on" : "off"
+                }`}
               onClick={() =>
                 changeTogle("bonusEnabled", toggleState.bonusEnabled)
               }
@@ -318,9 +319,8 @@ const DashboardPage = () => {
           <p>Pul yechish:</p>
           <div className="toggle-switch">
             <div
-              className={`toggle-slider ${
-                toggleState.withdrawEnabled ? "on" : "off"
-              }`}
+              className={`toggle-slider ${toggleState.withdrawEnabled ? "on" : "off"
+                }`}
               onClick={() =>
                 changeTogle("withdrawEnabled", toggleState.withdrawEnabled)
               }
@@ -333,11 +333,24 @@ const DashboardPage = () => {
           <p>To'ldirish:</p>
           <div className="toggle-switch">
             <div
-              className={`toggle-slider ${
-                toggleState.topUpEnabled ? "on" : "off"
-              }`}
+              className={`toggle-slider ${toggleState.topUpEnabled ? "on" : "off"
+                }`}
               onClick={() =>
                 changeTogle("topUpEnabled", toggleState.topUpEnabled)
+              }
+            >
+              <span className="toggle-knob"></span>
+            </div>
+          </div>
+        </div>
+        <div className="toggle-element">
+          <p>Promo:</p>
+          <div className="toggle-switch">
+            <div
+              className={`toggle-slider ${toggleState.promoEnabled ? "on" : "off"
+                }`}
+              onClick={() =>
+                changeTogle("promoEnabled", toggleState.promoEnabled)
               }
             >
               <span className="toggle-knob"></span>
@@ -376,9 +389,8 @@ const DashboardPage = () => {
             }}
             isClearable={true}
             placeholderText="Maxsus oraliq"
-            className={`custom-datepicker ${
-              filterPeriod === "custom" ? "active" : ""
-            }`}
+            className={`custom-datepicker ${filterPeriod === "custom" ? "active" : ""
+              }`}
           />
         </div>
       </header>
@@ -386,27 +398,24 @@ const DashboardPage = () => {
         <StatCard
           icon={<FiArrowDownCircle />}
           title="Jami Yechilgan"
-          value={`${
-            stats.totalApprovedWithdrawalAmount?.toLocaleString("uz-UZ") || 0
-          } so'm`}
+          value={`${stats.totalApprovedWithdrawalAmount?.toLocaleString("uz-UZ") || 0
+            } so'm`}
           detail="Tasdiqlangan"
           color="#e94560"
         />
         <StatCard
           icon={<FiArrowUpCircle />}
           title="Jami To'ldirilgan"
-          value={`${
-            stats.totalApprovedTopUpAmount?.toLocaleString("uz-UZ") || 0
-          } so'm`}
+          value={`${stats.totalApprovedTopUpAmount?.toLocaleString("uz-UZ") || 0
+            } so'm`}
           detail="Tasdiqlangan"
           color="#53bf9d"
         />
         <StatCard
           icon={<FiAward />}
           title="Jami Bonus"
-          value={`${
-            stats.totalApprovedBonusAmount?.toLocaleString("uz-UZ") || 0
-          } so'm`}
+          value={`${stats.totalApprovedBonusAmount?.toLocaleString("uz-UZ") || 0
+            } so'm`}
           detail="Tasdiqlangan Bonus"
           color="#9b59b6"
         />
@@ -414,9 +423,8 @@ const DashboardPage = () => {
           icon={<FiTrendingUp />}
           title="Jami So'rovlar"
           value={stats.totalRequests?.toLocaleString() || 0}
-          detail={`${
-            stats.approvedRequests?.toLocaleString() || 0
-          } tasdiqlangan`}
+          detail={`${stats.approvedRequests?.toLocaleString() || 0
+            } tasdiqlangan`}
           color="#3498db"
         />
         <StatCard

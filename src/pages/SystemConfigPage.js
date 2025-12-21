@@ -18,6 +18,7 @@ const SystemConfigPage = () => {
         ticketCalculationAmount: 0,
         dailyBonusTransferLimit: 0
     });
+
     const [isLoading, setIsLoading] = useState(true);
     const [isSaving, setIsSaving] = useState(false);
     const [error, setError] = useState('');
@@ -76,6 +77,8 @@ const SystemConfigPage = () => {
         }
     };
 
+
+
     if (isLoading) return <Loader />;
 
     return (
@@ -97,6 +100,8 @@ const SystemConfigPage = () => {
             {success && <div className="success-message mb-1">{success}</div>}
 
             <form onSubmit={handleSubmit} className="config-form">
+
+
                 <div className="config-section">
                     <div className="section-header">
                         <FiZap /> <h3>To'lov Limitlari</h3>
@@ -369,6 +374,7 @@ const SystemConfigPage = () => {
                     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
                     gap: 2rem;
                 }
+
                 .form__group label {
                     display: block;
                     margin-bottom: 0.8rem;

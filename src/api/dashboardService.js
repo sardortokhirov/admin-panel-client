@@ -46,6 +46,14 @@ const ToggleController = {
     );
     return res.data;
   },
+
+  // POST - Toggle Promo
+  togglePromo: async (enabled) => {
+    const res = await apiService.post(
+      `/features/toggle/promo?enabled=${enabled}`
+    );
+    return res.data;
+  },
 };
 export const dashboardService = {
   getDashboardStats,
