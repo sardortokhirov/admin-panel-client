@@ -54,6 +54,14 @@ const ToggleController = {
     );
     return res.data;
   },
+
+  // POST - Toggle Bonus Limit
+  toggleBonusLimit: async (enabled) => {
+    const res = await apiService.post(
+      `/features/toggle/bonus-limit?enabled=${enabled}`
+    );
+    return res.data;
+  },
 };
 export const dashboardService = {
   getDashboardStats,

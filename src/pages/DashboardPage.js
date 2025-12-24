@@ -162,6 +162,8 @@ const DashboardPage = () => {
       res = await dashboardService?.ToggleController?.toggleBonus(!value);
     } else if (key === "promoEnabled") {
       res = await dashboardService?.ToggleController?.togglePromo(!value);
+    } else if (key === "bonusLimitEnabled") {
+      res = await dashboardService?.ToggleController?.toggleBonusLimit(!value);
     }
     const toggles = await dashboardService.GetToggles();
 
@@ -351,6 +353,20 @@ const DashboardPage = () => {
                 }`}
               onClick={() =>
                 changeTogle("promoEnabled", toggleState.promoEnabled)
+              }
+            >
+              <span className="toggle-knob"></span>
+            </div>
+          </div>
+        </div>
+        <div className="toggle-element">
+          <p>Bonus Limiti:</p>
+          <div className="toggle-switch">
+            <div
+              className={`toggle-slider ${toggleState.bonusLimitEnabled ? "on" : "off"
+                }`}
+              onClick={() =>
+                changeTogle("bonusLimitEnabled", toggleState.bonusLimitEnabled)
               }
             >
               <span className="toggle-knob"></span>
