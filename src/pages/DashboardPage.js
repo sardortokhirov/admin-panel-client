@@ -145,7 +145,11 @@ const DashboardPage = () => {
 
       console.log("togglestoggles", toggles);
 
-      setToggleState(toggles);
+      setToggleState({
+        ...toggles,
+        payEnabled: toggles.payToggleEnabled !== undefined ? toggles.payToggleEnabled : toggles.payEnabled,
+        promoEnabled: toggles.promoEnabled
+      });
     })();
   }, []);
 
@@ -164,13 +168,19 @@ const DashboardPage = () => {
       res = await dashboardService?.ToggleController?.togglePromo(!value);
     } else if (key === "bonusLimitEnabled") {
       res = await dashboardService?.ToggleController?.toggleBonusLimit(!value);
+    } else if (key === "payEnabled") {
+      res = await dashboardService?.ToggleController?.togglePay(!value);
     }
     const toggles = await dashboardService.GetToggles();
 
     console.log("togglestoggles", toggles);
     console.log("togglestogglesRes", res);
 
-    setToggleState(toggles);
+    setToggleState({
+      ...toggles,
+      payEnabled: toggles.payToggleEnabled !== undefined ? toggles.payToggleEnabled : toggles.payEnabled,
+      promoEnabled: toggles.promoEnabled
+    });
     setIsLoading(0);
   };
 
@@ -367,6 +377,20 @@ const DashboardPage = () => {
                 }`}
               onClick={() =>
                 changeTogle("bonusLimitEnabled", toggleState.bonusLimitEnabled)
+              }
+            >
+              <span className="toggle-knob"></span>
+            </div>
+          </div>
+        </div>
+        <div className="toggle-element">
+          <p>Pay Toggle:</p>
+          <div className="toggle-switch">
+            <div
+              className={`toggle-slider ${toggleState.payEnabled ? "on" : "off"
+                }`}
+              onClick={() =>
+                changeTogle("payEnabled", toggleState.payEnabled)
               }
             >
               <span className="toggle-knob"></span>
