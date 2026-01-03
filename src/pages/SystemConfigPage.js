@@ -16,7 +16,9 @@ const SystemConfigPage = () => {
         withdrawalCommissionPercentage: 0,
         referralCommissionPercentage: 0,
         ticketCalculationAmount: 0,
-        dailyBonusTransferLimit: 0
+        ticketCalculationAmount: 0,
+        dailyBonusTransferLimit: 0,
+        topUpDailyLimitIncreasePercentage: 0
     });
 
     const [isLoading, setIsLoading] = useState(true);
@@ -189,6 +191,23 @@ const SystemConfigPage = () => {
                                 />
                                 <span className="currency">UZS</span>
                             </div>
+                        </div>
+
+                        <div className="form__group">
+                            <label>To'ldirish orqali limit oshish foizi</label>
+                            <div className="input-wrapper">
+                                <input
+                                    type="number"
+                                    step="0.0001"
+                                    name="topUpDailyLimitIncreasePercentage"
+                                    value={config.topUpDailyLimitIncreasePercentage}
+                                    onChange={handleInputChange}
+                                    min="0"
+                                    required
+                                />
+                                <span className="currency">%</span>
+                            </div>
+                            <small>Masalan: 0.02 = 2% oshish</small>
                         </div>
                     </div>
                 </div>

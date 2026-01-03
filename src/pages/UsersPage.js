@@ -15,6 +15,7 @@ const UsersPage = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
     const [selectedIds, setSelectedIds] = useState([]);
+    const [overallStats, setOverallStats] = useState(null);
 
     const fetchBalances = useCallback(async () => {
         setIsLoading(true);
@@ -31,9 +32,19 @@ const UsersPage = () => {
         }
     }, [page, size, sortBy, sortDirection]);
 
+    const fetchOverallStats = useCallback(async () => {
+        try {
+            const response = await lotteryService.getOverallStats();
+            setOverallStats(response.data);
+        } catch (err) {
+            console.error("Failed to fetch overall stats:", err);
+        }
+    }, []);
+
     useEffect(() => {
         fetchBalances();
-    }, [fetchBalances]);
+        fetchOverallStats();
+    }, [fetchBalances, fetchOverallStats]);
 
     // --- Actions ---
 
@@ -118,6 +129,22 @@ const UsersPage = () => {
                     <Button secondary>Lotereya Sahifasiga Qaytish</Button>
                 </Link>
             </div>
+            {overallStats && (
+                <div className="header-stats-container" style={{ display: 'flex', gap: '20px', marginBottom: '20px', padding: '15px', background: 'rgba(255,255,255,0.05)', borderRadius: '12px' }}>
+                    <div className="stat-item">
+                        <span style={{ color: '#a0a0a0', marginRight: '10px' }}>Jami Balans:</span>
+                        <span style={{ fontSize: '1.2rem', fontWeight: 'bold', color: '#53bf9d' }}>
+                            {overallStats.totalBalance?.toLocaleString('uz-UZ')} UZS
+                        </span>
+                    </div>
+                    <div className="stat-item">
+                        <span style={{ color: '#a0a0a0', marginRight: '10px' }}>Jami Biletlar:</span>
+                        <span style={{ fontSize: '1.2rem', fontWeight: 'bold', color: '#e94560' }}>
+                            {overallStats.totalTickets?.toLocaleString()}
+                        </span>
+                    </div>
+                </div>
+            )}
 
             <div className="table-actions">
                 {selectedIds.length > 0 && (
@@ -134,47 +161,47 @@ const UsersPage = () => {
                 <div className="transaction-list-container">
                     <table className="transaction-table">
                         <thead>
-                        <tr>
-                            <th>
-                                <input
-                                    type="checkbox"
-                                    onChange={handleSelectAll}
-                                    checked={totalUsersOnPage > 0 && selectedIds.length === totalUsersOnPage}
-                                    disabled={totalUsersOnPage === 0}
-                                />
-                            </th>
-                            <th onClick={() => handleSort('chatId')} className={sortBy === 'chatId' ? 'active-sort' : ''}>
-                                <FiHash /> Chat ID {sortBy === 'chatId' && (sortDirection === 'ASC' ? '▲' : '▼')}
-                            </th>
-                            <th onClick={() => handleSort('balance')} className={sortBy === 'balance' ? 'active-sort' : ''}>
-                                <FiTrendingUp /> Balans {sortBy === 'balance' && (sortDirection === 'ASC' ? '▲' : '▼')}
-                            </th>
-                            <th onClick={() => handleSort('tickets')} className={sortBy === 'tickets' ? 'active-sort' : ''}>
-                                <FiCreditCard /> Biletlar {sortBy === 'tickets' && (sortDirection === 'ASC' ? '▲' : '▼')}
-                            </th>
-                        </tr>
+                            <tr>
+                                <th>
+                                    <input
+                                        type="checkbox"
+                                        onChange={handleSelectAll}
+                                        checked={totalUsersOnPage > 0 && selectedIds.length === totalUsersOnPage}
+                                        disabled={totalUsersOnPage === 0}
+                                    />
+                                </th>
+                                <th onClick={() => handleSort('chatId')} className={sortBy === 'chatId' ? 'active-sort' : ''}>
+                                    <FiHash /> Chat ID {sortBy === 'chatId' && (sortDirection === 'ASC' ? '▲' : '▼')}
+                                </th>
+                                <th onClick={() => handleSort('balance')} className={sortBy === 'balance' ? 'active-sort' : ''}>
+                                    <FiTrendingUp /> Balans {sortBy === 'balance' && (sortDirection === 'ASC' ? '▲' : '▼')}
+                                </th>
+                                <th onClick={() => handleSort('tickets')} className={sortBy === 'tickets' ? 'active-sort' : ''}>
+                                    <FiCreditCard /> Biletlar {sortBy === 'tickets' && (sortDirection === 'ASC' ? '▲' : '▼')}
+                                </th>
+                            </tr>
                         </thead>
                         <tbody>
-                        {pageData.content.length > 0 ? (
-                            pageData.content.map((user) => (
-                                <tr key={user.chatId} className={selectedIds.includes(user.chatId) ? 'selected' : ''}>
-                                    <td>
-                                        <input
-                                            type="checkbox"
-                                            checked={selectedIds.includes(user.chatId)}
-                                            onChange={() => handleSelect(user.chatId)}
-                                        />
-                                    </td>
-                                    <td>{user.chatId}</td>
-                                    <td>{formatCurrency(user.balance)}</td>
-                                    <td>{user.tickets.toLocaleString()}</td>
+                            {pageData.content.length > 0 ? (
+                                pageData.content.map((user) => (
+                                    <tr key={user.chatId} className={selectedIds.includes(user.chatId) ? 'selected' : ''}>
+                                        <td>
+                                            <input
+                                                type="checkbox"
+                                                checked={selectedIds.includes(user.chatId)}
+                                                onChange={() => handleSelect(user.chatId)}
+                                            />
+                                        </td>
+                                        <td>{user.chatId}</td>
+                                        <td>{formatCurrency(user.balance)}</td>
+                                        <td>{user.tickets.toLocaleString()}</td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan="4" className="no-data">Foydalanuvchi balanslari topilmadi.</td>
                                 </tr>
-                            ))
-                        ) : (
-                            <tr>
-                                <td colSpan="4" className="no-data">Foydalanuvchi balanslari topilmadi.</td>
-                            </tr>
-                        )}
+                            )}
                         </tbody>
                     </table>
                 </div>

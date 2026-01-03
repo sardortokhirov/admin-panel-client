@@ -27,5 +27,15 @@ const getOverallStats = () => {
 export const lotteryService = {
     getLotteryStats,
     awardLottery,
-    getOverallStats
+    getOverallStats,
+    getPrizes: () => apiService.get(`${LOTTERY_URL}/prizes`),
+    addPrize: (prize) => apiService.post(`${LOTTERY_URL}/prizes`, prize),
+    deletePrize: (id) => apiService.delete(`${LOTTERY_URL}/prizes/${id}`),
+    getApprovedUsersChatIds: () => apiService.get(`${LOTTERY_URL}/approved-users`),
+    getUserBalance: (chatId) => apiService.get(`${LOTTERY_URL}/balance/${chatId}`),
+    addTickets: (chatId, tickets) => apiService.post(`${LOTTERY_URL}/tickets?chatId=${chatId}&tickets=${tickets}`),
+    resetTickets: (chatId) => apiService.delete(`${LOTTERY_URL}/tickets/${chatId}`),
+    resetBalance: (chatId) => apiService.delete(`${LOTTERY_URL}/balance/${chatId}`),
+    awardRandomUsers: (data) => apiService.post(`${LOTTERY_URL}/award-random`, data),
+    getUserBalancesPaginated: (page, size, sortBy, sortDirection) => apiService.get(`${LOTTERY_URL}/balances`, { params: { page, size, sortBy, sortDirection } })
 };
