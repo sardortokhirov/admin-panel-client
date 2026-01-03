@@ -1,55 +1,31 @@
-// src/api/lotteryService.js
 
 import apiService from './apiService';
 
-const API_URL = '/lottery';
+const LOTTERY_URL = '/lottery';
 
-// --- Prize Management & User Data ---
-const getPrizes = () => apiService.get(`${API_URL}/prizes`);
-const addPrize = (prizeData) => apiService.post(`${API_URL}/prizes`, prizeData);
-const deletePrize = (id) => apiService.delete(`${API_URL}/prizes/${id}`);
-const getUserBalance = (chatId) => apiService.get(`${API_URL}/balance/${chatId}`);
-const addTickets = (chatId, amount) => apiService.post(`${API_URL}/tickets/${chatId}`, null, { params: { amount } });
-const resetTickets = (chatId) => apiService.delete(`${API_URL}/tickets/${chatId}`);
-const resetBalance = (chatId) => apiService.delete(`${API_URL}/balance/${chatId}`);
+const getLotteryStats = (page = 0, size = 10) => {
+    // This endpoint seems to return a list of participants/tickets
+    return apiService.get(`${LOTTERY_URL}/stats`, {
+        params: { page, size }
+    });
+};
 
-/**
- * Awards a specified amount of MONEY to a random selection of users.
- * @param {object} awardData - Contains totalUsers, randomUsers, and amount.
- * @returns {Promise}
- */
-const awardRandomUsers = ({ totalUsers, randomUsers, amount }) => {
-    // Corrected URL: /lottery/award-random-users
-    return apiService.post(`${API_URL}/award-random-users`, null, {
-        params: {
-            totalUsers,
-            randomUsers,
-            amount
+const awardLottery = (userId) => {
+    return apiService.post(`${LOTTERY_URL}/award?userId=${userId}`);
+};
+
+const getOverallStats = () => {
+    // Uses Basic Auth header specifically for this request as per requirement
+    const AUTH_TOKEN = btoa('MaxUp1000:MaxUp1000');
+    return apiService.get(`${LOTTERY_URL}/overall`, {
+        headers: {
+            'Authorization': `Basic ${AUTH_TOKEN}`
         }
     });
 };
 
-const getApprovedUsersChatIds = () => apiService.get(`${API_URL}/approved-users-chatids`);
-
-// 2. Foydalanuvchi balanslarini paginatsiya bilan oladi
-const getUserBalancesPaginated = (page = 0, size = 20, sortBy = 'balance', sortDirection = 'DESC') => {
-    return apiService.get(`${API_URL}/balances`, {
-        params: { page, size, sortBy, sortDirection }
-    });
-};
-
-
-
-
 export const lotteryService = {
-    getPrizes,
-    addPrize,
-    deletePrize,
-    getUserBalance,
-    addTickets,
-    resetTickets,
-    resetBalance,
-    awardRandomUsers,
-    getApprovedUsersChatIds,
-    getUserBalancesPaginated,
+    getLotteryStats,
+    awardLottery,
+    getOverallStats
 };

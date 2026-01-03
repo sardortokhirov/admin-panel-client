@@ -13,6 +13,7 @@ const LotteryPage = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
+    const [overallStats, setOverallStats] = useState(null);
 
     // Prize Management State
     const [newPrize, setNewPrize] = useState({ amount: '', numberOfPrize: '' });
@@ -44,6 +45,10 @@ const LotteryPage = () => {
             ]);
             setPrizes(prizesResponse.data);
             setApprovedUsersChatIds(usersResponse.data);
+
+            // Fetch overall stats
+            const statsResponse = await lotteryService.getOverallStats();
+            setOverallStats(statsResponse.data);
         } catch (err) {
             setError("Ma'lumotlarni yuklab bo'lmadi.");
             console.error(err);
@@ -204,7 +209,21 @@ const LotteryPage = () => {
 
     return (
         <div className="page-container lottery-page">
-            <div className="page-header"> <h1>Lotereya Tizimi</h1> </div>
+            <div className="page-header">
+                <h1>Lotereya Tizimi</h1>
+                {overallStats && (
+                    <div className="header-stats">
+                        <div className="stat-pill">
+                            <span className="label">Jami Balans:</span>
+                            <span className="value">{overallStats.totalBalance?.toLocaleString('uz-UZ')} UZS</span>
+                        </div>
+                        <div className="stat-pill">
+                            <span className="label">Jami Biletlar:</span>
+                            <span className="value">{overallStats.totalTickets?.toLocaleString()}</span>
+                        </div>
+                    </div>
+                )}
+            </div>
 
             {error && <p className="error-message">{error}</p>}
             {successMessage && <p className="success-message">{successMessage}</p>}
@@ -337,5 +356,35 @@ const LotteryPage = () => {
         </div>
     );
 };
+
+// Add styles for the header stats here or in your CSS file
+const styles = `
+    .header-stats {
+        display: flex;
+        gap: 15px;
+        margin-top: 10px;
+    }
+    .stat-pill {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 0.9em;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .stat-pill .label {
+        color: #aaa;
+    }
+    .stat-pill .value {
+        color: #fff;
+        font-weight: bold;
+    }
+`;
+
+// Inject styles
+const styleSheet = document.createElement("style");
+styleSheet.innerText = styles;
+document.head.appendChild(styleSheet);
 
 export default LotteryPage;
