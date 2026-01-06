@@ -22,20 +22,11 @@ const GetToggles = async (params) => {
   }
 };
 
-const AUTH_TOKEN = btoa('MaxUp1000:MaxUp1000');
-const authConfig = {
-  headers: {
-    'Authorization': `Basic ${AUTH_TOKEN}`
-  }
-};
-
 const ToggleController = {
   // POST - Toggle Top-up
   toggleTopUp: async (enabled) => {
     const res = await apiService.post(
-      `/features/toggle/topup?enabled=${enabled}`,
-      null,
-      authConfig
+      `/features/toggle/topup?enabled=${enabled}`
     );
     return res.data;
   },
@@ -43,9 +34,7 @@ const ToggleController = {
   // POST - Toggle Withdraw
   toggleWithdraw: async (enabled) => {
     const res = await apiService.post(
-      `/features/toggle/withdraw?enabled=${enabled}`,
-      null,
-      authConfig
+      `/features/toggle/withdraw?enabled=${enabled}`
     );
     return res.data;
   },
@@ -53,9 +42,7 @@ const ToggleController = {
   // POST - Toggle Bonus
   toggleBonus: async (enabled) => {
     const res = await apiService.post(
-      `/features/toggle/bonus?enabled=${enabled}`,
-      null,
-      authConfig
+      `/features/toggle/bonus?enabled=${enabled}`
     );
     return res.data;
   },
@@ -63,9 +50,7 @@ const ToggleController = {
   // POST - Toggle Promo
   togglePromo: async (enabled) => {
     const res = await apiService.post(
-      `/features/toggle/promo?enabled=${enabled}`,
-      null,
-      authConfig
+      `/features/toggle/promo?enabled=${enabled}`
     );
     return res.data;
   },
@@ -73,9 +58,7 @@ const ToggleController = {
   // POST - Toggle Bonus Limit
   toggleBonusLimit: async (enabled) => {
     const res = await apiService.post(
-      `/features/toggle/bonus-limit?enabled=${enabled}`,
-      null,
-      authConfig
+      `/features/toggle/bonus-limit?enabled=${enabled}`
     );
     return res.data;
   },
@@ -83,9 +66,7 @@ const ToggleController = {
   // POST - Toggle Pay
   togglePay: async (enabled) => {
     const res = await apiService.post(
-      `/features/toggle/pay?enabled=${enabled}`,
-      null,
-      authConfig
+      `/features/toggle/pay?enabled=${enabled}`
     );
     return res.data;
   },
@@ -93,9 +74,7 @@ const ToggleController = {
   // POST - Toggle Humo
   toggleHumo: async (enabled) => {
     const res = await apiService.post(
-      `/features/toggle/humo?enabled=${enabled}`,
-      null,
-      authConfig
+      `/features/toggle/humo?enabled=${enabled}`
     );
     return res.data;
   },

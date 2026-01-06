@@ -9,15 +9,21 @@ const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(
-    !!localStorage.getItem("authToken")
+    !!localStorage.getItem("authData")
   );
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem("authToken");
-    if (token) {
-      setAuthHeader(token);
-      setIsAuthenticated(true);
+    const storedAuth = localStorage.getItem("authData");
+    if (storedAuth) {
+      const { token, expiry } = JSON.parse(storedAuth);
+      // Check if the token has expired
+      if (new Date().getTime() > expiry) {
+        logout();
+      } else {
+        setAuthHeader(token);
+        setIsAuthenticated(true);
+      }
     }
   }, []);
 
@@ -48,8 +54,9 @@ export const AuthProvider = ({ children }) => {
       await loginService.getLoginEvents();
 
       // 4. If the call succeeded, the credentials are valid! Now we can proceed.
-      // Permanently save the token
-      localStorage.setItem("authToken", token);
+      // Permanently save the token with an expiry of 3 days
+      const expiry = new Date().getTime() + 3 * 24 * 60 * 60 * 1000; // 3 days in milliseconds
+      localStorage.setItem("authData", JSON.stringify({ token, expiry }));
 
       // Set the state to re-render the app
       setIsAuthenticated(true);
@@ -87,7 +94,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
-    localStorage.removeItem("authToken");
+    localStorage.removeItem("authData");
     clearAuthHeader();
     setIsAuthenticated(false);
     navigate("/login");
