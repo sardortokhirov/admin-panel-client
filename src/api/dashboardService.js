@@ -89,6 +89,16 @@ const ToggleController = {
     );
     return res.data;
   },
+
+  // POST - Toggle Humo
+  toggleHumo: async (enabled) => {
+    const res = await apiService.post(
+      `/features/toggle/humo?enabled=${enabled}`,
+      null,
+      authConfig
+    );
+    return res.data;
+  },
 };
 export const dashboardService = {
   getDashboardStats,

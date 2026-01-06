@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import { cardService } from "../api/cardService";
+import { dashboardService } from "../api/dashboardService"; // Added for toggle functionality
 import { osonConfigService } from "../api/osonConfigService"; // We need this for the "Add Card" modal
 import Loader from "../components/common/Loader";
 import Button from "../components/common/Button";
@@ -34,6 +35,10 @@ const CardsPage = () => {
   const [currentCard, setCurrentCard] = useState(null);
   const [selectedOsonConfigId, setSelectedOsonConfigId] = useState("");
 
+  // State for Toggle
+  const [toggleState, setToggleState] = useState({ humoEnabled: true });
+  const [isToggling, setIsToggling] = useState(false);
+
   // Fetch BOTH cards and oson configs when the page loads
   const fetchData = useCallback(async () => {
     try {
@@ -57,7 +62,35 @@ const CardsPage = () => {
 
   useEffect(() => {
     fetchData();
+    fetchToggleState();
   }, [fetchData]);
+
+  const fetchToggleState = async () => {
+    try {
+      const toggles = await dashboardService.GetToggles();
+      setToggleState(prev => ({ ...prev, humoEnabled: toggles.humoEnabled }));
+    } catch (err) {
+      console.error("Failed to fetch toggle state:", err);
+    }
+  };
+
+  const handleToggleHumo = async () => {
+    setIsToggling(true);
+    try {
+      const newValue = !toggleState.humoEnabled;
+      await dashboardService.ToggleController.toggleHumo(newValue);
+      // Update local state immediately for better UX, or wait for fetch
+      setToggleState(prev => ({ ...prev, humoEnabled: newValue }));
+
+      // Optionally refetch to ensure sync
+      fetchToggleState();
+    } catch (err) {
+      console.error("Failed to toggle Humo:", err);
+      setError("Failed to update Humo toggle.");
+    } finally {
+      setIsToggling(false);
+    }
+  };
 
   const handleOpenModal = (card = null) => {
     if (card) {
@@ -125,7 +158,7 @@ const CardsPage = () => {
         // Display the specific error from the backend (e.g., "Cannot delete last card")
         alert(
           err.response?.data?.error ||
-            "An unknown error occurred during deletion."
+          "An unknown error occurred during deletion."
         );
       }
     }
@@ -137,9 +170,44 @@ const CardsPage = () => {
     <div className="page-container">
       <div className="page-header">
         <h1>All Admin Cards</h1>
-        <Button primary onClick={() => handleOpenModal()}>
-          <FiPlusCircle /> Add New Card
-        </Button>
+        <div style={{ display: 'flex', gap: '15px', alignItems: 'center' }}>
+          {/* Humo Toggle UI */}
+          <div className="toggle-element" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '0 10px' }}>
+            <span style={{ margin: 0, fontWeight: '600', color: 'inherit' }}>Humo:</span>
+            <div
+              className="toggle-switch"
+              style={{
+                margin: 0, // Override global margin
+                position: 'relative',
+                width: '50px',
+                height: '26px',
+                borderRadius: '20px',
+                cursor: 'pointer',
+                backgroundColor: toggleState.humoEnabled ? '#53bf9d' : '#e94560'
+              }}
+              onClick={() => !isToggling && handleToggleHumo()}
+            >
+              <div
+                className="toggle-knob"
+                style={{
+                  position: 'absolute',
+                  top: '3px',
+                  left: '3px',
+                  width: '20px',
+                  height: '20px',
+                  backgroundColor: '#fff',
+                  borderRadius: '50%',
+                  transition: 'transform 0.3s',
+                  transform: toggleState.humoEnabled ? 'translateX(24px)' : 'translateX(0)'
+                }}
+              ></div>
+            </div>
+          </div>
+
+          <Button primary onClick={() => handleOpenModal()}>
+            <FiPlusCircle /> Add New Card
+          </Button>
+        </div>
       </div>
 
       {error && <p className="error-message">{error}</p>}
@@ -148,9 +216,8 @@ const CardsPage = () => {
         {cards.map((card) => (
           <div
             key={card.id}
-            className={`admin-card ${
-              card.osonConfig.primaryConfig ? "primary-account" : ""
-            }`}
+            className={`admin-card ${card.osonConfig.primaryConfig ? "primary-account" : ""
+              }`}
           >
             {card.osonConfig.primaryConfig && (
               <div className="primary-indicator">
