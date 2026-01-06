@@ -3,7 +3,8 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { setAuthHeader, clearAuthHeader } from "../api/apiService";
-import { loginService } from "../api/loginService"; // We need this to make our test call
+import { loginService } from "../api/loginService";
+import { dashboardService } from "../api/dashboardService"; // Added for auth verification
 
 const AuthContext = createContext(null);
 
@@ -49,9 +50,9 @@ export const AuthProvider = ({ children }) => {
 
     try {
       // 3. THE CRITICAL STEP: Make a "test" call to a protected endpoint.
-      // We use getLoginEvents() because it requires authentication.
-      // If this call fails with a 401, the 'catch' block will run.
-      await loginService.getLoginEvents();
+      // 3. THE CRITICAL STEP: Make a "test" call to a protected endpoint.
+      // We use getDashboardStats() to verify authentication.
+      await dashboardService.getDashboardStats();
 
       // 4. If the call succeeded, the credentials are valid! Now we can proceed.
       // Permanently save the token with an expiry of 3 days
