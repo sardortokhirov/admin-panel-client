@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import { cardService } from "../api/cardService";
+import { setAuthHeader } from "../api/apiService";
 import { dashboardService } from "../api/dashboardService"; // Added for toggle functionality
 import { osonConfigService } from "../api/osonConfigService"; // We need this for the "Add Card" modal
 import Loader from "../components/common/Loader";
@@ -61,6 +62,11 @@ const CardsPage = () => {
   }, []);
 
   useEffect(() => {
+    const storedAuth = localStorage.getItem("authData");
+    if (storedAuth) {
+      const { token } = JSON.parse(storedAuth);
+      setAuthHeader(token);
+    }
     fetchData();
     fetchToggleState();
   }, [fetchData]);

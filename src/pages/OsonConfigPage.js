@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom'; // Use Link for navigation
 import { osonConfigService } from '../api/osonConfigService';
+import { setAuthHeader } from '../api/apiService';
 import Loader from '../components/common/Loader';
 import Button from '../components/common/Button';
 import { FiEdit, FiTrash2, FiStar, FiPlusCircle } from 'react-icons/fi';
@@ -24,6 +25,11 @@ const OsonConfigsListPage = () => {
     }, []);
 
     useEffect(() => {
+        const storedAuth = localStorage.getItem("authData");
+        if (storedAuth) {
+            const { token } = JSON.parse(storedAuth);
+            setAuthHeader(token);
+        }
         fetchConfigs();
     }, [fetchConfigs]);
 

@@ -1,6 +1,7 @@
 // src/pages/SystemConfigPage.js
 import React, { useState, useEffect, useCallback } from 'react';
 import { systemConfigService } from '../api/systemConfigService';
+import { setAuthHeader } from '../api/apiService';
 import Loader from '../components/common/Loader';
 import Button from '../components/common/Button';
 import { FiSave, FiRefreshCw, FiSettings, FiInfo, FiZap, FiPercent } from 'react-icons/fi';
@@ -43,6 +44,11 @@ const SystemConfigPage = () => {
     }, []);
 
     useEffect(() => {
+        const storedAuth = localStorage.getItem("authData");
+        if (storedAuth) {
+            const { token } = JSON.parse(storedAuth);
+            setAuthHeader(token);
+        }
         fetchConfig();
     }, [fetchConfig]);
 

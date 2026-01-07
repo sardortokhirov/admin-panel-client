@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import { blockedUsersService } from '../api/blockedUsersService';
+import { setAuthHeader } from '../api/apiService';
 import Loader from '../components/common/Loader';
 import { FiCheckCircle, FiShield, FiTrash2, FiUsers, FiChevronLeft, FiChevronRight, FiUnlock } from 'react-icons/fi';
 
@@ -40,6 +41,11 @@ const BlockedUsersPage = () => {
     };
 
     React.useEffect(() => {
+        const storedAuth = localStorage.getItem("authData");
+        if (storedAuth) {
+            const { token } = JSON.parse(storedAuth);
+            setAuthHeader(token);
+        }
         fetchBlockedUsers(0);
     }, []);
 

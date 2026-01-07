@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { lotteryService } from '../api/lotteryService';
+import { setAuthHeader } from '../api/apiService';
 import Loader from '../components/common/Loader';
 import Button from '../components/common/Button';
 import { FiGift, FiUserCheck, FiChevronRight } from 'react-icons/fi';
@@ -59,6 +60,11 @@ const LotteryPage = () => {
     }, []);
 
     useEffect(() => {
+        const storedAuth = localStorage.getItem("authData");
+        if (storedAuth) {
+            const { token } = JSON.parse(storedAuth);
+            setAuthHeader(token);
+        }
         fetchPrizesAndApprovedUsers();
     }, [fetchPrizesAndApprovedUsers]);
 

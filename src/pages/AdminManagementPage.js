@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { adminService } from '../api/adminService';
+import { setAuthHeader } from '../api/apiService';
 import Loader from '../components/common/Loader';
 import Button from '../components/common/Button';
 import { FiUserCheck, FiTrash2, FiBell, FiBellOff, FiPlus } from 'react-icons/fi';
@@ -30,6 +31,11 @@ const AdminManagementPage = () => {
     };
 
     useEffect(() => {
+        const storedAuth = localStorage.getItem("authData");
+        if (storedAuth) {
+            const { token } = JSON.parse(storedAuth);
+            setAuthHeader(token);
+        }
         fetchAdmins();
     }, []);
 
@@ -121,7 +127,7 @@ const AdminManagementPage = () => {
                                     </div>
                                 </div>
                                 <div className="admin-actions">
-                                    {admin.receiveNotifications ? <FiBell className="status-icon enabled"/> : <FiBellOff className="status-icon disabled"/>}
+                                    {admin.receiveNotifications ? <FiBell className="status-icon enabled" /> : <FiBellOff className="status-icon disabled" />}
                                     <label className="toggle-switch">
                                         <input
                                             type="checkbox"

@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { userPermissionsService } from '../api/userPermissionsService';
+import { setAuthHeader } from '../api/apiService';
 import Button from '../components/common/Button';
 import Loader from '../components/common/Loader';
 import {
@@ -50,6 +51,11 @@ const UserPermissionsPage = () => {
     };
 
     useEffect(() => {
+        const storedAuth = localStorage.getItem("authData");
+        if (storedAuth) {
+            const { token } = JSON.parse(storedAuth);
+            setAuthHeader(token);
+        }
         fetchOverrides(0);
     }, []);
 

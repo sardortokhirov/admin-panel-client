@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { loginService } from '../api/loginService';
+import { setAuthHeader } from '../api/apiService';
 import Loader from '../components/common/Loader';
 import { formatDistanceToNow } from 'date-fns';
 import { uz } from 'date-fns/locale';
@@ -44,6 +45,11 @@ const LoginDevicesPage = () => {
     const [expandedId, setExpandedId] = useState(null);
 
     useEffect(() => {
+        const storedAuth = localStorage.getItem("authData");
+        if (storedAuth) {
+            const { token } = JSON.parse(storedAuth);
+            setAuthHeader(token);
+        }
         const fetchLoginEvents = async () => {
             try {
                 const response = await loginService.getLoginEvents();

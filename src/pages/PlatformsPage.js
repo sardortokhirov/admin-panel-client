@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { platformService } from '../api/platformService';
+import { setAuthHeader } from '../api/apiService';
 import PlatformForm from '../components/PlatformForm';
 import Modal from '../components/common/Modal'; // Assuming Modal is in common
 import Loader from '../components/common/Loader';
@@ -41,6 +42,11 @@ const PlatformPage = () => {
     }, []);
 
     useEffect(() => {
+        const storedAuth = localStorage.getItem("authData");
+        if (storedAuth) {
+            const { token } = JSON.parse(storedAuth);
+            setAuthHeader(token);
+        }
         fetchPlatforms();
     }, [fetchPlatforms]);
 

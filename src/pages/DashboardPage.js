@@ -108,8 +108,9 @@ const DashboardPage = () => {
     }
   };
   useEffect(() => {
-    const token = localStorage.getItem("authToken");
-    if (token) {
+    const storedAuth = localStorage.getItem("authData");
+    if (storedAuth) {
+      const { token } = JSON.parse(storedAuth);
       setAuthHeader(token);
     } else {
       setError("No authentication token found. Please log in.");

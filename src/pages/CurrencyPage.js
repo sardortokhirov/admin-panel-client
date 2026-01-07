@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { exchangeRateService } from '../api/exchangeRateService';
+import { setAuthHeader } from '../api/apiService';
 import Loader from '../components/common/Loader';
 import Button from '../components/common/Button';
 import { FiArrowRight, FiClock } from 'react-icons/fi';
@@ -36,6 +37,11 @@ const CurrencyPage = () => {
     }, []);
 
     useEffect(() => {
+        const storedAuth = localStorage.getItem("authData");
+        if (storedAuth) {
+            const { token } = JSON.parse(storedAuth);
+            setAuthHeader(token);
+        }
         fetchLatestRate();
     }, [fetchLatestRate]);
 

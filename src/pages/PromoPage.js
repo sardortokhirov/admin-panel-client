@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import { promoService } from '../api/promoService';
+import { setAuthHeader } from '../api/apiService';
 import Button from '../components/common/Button';
 import Loader from '../components/common/Loader';
 import { FiCheckCircle, FiShield, FiUserPlus, FiTrash2, FiUsers, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
@@ -36,6 +37,11 @@ const PromoPage = () => {
     };
 
     React.useEffect(() => {
+        const storedAuth = localStorage.getItem("authData");
+        if (storedAuth) {
+            const { token } = JSON.parse(storedAuth);
+            setAuthHeader(token);
+        }
         fetchAllowedUsers(0);
     }, []);
 

@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react'; // Removed unused useCallback
 import { useParams, useNavigate } from 'react-router-dom';
 import { osonConfigService } from '../api/osonConfigService';
+import { setAuthHeader } from '../api/apiService';
 import Loader from '../components/common/Loader';
 import Button from '../components/common/Button';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
@@ -12,7 +13,7 @@ const OsonConfigDetailPage = () => {
     const navigate = useNavigate();
     const isNew = id === 'new';
 
-    const [config, setConfig] = useState({apiUrl:"https://core.oson.uz:8443/"});
+    const [config, setConfig] = useState({ apiUrl: "https://core.oson.uz:8443/" });
     const [isLoading, setIsLoading] = useState(!isNew);
     const [isSaving, setIsSaving] = useState(false);
     const [error, setError] = useState('');
@@ -20,6 +21,11 @@ const OsonConfigDetailPage = () => {
     const [showPassword, setShowPassword] = useState(false);
 
     useEffect(() => {
+        const storedAuth = localStorage.getItem("authData");
+        if (storedAuth) {
+            const { token } = JSON.parse(storedAuth);
+            setAuthHeader(token);
+        }
         if (!isNew) {
             osonConfigService.getConfig(id)
                 .then(response => setConfig(response.data))
