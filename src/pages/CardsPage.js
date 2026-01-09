@@ -61,24 +61,22 @@ const CardsPage = () => {
     }
   }, []);
 
-  useEffect(() => {
-    const storedAuth = localStorage.getItem("authData");
-    if (storedAuth) {
-      const { token } = JSON.parse(storedAuth);
-      setAuthHeader(token);
-    }
-    fetchData();
-    fetchToggleState();
-  }, [fetchData]);
-
-  const fetchToggleState = async () => {
+  const fetchToggleState = useCallback(async () => {
     try {
       const toggles = await dashboardService.GetToggles();
-      setToggleState(prev => ({ ...prev, humoEnabled: toggles.humoEnabled }));
+      console.log("Fetched toggles:", toggles); // Debugging
+      if (toggles && typeof toggles.humoEnabled !== 'undefined') {
+        setToggleState(prev => ({ ...prev, humoEnabled: toggles.humoEnabled }));
+      }
     } catch (err) {
       console.error("Failed to fetch toggle state:", err);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchData();
+    fetchToggleState();
+  }, [fetchData, fetchToggleState]);
 
   const handleToggleHumo = async () => {
     setIsToggling(true);
