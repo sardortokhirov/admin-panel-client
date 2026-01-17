@@ -201,20 +201,22 @@ const PromoPage = () => {
                                         </thead>
                                         <tbody>
                                             {allowedUsers.length > 0 ? (
-                                                allowedUsers.map((user, index) => (
-                                                    <tr key={user.id || index}>
-                                                        <td className="user-id-cell">{user.userId}</td>
-                                                        <td>
-                                                            <button
-                                                                onClick={() => handleRemoveUser(user.userId)}
-                                                                className="delete-btn"
-                                                                title="O'chirish"
-                                                            >
-                                                                <FiTrash2 />
-                                                            </button>
-                                                        </td>
-                                                    </tr>
-                                                ))
+                                                allowedUsers
+                                                    .filter(user => user.userId) // Filter out null userIds
+                                                    .map((user, index) => (
+                                                        <tr key={user.id || index}>
+                                                            <td className="user-id-cell">{user.userId}</td>
+                                                            <td>
+                                                                <button
+                                                                    onClick={() => handleRemoveUser(user.userId)}
+                                                                    className="delete-btn"
+                                                                    title="O'chirish"
+                                                                >
+                                                                    <FiTrash2 />
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    ))
                                             ) : (
                                                 <tr>
                                                     <td colSpan="2" className="empty-text">Ro'yxat bo'sh</td>
@@ -292,20 +294,22 @@ const PromoPage = () => {
                                         </thead>
                                         <tbody>
                                             {allowedChats.length > 0 ? (
-                                                allowedChats.map((chat, index) => (
-                                                    <tr key={chat.id || index}>
-                                                        <td className="user-id-cell">{chat.chatId}</td>
-                                                        <td>
-                                                            <button
-                                                                onClick={() => handleRemoveChat(chat.chatId)}
-                                                                className="delete-btn"
-                                                                title="O'chirish"
-                                                            >
-                                                                <FiTrash2 />
-                                                            </button>
-                                                        </td>
-                                                    </tr>
-                                                ))
+                                                allowedChats
+                                                    .filter(chat => chat.chatId) // Filter out null chatIds
+                                                    .map((chat, index) => (
+                                                        <tr key={chat.id || index}>
+                                                            <td className="user-id-cell">{chat.chatId}</td>
+                                                            <td>
+                                                                <button
+                                                                    onClick={() => handleRemoveChat(chat.chatId)}
+                                                                    className="delete-btn"
+                                                                    title="O'chirish"
+                                                                >
+                                                                    <FiTrash2 />
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    ))
                                             ) : (
                                                 <tr>
                                                     <td colSpan="2" className="empty-text">Ro'yxat bo'sh</td>
