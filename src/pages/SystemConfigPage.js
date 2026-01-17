@@ -19,7 +19,8 @@ const SystemConfigPage = () => {
         ticketCalculationAmount: 0,
         ticketCalculationAmount: 0,
         dailyBonusTransferLimit: 0,
-        topUpDailyLimitIncreasePercentage: 0
+        topUpDailyLimitIncreasePercentage: 0,
+        lotteryCooldownSeconds: 0 // Added lotteryCooldownSeconds
     });
 
     const [isLoading, setIsLoading] = useState(true);
@@ -261,6 +262,22 @@ const SystemConfigPage = () => {
                                 <span className="currency">UZS</span>
                             </div>
                             <small>Har qancha summa uchun 1 ta bilet berilishini belgilaydi</small>
+                        </div>
+
+                        <div className="form__group">
+                            <label>Lotereya o'ynash vaqti oralig'i (sekund)</label>
+                            <div className="input-wrapper">
+                                <input
+                                    type="number"
+                                    name="lotteryCooldownSeconds"
+                                    value={config.lotteryCooldownSeconds}
+                                    onChange={handleInputChange}
+                                    min="0"
+                                    required
+                                />
+                                <span className="currency">Sec</span>
+                            </div>
+                            <small>Foydalanuvchi lotereya o'ynagandan keyin qancha vaqt kutishi kerak</small>
                         </div>
                     </div>
                 </div>
