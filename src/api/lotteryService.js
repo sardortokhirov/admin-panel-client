@@ -40,5 +40,20 @@ export const lotteryService = {
     }),
 
     // Overall Stats: GET /lottery/overall
-    getOverallStats: () => apiService.get(`${LOTTERY_URL}/overall`)
+    getOverallStats: () => apiService.get(`${LOTTERY_URL}/overall`),
+
+    // Bundle Management
+    createBundle: (bundle) => apiService.post(`${LOTTERY_URL}/bundles`, bundle),
+    getAllBundles: () => apiService.get(`${LOTTERY_URL}/bundles`),
+    updateBundle: (id, bundle) => apiService.put(`${LOTTERY_URL}/bundles/${id}`, bundle),
+    deleteBundle: (id) => apiService.delete(`${LOTTERY_URL}/bundles/${id}`),
+    toggleBundle: (id) => apiService.put(`${LOTTERY_URL}/bundles/${id}/toggle`, {}),
+
+    // Purchase Cooldown
+    getPurchaseCooldown: () => apiService.get(`${LOTTERY_URL}/purchase-cooldown`),
+    setPurchaseCooldown: (seconds) => apiService.put(`${LOTTERY_URL}/purchase-cooldown`, { cooldownSeconds: seconds }),
+
+    // Winnings Percentage
+    getWinningsPercentage: () => apiService.get(`${LOTTERY_URL}/winnings-percentage`),
+    setWinningsPercentage: (percentage) => apiService.put(`${LOTTERY_URL}/winnings-percentage`, { percentage: percentage })
 };

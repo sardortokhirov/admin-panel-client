@@ -5,7 +5,7 @@ import { lotteryService } from '../api/lotteryService';
 import { setAuthHeader } from '../api/apiService';
 import Loader from '../components/common/Loader';
 import Button from '../components/common/Button';
-import { FiGift, FiUserCheck, FiChevronRight } from 'react-icons/fi';
+import { FiGift, FiUserCheck, FiChevronRight, FiTrash2, FiPower } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 
 const LotteryPage = () => {
@@ -34,22 +34,59 @@ const LotteryPage = () => {
     const [approvedUsersChatIds, setApprovedUsersChatIds] = useState([]);
     const [isFetchingUsers, setIsFetchingUsers] = useState(true);
 
+    // Bundle Management State
+    const [bundles, setBundles] = useState([]);
+    const [newBundle, setNewBundle] = useState({ tickets: '', price: '', currency: 'UZS', displayOrder: 0 });
+
+    // Config State
+    const [purchaseCooldown, setPurchaseCooldown] = useState(0);
+    const [winningsPercentage, setWinningsPercentage] = useState(0);
+
     // --- Data Fetching ---
-    const fetchPrizesAndApprovedUsers = useCallback(async () => {
+    const fetchData = useCallback(async () => {
         setIsLoading(true);
         setError('');
         try {
-            // Fetch prizes and approved user chat IDs in parallel
-            const [prizesResponse, usersResponse] = await Promise.all([
+            // 1. Critical Data (Prizes, Approved Users, Overall Stats) - Fail if these fail
+            const [prizesRes, usersRes, statsRes] = await Promise.all([
                 lotteryService.getPrizes(),
-                lotteryService.getApprovedUsersChatIds()
+                lotteryService.getApprovedUsersChatIds(),
+                lotteryService.getOverallStats()
             ]);
-            setPrizes(prizesResponse.data);
-            setApprovedUsersChatIds(usersResponse.data);
 
-            // Fetch overall stats
-            const statsResponse = await lotteryService.getOverallStats();
-            setOverallStats(statsResponse.data);
+            setPrizes(prizesRes.data);
+            setApprovedUsersChatIds(usersRes.data);
+            setOverallStats(statsRes.data);
+
+            // 2. New Features Data (Bundles, Cooldown, Winnings) - Handle gracefully if 404/fail
+            try {
+                const bundlesRes = await lotteryService.getAllBundles();
+                if (Array.isArray(bundlesRes.data)) {
+                    setBundles(bundlesRes.data);
+                } else {
+                    setBundles([]);
+                }
+            } catch (ignored) {
+                console.warn("Bundles endpoint not available yet");
+                setBundles([]);
+            }
+
+            try {
+                const cooldownRes = await lotteryService.getPurchaseCooldown();
+                // Backend returns { cooldownSeconds: <number> }
+                setPurchaseCooldown(cooldownRes.data.cooldownSeconds || 0);
+            } catch (ignored) {
+                console.warn("Cooldown endpoint not available yet");
+            }
+
+            try {
+                const winningsRes = await lotteryService.getWinningsPercentage();
+                // Backend returns { percentage: <number> }
+                setWinningsPercentage(winningsRes.data.percentage || 0);
+            } catch (ignored) {
+                console.warn("Winnings endpoint not available yet");
+            }
+
         } catch (err) {
             setError("Ma'lumotlarni yuklab bo'lmadi.");
             console.error(err);
@@ -65,8 +102,90 @@ const LotteryPage = () => {
             const { token } = JSON.parse(storedAuth);
             setAuthHeader(token);
         }
-        fetchPrizesAndApprovedUsers();
-    }, [fetchPrizesAndApprovedUsers]);
+        fetchData();
+    }, [fetchData]);
+
+    // --- Bundle Handlers ---
+    const handleBundleInputChange = (e) => {
+        const { name, value } = e.target;
+        setNewBundle(prev => ({ ...prev, [name]: value }));
+    };
+
+    const handleAddBundle = async (e) => {
+        e.preventDefault();
+        setError('');
+        try {
+            await lotteryService.createBundle(newBundle);
+            setNewBundle({ tickets: '', price: '', currency: 'UZS', displayOrder: 0 });
+            setSuccessMessage("Paket muvaffaqiyatli qo'shildi!");
+            setTimeout(() => setSuccessMessage(''), 3000);
+            fetchData();
+        } catch (err) {
+            console.error(err);
+            if (err.response && err.response.status === 404) {
+                setError("Bundle tizimi hali backendda yoqilmagan (404).");
+            } else {
+                setError("Bundle qo'shishda xatolik yuz berdi.");
+            }
+        }
+    };
+
+    const handleDeleteBundle = async (id) => {
+        if (window.confirm("Bundle ni o'chirasizmi?")) {
+            try {
+                await lotteryService.deleteBundle(id);
+                fetchData();
+            } catch (err) {
+                console.error(err);
+                setError("Bundle ni o'chirib bo'lmadi.");
+            }
+        }
+    };
+
+    const handleToggleBundle = async (id) => {
+        try {
+            await lotteryService.toggleBundle(id);
+            fetchData();
+        } catch (err) {
+            console.error(err);
+            setError("Bundle holatini o'zgartirib bo'lmadi.");
+        }
+    };
+
+    // --- Config Handlers ---
+    const handleUpdateCooldown = async () => {
+        setError('');
+        setSuccessMessage('');
+        try {
+            await lotteryService.setPurchaseCooldown(parseInt(purchaseCooldown));
+            setSuccessMessage("Cooldown muvaffaqiyatli saqlandi!");
+            setTimeout(() => setSuccessMessage(''), 3000);
+        } catch (err) {
+            console.error(err);
+            if (err.response && err.response.status === 404) {
+                setError("Cooldown API topilmadi (404). Backendni tekshiring.");
+            } else {
+                setError("Cooldown yangilab bo'lmadi.");
+            }
+        }
+    };
+
+    const handleUpdateWinningsPercentage = async () => {
+        setError('');
+        setSuccessMessage('');
+        try {
+            await lotteryService.setWinningsPercentage(parseFloat(winningsPercentage));
+            setSuccessMessage("Foiz muvaffaqiyatli saqlandi!");
+            setTimeout(() => setSuccessMessage(''), 3000);
+        } catch (err) {
+            console.error(err);
+            if (err.response && err.response.status === 404) {
+                setError("Winnings API topilmadi (404). Backendni tekshiring.");
+            } else {
+                setError("Foizni yangilab bo'lmadi.");
+            }
+        }
+    };
 
     // --- Prize Management Handlers ---
     const handlePrizeInputChange = (e) => {
@@ -83,7 +202,7 @@ const LotteryPage = () => {
         try {
             await lotteryService.addPrize(newPrize);
             setNewPrize({ amount: '', numberOfPrize: '' });
-            await fetchPrizesAndApprovedUsers(); // Refresh data
+            await fetchData(); // Refresh data
         } catch (err) {
             setError("Sovrin qo'shib bo'lmadi.");
             console.error(err);
@@ -94,7 +213,7 @@ const LotteryPage = () => {
         if (window.confirm("Haqiqatan ham bu sovrinni o'chirmoqchimisiz?")) {
             try {
                 await lotteryService.deletePrize(id);
-                await fetchPrizesAndApprovedUsers(); // Refresh data
+                await fetchData(); // Refresh data
             } catch (err) {
                 setError("Sovrinni o'chirib bo'lmadi.");
                 console.error(err);
@@ -207,8 +326,6 @@ const LotteryPage = () => {
         }
     };
 
-
-
     const totalNumberOfPrizes = prizes.reduce((total, prize) => total + (Number(prize.numberOfPrize) || 0), 0);
 
     if (isLoading && isFetchingUsers) return <Loader />;
@@ -236,7 +353,91 @@ const LotteryPage = () => {
 
             <div className="lottery-content-grid">
 
-                {/* 1. Prize Management Panel (Top Left) */}
+                {/* 1. Global Settings Config Panel (New) */}
+                <div className="lottery-panel full-width-panel">
+                    <h3>Lotereya Sozlamalari</h3>
+                    <div className="settings-grid" style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>
+                        <div className="setting-item">
+                            <label>Sotib olish oralig'i (sekund)</label>
+                            <div style={{ display: 'flex', gap: '10px' }}>
+                                <input
+                                    type="number"
+                                    value={purchaseCooldown}
+                                    onChange={(e) => setPurchaseCooldown(e.target.value)}
+                                />
+                                <Button onClick={handleUpdateCooldown} primary>Saqlash</Button>
+                            </div>
+                        </div>
+                        <div className="setting-item">
+                            <label>Yutuq foizi (Daily Limitga qo'shiladi)</label>
+                            <div style={{ display: 'flex', gap: '10px' }}>
+                                <input
+                                    type="number"
+                                    step="0.01"
+                                    value={winningsPercentage}
+                                    onChange={(e) => setWinningsPercentage(e.target.value)}
+                                />
+                                <Button onClick={handleUpdateWinningsPercentage} primary>Saqlash</Button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* 2. Bundle Management Panel (New) */}
+                <div className="lottery-panel">
+                    <h3>Bilet Paketlari (Bundles)</h3>
+                    <form onSubmit={handleAddBundle} className="form">
+                        <div className="form-row" style={{ display: 'flex', gap: '10px' }}>
+                            <div className="form__group" style={{ flex: 1 }}>
+                                <label>Biletlar Soni</label>
+                                <input type="number" name="tickets" value={newBundle.tickets} onChange={handleBundleInputChange} required />
+                            </div>
+                            <div className="form__group" style={{ flex: 1 }}>
+                                <label>Narxi (UZS)</label>
+                                <input type="number" name="price" value={newBundle.price} onChange={handleBundleInputChange} required />
+                            </div>
+                        </div>
+                        <Button type="submit" primary>Paket Qo'shish</Button>
+                    </form>
+
+                    <div className="bundles-list" style={{ marginTop: '20px' }}>
+                        {bundles.map(bundle => (
+                            <div key={bundle.id} className="bundle-item" style={{
+                                background: 'rgba(255,255,255,0.05)',
+                                padding: '10px',
+                                marginBottom: '10px',
+                                borderRadius: '8px',
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                alignItems: 'center'
+                            }}>
+                                <div>
+                                    <strong>{bundle.tickets} ta bilet</strong> - {Number(bundle.price).toLocaleString()} {bundle.currency}
+                                    <div style={{ fontSize: '0.8em', color: bundle.isActive ? '#53bf9d' : '#e94560' }}>
+                                        {bundle.isActive ? 'Faol' : 'Nofaol'}
+                                    </div>
+                                </div>
+                                <div style={{ display: 'flex', gap: '5px' }}>
+                                    <Button
+                                        onClick={() => handleToggleBundle(bundle.id)}
+                                        primary={!bundle.isActive}
+                                        className={bundle.isActive ? "btn-deactivate" : ""}
+                                        small
+                                        style={{ display: 'flex', alignItems: 'center', gap: '5px' }}
+                                    >
+                                        <FiPower />
+                                        {bundle.isActive ? 'Nofaol qilish' : 'Yoqish'}
+                                    </Button>
+                                    <Button onClick={() => handleDeleteBundle(bundle.id)} danger small>
+                                        <FiTrash2 />
+                                    </Button>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                {/* 3. Prize Management Panel (Top Left) */}
                 <div className="lottery-panel">
                     <h3>Sovrinlarni Boshqarish</h3>
                     <form onSubmit={handleAddPrize} className="form">
@@ -275,7 +476,7 @@ const LotteryPage = () => {
                     </ul>
                 </div>
 
-                {/* 2. User Search & Actions Panel (Top Right) */}
+                {/* 4. User Search & Actions Panel (Top Right) */}
                 <div className="lottery-panel">
                     <h3>Foydalanuvchi Balansini Tekshirish</h3>
                     <form onSubmit={handleSearchSubmit} className="form">
@@ -311,7 +512,7 @@ const LotteryPage = () => {
                     )}
                 </div>
 
-                {/* 3. Random Money Award Panel (Full Width - Pastki) */}
+                {/* 5. Random Money Award Panel (Full Width - Pastki) */}
                 <div className="lottery-panel full-width-panel">
                     <h3>Tasodifiy Foydalanuvchilarga Pul Berish</h3>
 
@@ -385,6 +586,39 @@ const styles = `
     .stat-pill .value {
         color: #fff;
         font-weight: bold;
+    }
+    .toggle-btn {
+        background: rgba(83, 191, 157, 0.2);
+        color: #53bf9d;
+        border: 1px solid rgba(83, 191, 157, 0.4);
+    }
+    .toggle-btn:hover {
+        background: rgba(83, 191, 157, 0.3);
+    }
+    .toggle-btn.inactive {
+        background: rgba(233, 69, 96, 0.2);
+        color: #e94560;
+        border: 1px solid rgba(233, 69, 96, 0.4);
+    }
+    .toggle-btn.inactive:hover {
+        background: rgba(233, 69, 96, 0.3);
+    }
+    .btn-secondary {
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .btn-secondary:hover {
+        background: rgba(255, 255, 255, 0.2);
+    }
+    .btn-deactivate {
+        background: rgba(255, 193, 7, 0.15);
+        color: #ffc107;
+        border: 1px solid rgba(255, 193, 7, 0.3);
+    }
+    .btn-deactivate:hover {
+        background: rgba(255, 193, 7, 0.25);
+        color: #ffca2c;
     }
 `;
 
