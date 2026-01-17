@@ -54,15 +54,12 @@ const SystemConfigPage = () => {
     }, [fetchConfig]);
 
     const handleInputChange = (e) => {
-        const { name, value, type } = e.target;
-        let newValue = type === 'number' ? (value === '' ? 0 : parseFloat(value)) : value;
-
-        // Prevent negative numbers
-        if (type === 'number' && newValue < 0) newValue = 0;
-
+        const { name, value } = e.target;
+        // Keep as string to allow proper decimal typing and scientific notation avoidance
+        // Validation can happen on submit or layout
         setConfig(prev => ({
             ...prev,
-            [name]: newValue
+            [name]: value
         }));
     };
 
@@ -205,16 +202,20 @@ const SystemConfigPage = () => {
                             <div className="input-wrapper">
                                 <input
                                     type="number"
-                                    step="0.0001"
+                                    step="0.00000001"
                                     name="topUpDailyLimitIncreasePercentage"
-                                    value={config.topUpDailyLimitIncreasePercentage}
+                                    value={
+                                        typeof config.topUpDailyLimitIncreasePercentage === 'number'
+                                            ? Number(config.topUpDailyLimitIncreasePercentage).toFixed(8).replace(/\.?0+$/, "")
+                                            : config.topUpDailyLimitIncreasePercentage
+                                    }
                                     onChange={handleInputChange}
                                     min="0"
                                     required
                                 />
                                 <span className="currency">%</span>
                             </div>
-                            <small>Masalan: 0.02 = 2% oshish</small>
+                            <small>Masalan: 0.02 = 2% oshish (8 ta raqamgacha aniqlik)</small>
                         </div>
                     </div>
                 </div>
