@@ -49,11 +49,14 @@ const Navbar = () => {
                         <NavLink to="/lottery" onClick={closeMobileMenu}>
                             Lotereya
                         </NavLink>
-                        {/* YANGI LINK: UsersPage (Balanslar ro'yxati) */}
+                        {/* Restore Old Link */}
                         <NavLink to="/users" onClick={closeMobileMenu}>
                             Foydalanuvchi Balanslari
                         </NavLink>
-                        {/* YANGI LINK TUGADI */}
+                        {/* New Link */}
+                        <NavLink to="/users-list" onClick={closeMobileMenu}>
+                            Foydalanuvchilar
+                        </NavLink>
                     </Dropdown>
                 </div>
 
