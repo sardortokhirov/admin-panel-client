@@ -373,8 +373,12 @@ const LotteryPage = () => {
                             <div style={{ display: 'flex', gap: '10px' }}>
                                 <input
                                     type="number"
-                                    step="0.01"
-                                    value={winningsPercentage}
+                                    step="0.00000001"
+                                    value={
+                                        typeof winningsPercentage === 'number'
+                                            ? Number(winningsPercentage).toFixed(8).replace(/\.?0+$/, "")
+                                            : winningsPercentage
+                                    }
                                     onChange={(e) => setWinningsPercentage(e.target.value)}
                                 />
                                 <Button onClick={handleUpdateWinningsPercentage} primary>Saqlash</Button>
