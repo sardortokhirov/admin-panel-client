@@ -258,7 +258,7 @@ const UserProfilePage = () => {
             </div>
 
             {/* SECTION 1: User All Data (Identity + Assets) */}
-            <div className="grid-section" style={{ display: 'grid', gridTemplateColumns: '2fr 1.5fr', gap: '25px', marginBottom: '25px' }}>
+            <div className="responsive-grid-sidebar-right">
                 {/* Identity Card */}
                 <div className="card profile-card" style={{ background: '#252a41', borderRadius: '15px', padding: '25px', boxShadow: '0 4px 15px rgba(0,0,0,0.1)' }}>
                     <div className="profile-header" style={{ display: 'flex', gap: '20px', alignItems: 'flex-start', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '20px', marginBottom: '20px' }}>
@@ -316,7 +316,7 @@ const UserProfilePage = () => {
             </div>
 
             {/* SECTION 2: Limits & Management */}
-            <div className="grid-section" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '25px', marginBottom: '25px' }}>
+            <div className="responsive-grid-halves">
                 {/* Limits */}
                 <div className="card" style={{ background: '#252a41', borderRadius: '15px', padding: '25px' }}>
                     <h3 style={{ borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '15px', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -390,7 +390,7 @@ const UserProfilePage = () => {
                     <h2 style={{ fontSize: '1.4rem', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px' }}>
                         <FiActivity /> Faoliyat Statistikasi
                     </h2>
-                    <div className="charts-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 2fr 1fr', gap: '25px', alignItems: 'stretch' }}>
+                    <div className="responsive-grid-thirds-stats">
                         {/* Stats Summary Cards (Left) */}
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
                             <div className="stat-card" style={{ background: '#252a41', padding: '20px', borderRadius: '12px', borderLeft: '4px solid #53bf9d' }}>

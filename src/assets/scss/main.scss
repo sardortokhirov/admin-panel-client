@@ -47,7 +47,8 @@ $telegram-success: #4caf50;
 
 .main-content {
   padding: 2rem;
-  padding-top: 100px; /* Space for fixed navbar */
+  padding-top: 100px;
+  /* Space for fixed navbar */
 
   @include mobile {
     padding: 1rem;
@@ -97,13 +98,16 @@ $telegram-success: #4caf50;
   .filter-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 1.5rem; /* MODIFIED: Increased gap for better spacing */
+    gap: 1.5rem;
+    /* MODIFIED: Increased gap for better spacing */
 
     /* NEW STYLES: This makes the filter inputs bigger */
     select {
       width: 100%;
-      padding: 0.9rem 1rem; /* MODIFIED: Increased padding to make them taller */
-      font-size: 1rem; /* MODIFIED: Slightly larger font */
+      padding: 0.9rem 1rem;
+      /* MODIFIED: Increased padding to make them taller */
+      font-size: 1rem;
+      /* MODIFIED: Slightly larger font */
       border-radius: $border-radius;
       border: 1px solid $border-color;
       background-color: $bg-color;
@@ -123,6 +127,7 @@ $telegram-success: #4caf50;
     justify-content: flex-end;
     gap: 1rem;
     margin-top: 1.5rem;
+
     .btn {
       display: inline-flex;
       align-items: center;
@@ -134,89 +139,102 @@ $telegram-success: #4caf50;
     margin-bottom: 1rem;
     min-height: 50px;
   }
+}
 
-  .transaction-list-container {
-    overflow-x: auto;
-    background-color: $bg-light;
-    border-radius: $border-radius;
-  }
+// Global Table Styles
+.transaction-list-container {
+  overflow-x: auto;
+  background-color: $bg-light;
+  border-radius: $border-radius;
+  -webkit-overflow-scrolling: touch; // Smooth scrolling on iOS
+}
 
-  .transaction-table {
-    width: 100%;
-    border-collapse: collapse;
-    color: $text-secondary;
-    font-size: 0.9rem;
+.transaction-table {
+  width: 100%;
+  border-collapse: collapse;
+  color: $text-secondary;
+  font-size: 0.9rem;
+  min-width: 800px; // Ensure table has a minimum width to force scrolling on small screens
 
-    thead th {
-      background-color: $bg-lighter;
-      color: $text-primary;
-      padding: 1rem;
-      text-align: left;
-      font-weight: 600;
-      white-space: nowrap;
-    }
-
-    tbody td {
-      padding: 1rem;
-      border-top: 1px solid $border-color;
-      vertical-align: middle;
-    }
-
-    tbody tr {
-      transition: background-color 0.2s ease;
-      &.selected {
-        background-color: rgba($primary-color, 0.1);
-      }
-      &:hover {
-        background-color: $bg-lighter;
-      }
-    }
-
-    .no-data {
-      text-align: center;
-      padding: 3rem;
-      font-size: 1.1rem;
-    }
-
-    .action-btn-icon {
-      background: none;
-      border: none;
-      color: $text-secondary;
-      cursor: pointer;
-      font-size: 1.1rem;
-      transition: color 0.2s ease;
-      &:hover {
-        color: $danger-color;
-      }
-    }
-  }
-
-  // Status Badges
-  .status-badge {
-    padding: 0.25rem 0.6rem;
-    border-radius: 20px;
+  thead th {
+    background-color: $bg-lighter;
+    color: $text-primary;
+    padding: 1rem;
+    text-align: left;
     font-weight: 600;
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    color: #fff;
+    white-space: nowrap;
+  }
 
-    &.status--approved {
-      background-color: $secondary-color;
+  tbody td {
+    padding: 1rem;
+    border-top: 1px solid $border-color;
+    vertical-align: middle;
+    white-space: nowrap; // Prevent wrapping to keep rows consistent
+  }
+
+  tbody tr {
+    transition: background-color 0.2s ease;
+
+    &.selected {
+      background-color: rgba($primary-color, 0.1);
     }
-    &.status--pending,
-    &.status--pending_sms,
-    &.status--pending_admin,
-    &.status--pending_payment {
-      background-color: #fca130;
+
+    &:hover {
+      background-color: $bg-lighter;
     }
-    &.status--canceled {
-      background-color: #6c757d;
-    }
-    &.status--failed {
-      background-color: $danger-color;
+  }
+
+  .no-data {
+    text-align: center;
+    padding: 3rem;
+    font-size: 1.1rem;
+    white-space: normal; // Allow wrapping for no-data message
+  }
+
+  .action-btn-icon {
+    background: none;
+    border: none;
+    color: $text-secondary;
+    cursor: pointer;
+    font-size: 1.1rem;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: $danger-color;
     }
   }
 }
+
+// Status Badges
+.status-badge {
+  padding: 0.25rem 0.6rem;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: #fff;
+  white-space: nowrap;
+
+  &.status--approved {
+    background-color: $secondary-color;
+  }
+
+  &.status--pending,
+  &.status--pending_sms,
+  &.status--pending_admin,
+  &.status--pending_payment {
+    background-color: #fca130;
+  }
+
+  &.status--canceled {
+    background-color: #6c757d;
+  }
+
+  &.status--failed {
+    background-color: $danger-color;
+  }
+}
+
 // src/styles/main.scss
 
 // ... (all your existing styles)
@@ -282,6 +300,7 @@ $telegram-success: #4caf50;
           font-weight: 600;
           color: $text-primary;
         }
+
         small {
           color: $text-secondary;
           margin-left: 1rem;
@@ -292,11 +311,13 @@ $telegram-success: #4caf50;
 
     .random-award-layout-grid {
       display: grid;
-      grid-template-columns: 1fr 1.5fr; /* Info blok kichikroq, form kattaroq */
+      grid-template-columns: 1fr 1.5fr;
+      /* Info blok kichikroq, form kattaroq */
       gap: 2rem;
 
       @include tablet {
-        grid-template-columns: 1fr; /* Mobil qurilmalarda ustunlarni yig'ish */
+        grid-template-columns: 1fr;
+        /* Mobil qurilmalarda ustunlarni yig'ish */
       }
     }
 
@@ -322,12 +343,16 @@ $telegram-success: #4caf50;
     // but the inputs are now arranged by the parent grid
     .random-award-form {
       display: grid;
-      grid-template-columns: 1fr 1fr; /* Ikki ustunli inputlar */
+      grid-template-columns: 1fr 1fr;
+      /* Ikki ustunli inputlar */
       gap: 1.5rem;
-      align-content: flex-start; /* Kontentni yuqoridan boshlash */
+      align-content: flex-start;
+      /* Kontentni yuqoridan boshlash */
 
       .submit-group {
-        grid-column: 1 / -1; /* Tugmani to'liq kenglikka yoyish */
+        grid-column: 1 / -1;
+
+        /* Tugmani to'liq kenglikka yoyish */
         .btn {
           width: 100%;
         }
@@ -336,7 +361,8 @@ $telegram-success: #4caf50;
 
     @include mobile {
       .random-award-form {
-        grid-template-columns: 1fr; /* Mobil qurilmalarda bitta ustun */
+        grid-template-columns: 1fr;
+        /* Mobil qurilmalarda bitta ustun */
       }
     }
   }
@@ -357,6 +383,7 @@ $telegram-success: #4caf50;
       margin: 0.5rem 0;
       color: $text-primary;
       font-size: 1.1rem;
+
       span {
         font-weight: 700;
         color: $secondary-color;
@@ -365,6 +392,7 @@ $telegram-success: #4caf50;
     }
   }
 }
+
 // src/styles/main.scss
 
 // ... (all your existing styles)
@@ -374,6 +402,7 @@ $telegram-success: #4caf50;
 // ===============================================
 .login-devices-page {
   .transaction-table {
+
     // Reusing existing table styles
     td:last-child {
       // Target the last column (User Agent)
@@ -382,6 +411,7 @@ $telegram-success: #4caf50;
     }
   }
 }
+
 // src/styles/main.scss
 
 // ... (all your existing styles)
@@ -425,6 +455,7 @@ $telegram-success: #4caf50;
         color: $text-primary;
         font-size: 1.25rem;
       }
+
       small {
         color: $text-secondary;
       }
@@ -519,11 +550,13 @@ $telegram-success: #4caf50;
     opacity: 0;
     transform: translateY(-10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
+
 // src/styles/main.scss
 
 // ... (all your existing styles)
@@ -569,6 +602,7 @@ $telegram-success: #4caf50;
     justify-content: flex-end;
   }
 }
+
 // src/styles/main.scss
 
 // ... (your existing styles)
@@ -678,6 +712,7 @@ $telegram-success: #4caf50;
     transform: rotate(45deg);
   }
 }
+
 .main-card-ribbon {
   width: 150px;
   height: 150px;
@@ -765,9 +800,11 @@ $telegram-success: #4caf50;
 
   .status-icon {
     font-size: 1.2rem;
+
     &.enabled {
       color: $secondary-color;
     }
+
     &.disabled {
       color: $text-secondary;
     }
@@ -830,14 +867,15 @@ $telegram-success: #4caf50;
     }
   }
 
-  input:checked + .slider {
+  input:checked+.slider {
     background-color: $secondary-color; // On state
   }
 
-  input:checked + .slider:before {
+  input:checked+.slider:before {
     transform: translateX(22px);
   }
 }
+
 // This is the base style for all forms
 .form {
   display: flex;
@@ -903,6 +941,7 @@ select {
     }
   }
 }
+
 // ... (keep all your other styles)
 
 // ===============================================
@@ -1017,9 +1056,11 @@ select {
 
   .status-icon {
     font-size: 1.2rem;
+
     &.enabled {
       color: $secondary-color;
     }
+
     &.disabled {
       color: $text-secondary;
     }
@@ -1042,10 +1083,12 @@ select {
     }
   }
 }
+
 // ===============================================
 // Styles for Transactions Page (with MOBILE FIX)
 // ===============================================
 .transactions-page {
+
   // NEW: The button to open filters on mobile. Hidden on desktop.
   .mobile-filter-toggle {
     display: none; // Hidden by default on larger screens
@@ -1114,6 +1157,7 @@ select {
 
   // --- MOBILE SPECIFIC STYLES ---
   @include mobile {
+
     // Show the toggle button on mobile
     .mobile-filter-toggle {
       display: inline-flex;
@@ -1225,6 +1269,7 @@ select {
     }
   }
 }
+
 // src/styles/main.scss
 
 // ... (barcha mavjud uslublaringiz)
@@ -1241,9 +1286,11 @@ select {
 
     .btn {
       background-color: $secondary-color; // Boshqa rang beramiz
+
       &:hover {
         background-color: darken($secondary-color, 10%);
       }
+
       &:disabled {
         background-color: $border-color;
         cursor: not-allowed;
@@ -1251,6 +1298,7 @@ select {
     }
   }
 }
+
 // src/styles/main.scss yoki components/Form.scss oxiriga qo'shing
 
 // Parolni ko'rsatish/yashirish tugmasi uchun stil
@@ -1302,6 +1350,7 @@ select {
   justify-content: flex-end; // Tugmani o'ng tomonga suradi
   margin-top: 1rem;
 }
+
 // src/styles/main.scss
 
 // ... (all other styles)
@@ -1341,6 +1390,7 @@ select {
       svg {
         font-size: 1.5rem;
       }
+
       h3 {
         margin: 0;
         font-size: 1.25rem;
@@ -1433,6 +1483,7 @@ select {
     }
   }
 }
+
 // src/styles/main.scss
 
 // ... (all other styles)
@@ -1444,6 +1495,7 @@ select {
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
@@ -1452,6 +1504,7 @@ select {
 .spinner {
   animation: spin 1s linear infinite;
 }
+
 // src/styles/main.scss
 
 // ... (barcha mavjud stillaringiz) ...
@@ -1519,16 +1572,19 @@ select {
     align-items: center;
     flex-wrap: wrap;
     gap: 1rem;
+
     h1 {
       color: $text-primary;
     }
   }
+
   .filter-controls {
     display: flex;
     gap: 0.5rem;
     background-color: $bg-light;
     padding: 0.5rem;
     border-radius: $border-radius;
+
     button,
     .custom-datepicker {
       background: transparent;
@@ -1541,10 +1597,12 @@ select {
       transition: all 0.2s ease;
       font-family: inherit;
       font-size: 0.9rem;
+
       &:hover {
         color: $text-primary;
         background-color: $bg-lighter;
       }
+
       &.active {
         background-color: $primary-color;
         color: #fff;
@@ -1557,39 +1615,49 @@ select {
     background-color: transparent !important;
     text-align: center;
     width: 160px;
+
     &::placeholder {
       color: $text-secondary;
     }
   }
+
   .react-datepicker-popper {
     z-index: 10;
   }
+
   .react-datepicker__triangle {
     display: none;
   }
+
   .react-datepicker {
     background-color: $bg-light !important;
     border: 1px solid $border-color !important;
     font-family: $font-family !important;
   }
+
   .react-datepicker__header {
     background-color: $bg-lighter !important;
     border-bottom: 1px solid $border-color !important;
   }
+
   .react-datepicker__navigation-arrow {
     margin-top: 5px !important;
   }
+
   .react-datepicker__current-month,
   .react-datepicker__day-name,
   .react-datepicker__day {
     color: $text-primary !important;
   }
+
   .react-datepicker__day:hover {
     background-color: $bg-lighter !important;
   }
+
   .react-datepicker__day--disabled {
     color: #666 !important;
   }
+
   .react-datepicker__day--selected,
   .react-datepicker__day--in-selecting-range,
   .react-datepicker__day--in-range {
@@ -1602,6 +1670,7 @@ select {
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     gap: 1.5rem;
   }
+
   .stat-card-v2 {
     background-color: $bg-light;
     padding: 1.5rem;
@@ -1610,19 +1679,23 @@ select {
     gap: 1rem;
     border-bottom: 4px solid;
     transition: all 0.2s ease;
+
     &:hover {
       transform: translateY(-5px);
       box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);
     }
+
     &__icon {
       font-size: 2.5rem;
       align-self: center;
     }
+
     &__info {
       display: flex;
       flex-direction: column;
       justify-content: center;
     }
+
     &__title {
       color: $text-secondary;
       font-size: 0.9rem;
@@ -1630,12 +1703,14 @@ select {
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
+
     &__value {
       color: $text-primary;
       font-size: 2rem;
       font-weight: 700;
       line-height: 1.2;
     }
+
     &__detail {
       color: $text-secondary;
       font-size: 0.85rem;
@@ -1647,6 +1722,7 @@ select {
     display: grid;
     grid-template-columns: 2fr 1.2fr; // Left column is wider
     gap: 1.5rem;
+
     @include tablet {
       grid-template-columns: 1fr; // Stack on smaller screens
     }
@@ -1671,6 +1747,7 @@ select {
   .area-chart {
     height: 400px;
   }
+
   .stacked-bar-chart {
     height: 400px;
   }
@@ -1689,19 +1766,24 @@ select {
     border-radius: $border-radius;
     display: flex;
     flex-direction: column;
+
     h3 {
       margin: 0 0 1rem 0;
       color: $text-primary;
     }
+
     .table-wrapper {
       overflow-y: auto;
       flex-grow: 1;
       max-height: 250px;
-    } // Set max-height for scrolling
+    }
+
+    // Set max-height for scrolling
     table {
       width: 100%;
       border-collapse: collapse;
       font-size: 0.9rem;
+
       th {
         text-align: left;
         padding: 0.75rem;
@@ -1709,20 +1791,24 @@ select {
         border-bottom: 2px solid $border-color;
         font-weight: 600;
       }
+
       td {
         padding: 0.75rem;
         border-bottom: 1px solid $border-color;
         color: $text-primary;
       }
+
       tbody tr:last-child td {
         border-bottom: none;
       }
+
       tbody tr:hover {
         background-color: $bg-lighter;
       }
     }
   }
 }
+
 // src/styles/main.scss
 
 // ... (all your existing styles)
@@ -1745,16 +1831,19 @@ select {
     align-items: center;
     flex-wrap: wrap;
     gap: 1rem;
+
     h1 {
       color: $text-primary;
     }
   }
+
   .filter-controls {
     display: flex;
     gap: 0.5rem;
     background-color: $bg-light;
     padding: 0.5rem;
     border-radius: $border-radius;
+
     button,
     .custom-datepicker {
       background: transparent;
@@ -1767,10 +1856,12 @@ select {
       transition: all 0.2s ease;
       font-family: inherit;
       font-size: 0.9rem;
+
       &:hover {
         color: $text-primary;
         background-color: $bg-lighter;
       }
+
       &.active {
         background-color: $primary-color;
         color: #fff;
@@ -1783,39 +1874,49 @@ select {
     background-color: transparent !important;
     text-align: center;
     width: 160px;
+
     &::placeholder {
       color: $text-secondary;
     }
   }
+
   .react-datepicker-popper {
     z-index: 10;
   }
+
   .react-datepicker__triangle {
     display: none;
   }
+
   .react-datepicker {
     background-color: $bg-light !important;
     border: 1px solid $border-color !important;
     font-family: $font-family !important;
   }
+
   .react-datepicker__header {
     background-color: $bg-lighter !important;
     border-bottom: 1px solid $border-color !important;
   }
+
   .react-datepicker__navigation-arrow {
     margin-top: 5px !important;
   }
+
   .react-datepicker__current-month,
   .react-datepicker__day-name,
   .react-datepicker__day {
     color: $text-primary !important;
   }
+
   .react-datepicker__day:hover {
     background-color: $bg-lighter !important;
   }
+
   .react-datepicker__day--disabled {
     color: #666 !important;
   }
+
   .react-datepicker__day--selected,
   .react-datepicker__day--in-selecting-range,
   .react-datepicker__day--in-range {
@@ -1828,6 +1929,7 @@ select {
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     gap: 1.5rem;
   }
+
   .stat-card-v2 {
     background-color: $bg-light;
     padding: 1.5rem;
@@ -1836,19 +1938,23 @@ select {
     gap: 1rem;
     border-bottom: 4px solid;
     transition: all 0.2s ease;
+
     &:hover {
       transform: translateY(-5px);
       box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);
     }
+
     &__icon {
       font-size: 2.5rem;
       align-self: center;
     }
+
     &__info {
       display: flex;
       flex-direction: column;
       justify-content: center;
     }
+
     &__title {
       color: $text-secondary;
       font-size: 0.9rem;
@@ -1856,12 +1962,14 @@ select {
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
+
     &__value {
       color: $text-primary;
       font-size: 2rem;
       font-weight: 700;
       line-height: 1.2;
     }
+
     &__detail {
       color: $text-secondary;
       font-size: 0.85rem;
@@ -1874,6 +1982,7 @@ select {
     grid-template-columns: 2fr 1.2fr;
     gap: 1.5rem;
   }
+
   .main-column,
   .sidebar-column {
     display: flex;
@@ -1890,29 +1999,35 @@ select {
     display: flex;
     flex-direction: column;
   }
+
   .area-chart,
   .stacked-bar-chart {
     height: 400px;
   }
+
   .donut-hero-chart {
     height: 550px;
     padding: 2rem;
     justify-content: center;
   }
+
   .table-container-v2 {
     h3 {
       margin: 0 0 1rem 0;
       color: $text-primary;
     }
+
     .table-wrapper {
       overflow-y: auto;
       flex-grow: 1;
       max-height: 250px;
     }
+
     table {
       width: 100%;
       border-collapse: collapse;
       font-size: 0.9rem;
+
       th {
         text-align: left;
         padding: 0.75rem;
@@ -1920,14 +2035,17 @@ select {
         border-bottom: 2px solid $border-color;
         font-weight: 600;
       }
+
       td {
         padding: 0.75rem;
         border-bottom: 1px solid $border-color;
         color: $text-primary;
       }
+
       tbody tr:last-child td {
         border-bottom: none;
       }
+
       tbody tr:hover {
         background-color: $bg-lighter;
       }
@@ -1938,6 +2056,7 @@ select {
   // These styles will only apply on screens 768px or smaller
 
   @include mobile {
+
     // Make main layout a single column
     .dashboard-main-content-grid {
       grid-template-columns: 1fr;
@@ -1954,6 +2073,7 @@ select {
       align-items: stretch; // Make items stretch to full width
       gap: 1rem;
     }
+
     .filter-controls {
       flex-wrap: wrap; // Allow filter buttons to wrap
       justify-content: center;
@@ -1964,12 +2084,15 @@ select {
     .stat-card-v2 {
       padding: 1rem;
       gap: 0.75rem;
+
       &__icon {
         font-size: 2rem;
       }
+
       &__value {
         font-size: 1.5rem;
       }
+
       &__title {
         font-size: 0.8rem;
       }
@@ -1986,6 +2109,7 @@ select {
     .stacked-bar-chart {
       height: 300px;
     }
+
     .donut-hero-chart {
       height: 450px; // Still the "hero" but not excessively tall
       padding: 1rem;
@@ -1996,8 +2120,10 @@ select {
       h3 {
         font-size: 1.2rem;
       }
+
       table {
         font-size: 0.85rem;
+
         th,
         td {
           padding: 0.6rem;
@@ -2006,6 +2132,7 @@ select {
     }
   }
 }
+
 // src/styles/main.scss
 
 // ... (all your existing styles)
@@ -2096,6 +2223,7 @@ hr {
   margin-bottom: 1.5rem;
   text-align: left;
 }
+
 // src/styles/main.scss
 
 // ... (all your existing styles)
@@ -2118,10 +2246,12 @@ hr {
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
 }
+
 .spin {
   animation: spin 1s linear infinite;
 }
@@ -2140,6 +2270,7 @@ hr {
     }
   }
 }
+
 // src/styles/main.scss
 
 // ... (your existing styles for .oson-card, etc.)
@@ -2176,6 +2307,7 @@ hr {
 // Style for password toggle button if not already present
 .password-input-container {
   position: relative;
+
   .password-toggle-btn {
     position: absolute;
     right: 10px;
@@ -2193,12 +2325,14 @@ hr {
 .transaction-table {
   tbody tr.is-primary-row {
     background-color: rgba($secondary-color, 0.1);
+
     td:first-child svg {
       color: $secondary-color;
       font-size: 1.2rem;
     }
   }
 }
+
 // src/styles/main.scss
 
 // ... (your existing oson-card styles are good)
@@ -2224,6 +2358,7 @@ hr {
   padding: 2rem;
   border-radius: $border-radius;
 }
+
 // src/styles/main.scss
 
 // ... (your existing oson-card styles are good)
@@ -2249,6 +2384,7 @@ hr {
   padding: 2rem;
   border-radius: $border-radius;
 }
+
 // src/styles/main.scss
 
 // ===============================================
@@ -2354,7 +2490,7 @@ hr {
 
   // Ensure all buttons and links are styled consistently
   .btn,
-  a > .btn {
+  a>.btn {
     flex-grow: 1; // Makes buttons share space nicely
     display: inline-flex;
     align-items: center;
@@ -2363,10 +2499,11 @@ hr {
   }
 
   // Make the primary action stand out more if needed
-  a > .btn {
+  a>.btn {
     // You can add specific styles for the "Edit" button if you want
   }
 }
+
 // src/styles/main.scss
 
 // ===============================================
@@ -2462,6 +2599,7 @@ hr {
     color: $text-secondary;
     margin-bottom: 0.1rem;
   }
+
   p {
     margin: 0;
     font-size: 1.1rem;
@@ -2507,6 +2645,7 @@ hr {
     line-height: 1; // Ensures icon is centered vertically
   }
 }
+
 // src/styles/main.scss
 
 // ... (all your existing styles)
@@ -2543,6 +2682,7 @@ hr {
       height: 18px;
       cursor: pointer;
     }
+
     label {
       margin: 0;
       cursor: pointer;
@@ -2581,10 +2721,12 @@ hr {
     p {
       margin: 0;
       line-height: 1.5;
+
       // Make links inside the message look good
       a {
         color: #fff;
         text-decoration: underline;
+
         &:hover {
           color: darken(#fff, 15%);
         }
@@ -2634,6 +2776,7 @@ hr {
     &.success {
       background-color: $secondary-color;
     }
+
     &.error {
       background-color: $danger-color;
     }
@@ -2653,6 +2796,7 @@ hr {
     }
   }
 }
+
 // src/styles/components/_Navbar.scss OR main.scss
 
 // ... (existing .navbar styles)
@@ -2699,6 +2843,7 @@ hr {
 
     &__chevron {
       transition: transform 0.2s ease-in-out;
+
       &.open {
         transform: rotate(180deg);
       }
@@ -2785,11 +2930,13 @@ hr {
     opacity: 0;
     transform: translateY(-10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
+
 /* These styles make the dashboard page look good */
 
 .dashboard-v2 {
@@ -2916,9 +3063,11 @@ hr {
     &.area-chart {
       height: 300px;
     }
+
     &.stacked-bar-chart {
       height: 410px;
     }
+
     &.donut-hero-chart {
       height: 400px;
     }
@@ -2948,16 +3097,19 @@ hr {
         padding: 0.75rem;
         text-align: left;
       }
+
       th {
         color: $text-secondary;
         font-size: 0.9rem;
       }
+
       tbody tr {
         border-top: 1px solid $border-color;
       }
     }
   }
 }
+
 // src/styles/main.scss
 
 // ... (all your existing styles, including the .lottery-page styles)
@@ -3008,6 +3160,7 @@ hr {
     gap: 1rem;
   }
 }
+
 // src/styles/main.scss
 
 // ... (all existing styles for .lottery-page, etc.)
@@ -3037,6 +3190,7 @@ hr {
     align-items: flex-end; // Aligns the button nicely with the inputs
 
     .submit-group {
+
       // The button will also take up one grid cell
       .btn {
         width: 100%; // Make the button fill its container
@@ -3225,13 +3379,14 @@ hr {
     transform: translateX(25px);
   }
 }
- $primary-color: #3b82f6;      // A vibrant blue
- $danger-color-light: #fee2e2; // A very light red for hover
- $border-color: #e5e7eb;
- $bg-light: #ffffff;
- $text-primary: #111827;
- $text-secondary: #6b7280;
- $border-radius: 8px;
+
+$primary-color: #3b82f6; // A vibrant blue
+$danger-color-light: #fee2e2; // A very light red for hover
+$border-color: #e5e7eb;
+$bg-light: #ffffff;
+$text-primary: #111827;
+$text-secondary: #6b7280;
+$border-radius: 8px;
 
 /*
  * ===================================================================
@@ -3240,11 +3395,12 @@ hr {
  */
 
 .form__group.form__group--toggle {
+
   /*
    * 1. Label Styling
    *    - Fixed the color to be a professional dark gray instead of black.
    */
-  > label {
+  >label {
     margin-bottom: 0.75rem;
     font-weight: 600;
     font-size: 1rem;
@@ -3286,7 +3442,7 @@ hr {
     cursor: pointer;
 
     // --- FIX: Increased vertical padding for better balance ---
-    padding: 0.9rem ;
+    padding: 0.9rem;
 
     // Use flexbox for perfect vertical and horizontal alignment
     display: flex;
@@ -3306,6 +3462,7 @@ hr {
 
     // Separator border
     border-right: 1px solid $border-color;
+
     &:last-child {
       border-right: none;
     }
@@ -3326,7 +3483,7 @@ hr {
   /*
    * 5. The Active/Checked State (Blue)
    */
-  input[type="radio"]:checked + .toggle-option {
+  input[type="radio"]:checked+.toggle-option {
     background-color: $primary-color;
     color: white;
     font-weight: 600;
@@ -3341,7 +3498,7 @@ hr {
   /*
    * 6. Accessibility Focus Ring
    */
-  input[type="radio"]:focus-visible + .toggle-option {
+  input[type="radio"]:focus-visible+.toggle-option {
     outline: 3px solid rgba($primary-color, 0.5);
     outline-offset: 2px;
     z-index: 1;
@@ -3354,6 +3511,7 @@ hr {
 // Styles for Users Page (User Balances Table) - Final Design
 // ===============================================
 .users-page {
+
   // 1. Table Container (The main outer box)
   .transaction-list-container {
     margin-bottom: 1.5rem;
@@ -3366,25 +3524,104 @@ hr {
 
   // 2. Table Structure (UNCHANGED)
   .transaction-table {
-    width: 100%; min-width: 600px; border-collapse: separate; border-spacing: 0 0.5rem; font-size: 1rem;
+    width: 100%;
+    min-width: 600px;
+    border-collapse: separate;
+    border-spacing: 0 0.5rem;
+    font-size: 1rem;
+
     thead {
-      tr { background-color: $primary-color; color: white; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); td, th { border: none !important; padding: 1.2rem 1.5rem; } }
-      th { cursor: pointer; user-select: none; font-size: 1rem; white-space: nowrap; font-weight: 600;
-        &.active-sort { background-color: darken($primary-color, 5%); color: white; &:hover { background-color: darken($primary-color, 10%); } }
-        &:hover:not(.active-sort) { background-color: lighten($primary-color, 5%); }
-        svg { vertical-align: middle; margin-right: 0.5rem; font-size: 1.1rem; }
+      tr {
+        background-color: $primary-color;
+        color: white;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
+        td,
+        th {
+          border: none !important;
+          padding: 1.2rem 1.5rem;
+        }
+      }
+
+      th {
+        cursor: pointer;
+        user-select: none;
+        font-size: 1rem;
+        white-space: nowrap;
+        font-weight: 600;
+
+        &.active-sort {
+          background-color: darken($primary-color, 5%);
+          color: white;
+
+          &:hover {
+            background-color: darken($primary-color, 10%);
+          }
+        }
+
+        &:hover:not(.active-sort) {
+          background-color: lighten($primary-color, 5%);
+        }
+
+        svg {
+          vertical-align: middle;
+          margin-right: 0.5rem;
+          font-size: 1.1rem;
+        }
       }
     }
+
     tbody tr {
-      background-color: rgba($primary-color, 0.05); border-radius: $border-radius; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05); transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-      td { border: none !important; padding: 1.2rem 1.5rem; }
-      &:hover:not(.selected) { background-color: rgba($primary-color, 0.1); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); transform: translateY(-2px); }
-      &.selected { background-color: rgba($secondary-color, 0.15); border: 1px solid $secondary-color; box-shadow: 0 0 10px rgba($secondary-color, 0.2); transform: scale(1.005); }
+      background-color: rgba($primary-color, 0.05);
+      border-radius: $border-radius;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+
+      td {
+        border: none !important;
+        padding: 1.2rem 1.5rem;
+      }
+
+      &:hover:not(.selected) {
+        background-color: rgba($primary-color, 0.1);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        transform: translateY(-2px);
+      }
+
+      &.selected {
+        background-color: rgba($secondary-color, 0.15);
+        border: 1px solid $secondary-color;
+        box-shadow: 0 0 10px rgba($secondary-color, 0.2);
+        transform: scale(1.005);
+      }
     }
-    tbody td:nth-child(2) { font-family: monospace; font-weight: 500; color: $text-secondary; }
-    tbody td:nth-child(3) { font-weight: 700; color: $secondary-color; font-family: "Courier New", Courier, monospace; }
-    tbody td:nth-child(4) { font-weight: 600; color: $primary-color; font-family: "Courier New", Courier, monospace; }
-    .no-data { padding: 4rem; font-size: 1.2rem; box-shadow: none; border: none; background-color: $bg-light; border-radius: $border-radius; }
+
+    tbody td:nth-child(2) {
+      font-family: monospace;
+      font-weight: 500;
+      color: $text-secondary;
+    }
+
+    tbody td:nth-child(3) {
+      font-weight: 700;
+      color: $secondary-color;
+      font-family: "Courier New", Courier, monospace;
+    }
+
+    tbody td:nth-child(4) {
+      font-weight: 600;
+      color: $primary-color;
+      font-family: "Courier New", Courier, monospace;
+    }
+
+    .no-data {
+      padding: 4rem;
+      font-size: 1.2rem;
+      box-shadow: none;
+      border: none;
+      background-color: $bg-light;
+      border-radius: $border-radius;
+    }
   }
 
   // 3. Pagination Controls Style (FIXED: White Text)
@@ -3456,16 +3693,40 @@ hr {
 
     // 4. Mobile Responsiveness (UNCHANGED)
     @include mobile {
-      .page-header { flex-direction: column; align-items: stretch; gap: 1rem; h1 { text-align: center; } a .btn { width: 100%; justify-content: center; } }
-      .table-actions .btn { width: 100%; justify-content: center; }
-      .transaction-table { min-width: 550px; font-size: 0.9rem; }
+      .page-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
+
+        h1 {
+          text-align: center;
+        }
+
+        a .btn {
+          width: 100%;
+          justify-content: center;
+        }
+      }
+
+      .table-actions .btn {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .transaction-table {
+        min-width: 550px;
+        font-size: 0.9rem;
+      }
 
       .pagination-controls {
         flex-direction: column;
         gap: 1rem;
         padding: 1rem;
 
-        span { font-size: 0.9rem; text-align: center; }
+        span {
+          font-size: 0.9rem;
+          text-align: center;
+        }
 
         .btn {
           width: 100%;
@@ -3476,6 +3737,7 @@ hr {
     }
   }
 }
+
 // ===============================================
 // Custom Date Input Styles
 // ===============================================
@@ -3516,10 +3778,120 @@ hr {
     opacity: 0.9; // Made lighter/brighter
     transition: opacity 0.2s ease, transform 0.2s ease;
   }
-  
+
   &::-webkit-calendar-picker-indicator:hover {
     opacity: 1;
     transform: scale(1.1);
+  }
+}
+// ===============================================
+// New Responsive Utilities (Step 184 Fix)
+// ===============================================
+
+// 1. Responsive Grids for Profile Page
+.responsive-grid-sidebar-right {
+  display: grid;
+  grid-template-columns: 2fr 1.5fr;
+  gap: 25px;
+  margin-bottom: 25px;
+
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.responsive-grid-halves {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 25px;
+  margin-bottom: 25px;
+
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.responsive-grid-thirds-stats {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr 1fr;
+  gap: 25px;
+  align-items: stretch;
+
+  @media (max-width: 1100px) {
+    grid-template-columns: 1fr 1fr;
+    .graph-card { grid-column: span 2; }
+  }
+  
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    .graph-card { grid-column: span 1; }
+  }
+}
+
+// 2. Responsive Filters for User Management
+.responsive-filters-form {
+  display: flex; 
+  gap: 10px; 
+  flex-wrap: wrap; 
+  align-items: flex-end;
+
+  .form-group {
+    flex: 1 1 180px; // Allow growing and shrinking, base 180px
+    min-width: 150px;
+    
+    label {
+      display: block;
+      margin-bottom: 5px;
+      color: #aaa;
+    }
+
+    input, select {
+      width: 100%;
+      // Ensure box-sizing is border-box to contain padding
+      box-sizing: border-box; 
+    }
+  }
+
+  // Make buttons responsive too
+  button {
+    flex: 0 0 auto;
+    @media (max-width: 480px) {
+      width: 100%; // Full width buttons on very small screens
+      justify-content: center;
+    }
+  }
+}
+
+// 3. Profile Header Mobile
+@media (max-width: 768px) {
+  .user-profile-page {
+    .page-header {
+      flex-direction: column;
+      align-items: flex-start !important;
+      gap: 15px;
+      
+      h1 { font-size: 1.5rem !important; }
+      
+      div:last-child {
+        width: 100%;
+        justify-content: space-between;
+      }
+    }
+
+    .profile-card {
+      .profile-header {
+        flex-direction: column;
+        align-items: center !important;
+        text-align: center;
+        
+        .avatar-placeholder { margin-bottom: 10px; }
+        div { text-align: center !important; margin-left: 0 !important; }
+      }
+      
+      .profile-details {
+        grid-template-columns: 1fr !important;
+      }
+    }
   }
 }
 

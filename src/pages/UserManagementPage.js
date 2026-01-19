@@ -165,7 +165,7 @@ const UserManagementPage = () => {
 
             {/* Filters Section */}
             <div className="filters-container" style={{ marginBottom: '20px', padding: '15px', background: 'rgba(255,255,255,0.05)', borderRadius: '12px' }}>
-                <form onSubmit={handleSearch} style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', alignItems: 'flex-end' }}>
+                <form onSubmit={handleSearch} className="responsive-filters-form">
                     <div className="form-group">
                         <label>Qidiruv (Chat ID)</label>
                         <input
