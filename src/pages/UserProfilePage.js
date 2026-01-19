@@ -421,38 +421,38 @@ const UserProfilePage = () => {
 
             {/* SECTION 3: Activity Statistics */}
             {summary && (
-                <div className="section-container" style={{ marginBottom: '25px' }}>
+                <div className="section-container" style={{ marginBottom: '25px', overflow: 'hidden' }}>
                     <h2 style={{ fontSize: '1.4rem', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px' }}>
                         <FiActivity /> Faoliyat Statistikasi
                     </h2>
                     <div className="responsive-grid-thirds-stats">
                         {/* Stats Summary Cards (Left) */}
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-                            <div className="stat-card" style={{ background: '#252a41', padding: '20px', borderRadius: '12px', borderLeft: '4px solid #53bf9d' }}>
-                                <div style={{ color: '#888' }}>Jami Top-uplar</div>
-                                <div style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>{formatCurrency(summary.totalTopUps)}</div>
-                                <div style={{ color: '#53bf9d', display: 'flex', alignItems: 'center' }}><FiArrowDownLeft /> Kirim</div>
+                            <div className="stat-card" style={{ background: '#252a41', padding: '15px', borderRadius: '12px', borderLeft: '4px solid #53bf9d' }}>
+                                <div style={{ color: '#888', fontSize: '0.9rem' }}>Jami Top-uplar</div>
+                                <div style={{ fontSize: '1.3rem', fontWeight: 'bold' }}>{formatCurrency(summary.totalTopUps)}</div>
+                                <div style={{ color: '#53bf9d', display: 'flex', alignItems: 'center', fontSize: '0.85rem' }}><FiArrowDownLeft /> Kirim</div>
                             </div>
-                            <div className="stat-card" style={{ background: '#252a41', padding: '20px', borderRadius: '12px', borderLeft: '4px solid #36a2eb' }}>
-                                <div style={{ color: '#888' }}>Jami Transferlar</div>
-                                <div style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>{formatCurrency(summary.totalTransfers)}</div>
-                                <div style={{ color: '#36a2eb', display: 'flex', alignItems: 'center' }}><FiArrowUpRight /> Chiqim</div>
+                            <div className="stat-card" style={{ background: '#252a41', padding: '15px', borderRadius: '12px', borderLeft: '4px solid #36a2eb' }}>
+                                <div style={{ color: '#888', fontSize: '0.9rem' }}>Jami Transferlar</div>
+                                <div style={{ fontSize: '1.3rem', fontWeight: 'bold' }}>{formatCurrency(summary.totalTransfers)}</div>
+                                <div style={{ color: '#36a2eb', display: 'flex', alignItems: 'center', fontSize: '0.85rem' }}><FiArrowUpRight /> Chiqim</div>
                             </div>
                         </div>
 
                         {/* Volume Chart (Middle) */}
-                        <div className="card graph-card" style={{ background: '#252a41', borderRadius: '15px', padding: '20px', minHeight: '300px' }}>
-                            <h4 style={{ textAlign: 'center', marginBottom: '15px', color: '#aaa' }}>Kirim va Chiqim Hajmi</h4>
-                            <div style={{ height: '240px', width: '100%' }}>
+                        <div className="card graph-card" style={{ background: '#252a41', borderRadius: '15px', padding: '15px', minHeight: '250px', maxWidth: '100%', boxSizing: 'border-box' }}>
+                            <h4 style={{ textAlign: 'center', marginBottom: '10px', color: '#aaa', fontSize: '1rem' }}>Kirim va Chiqim Hajmi</h4>
+                            <div style={{ height: '200px', width: '100%', maxWidth: '100%' }}>
                                 <Bar
                                     data={getVolumeStatsData()}
                                     options={{
                                         responsive: true,
                                         maintainAspectRatio: false,
-                                        plugins: { legend: { position: 'bottom' } },
+                                        plugins: { legend: { position: 'bottom', labels: { boxWidth: 8, padding: 10, font: { size: 11 } } } },
                                         scales: {
-                                            y: { grid: { color: 'rgba(255,255,255,0.05)' } },
-                                            x: { grid: { display: false } }
+                                            y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { font: { size: 10 } } },
+                                            x: { grid: { display: false }, ticks: { font: { size: 10 } } }
                                         }
                                     }}
                                 />
@@ -460,15 +460,15 @@ const UserProfilePage = () => {
                         </div>
 
                         {/* Status Chart (Right) */}
-                        <div className="card pie-card" style={{ background: '#252a41', borderRadius: '15px', padding: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                            <h4 style={{ textAlign: 'center', marginBottom: '15px', color: '#aaa' }}>So'rovlar Holati</h4>
-                            <div style={{ height: '200px', width: '100%', maxWidth: '200px' }}>
+                        <div className="card pie-card" style={{ background: '#252a41', borderRadius: '15px', padding: '15px', display: 'flex', flexDirection: 'column', alignItems: 'center', maxWidth: '100%', boxSizing: 'border-box' }}>
+                            <h4 style={{ textAlign: 'center', marginBottom: '10px', color: '#aaa', fontSize: '1rem' }}>So'rovlar Holati</h4>
+                            <div style={{ height: '180px', width: '100%', maxWidth: '180px' }}>
                                 <Doughnut
                                     data={getRequestStatsData()}
                                     options={{
                                         responsive: true,
                                         maintainAspectRatio: false,
-                                        plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, padding: 15, color: '#fff' } } },
+                                        plugins: { legend: { position: 'bottom', labels: { boxWidth: 8, padding: 10, color: '#fff', font: { size: 10 } } } },
                                         borderWidth: 0
                                     }}
                                 />
@@ -644,48 +644,50 @@ const UserProfilePage = () => {
             </div>
 
             {/* Reuse Modal - keeping it simple */}
-            {modalOpen && (
-                <div className="modal-overlay" style={{
-                    position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.8)',
-                    display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000, backdropFilter: 'blur(5px)'
-                }}>
-                    <div className="modal-content" style={{
-                        background: '#252a41', padding: '30px', borderRadius: '15px', width: '400px', maxWidth: '90%', border: '1px solid #444'
+            {
+                modalOpen && (
+                    <div className="modal-overlay" style={{
+                        position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.8)',
+                        display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000, backdropFilter: 'blur(5px)'
                     }}>
-                        <h2 style={{ marginTop: 0, marginBottom: '20px', color: '#fff' }}>Tahrirlash: {modalType === 'limit' ? 'Limitni Oshirish' : modalType}</h2>
-                        <form onSubmit={handleModalSubmit}>
-                            <div className="form-group" style={{ marginBottom: '25px' }}>
-                                <label style={{ display: 'block', marginBottom: '8px', color: '#aaa' }}>
-                                    {modalType === 'language' ? 'Yangi Til' : 'Yangi Qiymat'}
-                                </label>
-                                {modalType === 'language' ? (
-                                    <select
-                                        style={{ width: '100%', padding: '12px', borderRadius: '8px', background: '#1a1a2e', border: '1px solid #444', color: '#fff' }}
-                                        value={modalValue}
-                                        onChange={e => setModalValue(e.target.value)}
-                                    >
-                                        <option value="UZ">O'zbekcha (UZ)</option>
-                                        <option value="RU">Ruscha (RU)</option>
-                                    </select>
-                                ) : (
-                                    <input
-                                        type="number"
-                                        style={{ width: '100%', padding: '12px', borderRadius: '8px', background: '#1a1a2e', border: '1px solid #444', color: '#fff', fontSize: '1.2rem' }}
-                                        value={modalValue}
-                                        onChange={e => setModalValue(e.target.value)}
-                                        autoFocus
-                                    />
-                                )}
-                            </div>
-                            <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
-                                <Button type="button" secondary onClick={() => setModalOpen(false)}>Bekor qilish</Button>
-                                <Button type="submit" primary>Saqlash</Button>
-                            </div>
-                        </form>
+                        <div className="modal-content" style={{
+                            background: '#252a41', padding: '30px', borderRadius: '15px', width: '400px', maxWidth: '90%', border: '1px solid #444'
+                        }}>
+                            <h2 style={{ marginTop: 0, marginBottom: '20px', color: '#fff' }}>Tahrirlash: {modalType === 'limit' ? 'Limitni Oshirish' : modalType}</h2>
+                            <form onSubmit={handleModalSubmit}>
+                                <div className="form-group" style={{ marginBottom: '25px' }}>
+                                    <label style={{ display: 'block', marginBottom: '8px', color: '#aaa' }}>
+                                        {modalType === 'language' ? 'Yangi Til' : 'Yangi Qiymat'}
+                                    </label>
+                                    {modalType === 'language' ? (
+                                        <select
+                                            style={{ width: '100%', padding: '12px', borderRadius: '8px', background: '#1a1a2e', border: '1px solid #444', color: '#fff' }}
+                                            value={modalValue}
+                                            onChange={e => setModalValue(e.target.value)}
+                                        >
+                                            <option value="UZ">O'zbekcha (UZ)</option>
+                                            <option value="RU">Ruscha (RU)</option>
+                                        </select>
+                                    ) : (
+                                        <input
+                                            type="number"
+                                            style={{ width: '100%', padding: '12px', borderRadius: '8px', background: '#1a1a2e', border: '1px solid #444', color: '#fff', fontSize: '1.2rem' }}
+                                            value={modalValue}
+                                            onChange={e => setModalValue(e.target.value)}
+                                            autoFocus
+                                        />
+                                    )}
+                                </div>
+                                <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
+                                    <Button type="button" secondary onClick={() => setModalOpen(false)}>Bekor qilish</Button>
+                                    <Button type="submit" primary>Saqlash</Button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
-                </div>
-            )}
-        </div>
+                )
+            }
+        </div >
     );
 };
 
