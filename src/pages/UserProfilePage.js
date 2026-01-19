@@ -8,7 +8,7 @@ import Button from '../components/common/Button';
 import {
     FaArrowLeft, FaEdit, FaTrash, FaBan, FaCheck, FaCoins, FaTicketAlt, FaChartLine, FaGlobe, FaPhone, FaCalendarAlt, FaGamepad, FaShieldAlt
 } from 'react-icons/fa';
-import { FiRefreshCw, FiAlertTriangle, FiActivity, FiArrowUpRight, FiArrowDownLeft } from 'react-icons/fi';
+import { FiRefreshCw, FiAlertTriangle, FiActivity, FiArrowUpRight, FiArrowDownLeft, FiInfo } from 'react-icons/fi';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title } from 'chart.js';
 import { Doughnut, Bar } from 'react-chartjs-2';
 
@@ -235,7 +235,7 @@ const UserProfilePage = () => {
     if (!user) return null;
 
     return (
-        <div className="page-container user-profile-page" style={{ maxWidth: '1400px', margin: '0 auto' }}>
+        <div className="page-container user-profile-page">
             {/* Header */}
             <div className="page-header" style={{ marginBottom: '30px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
@@ -319,8 +319,15 @@ const UserProfilePage = () => {
             <div className="responsive-grid-halves">
                 {/* Limits */}
                 <div className="card" style={{ background: '#252a41', borderRadius: '15px', padding: '25px' }}>
-                    <h3 style={{ borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '15px', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                        <FaChartLine color="#36a2eb" /> Limitlar nazorati
+                    <h3 style={{ borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '15px', marginBottom: '20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                            <FaChartLine color="#36a2eb" /> Limitlar nazorati
+                        </div>
+                        {user.limitBreakdown && (
+                            <div className="tooltip-container" title={user.limitBreakdown} style={{ cursor: 'help' }}>
+                                <FiInfo size={18} color="#aaa" />
+                            </div>
+                        )}
                     </h3>
 
                     <div className="limit-row" style={{ marginBottom: '20px' }}>
@@ -341,19 +348,47 @@ const UserProfilePage = () => {
                         </div>
                     </div>
 
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
-                        <div style={{ background: 'rgba(255,255,255,0.03)', padding: '15px', borderRadius: '8px' }}>
-                            <div style={{ color: '#888', fontSize: '0.9rem' }}>Doimiy Oshirish</div>
-                            <div style={{ fontSize: '1.1rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                {formatCurrency(user.permanentLimitIncrease)}
-                                <FaEdit style={{ cursor: 'pointer', fontSize: '0.9rem', color: '#667eea' }} onClick={() => openModal('limit')} />
-                            </div>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(110px, 1fr))', gap: '10px' }}>
+                        <div style={{ background: 'rgba(255,255,255,0.03)', padding: '10px', borderRadius: '8px' }}>
+                            <div style={{ color: '#888', fontSize: '0.8rem' }}>Bazaviy</div>
+                            <div style={{ fontSize: '1rem', fontWeight: 'bold' }}>{formatCurrency(user.baseDailyLimit || 5000000)}</div>
                         </div>
-                        <div style={{ background: 'rgba(255,255,255,0.03)', padding: '15px', borderRadius: '8px' }}>
-                            <div style={{ color: '#888', fontSize: '0.9rem' }}>Lotereyadan Oshirish</div>
-                            <div style={{ fontSize: '1.1rem', fontWeight: 'bold', color: '#f9d56e' }}>+{formatCurrency(user.dailyLimitIncrease)}</div>
+
+                        <div style={{ background: 'rgba(255,255,255,0.03)', padding: '10px', borderRadius: '8px' }}>
+                            <div style={{ color: '#888', fontSize: '0.8rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                Doimiy <FaEdit style={{ cursor: 'pointer', fontSize: '0.9rem', color: '#667eea' }} onClick={() => openModal('limit')} />
+                            </div>
+                            <div style={{ fontSize: '1rem', fontWeight: 'bold' }}>
+                                {formatCurrency(user.permanentLimitIncrease)}
+                            </div>
+                            {user.permanentLimitIncreaseFormatted && (
+                                <div style={{ fontSize: '0.65rem', color: '#667eea', marginTop: '2px', fontFamily: 'monospace' }}>
+                                    {user.permanentLimitIncreaseFormatted}
+                                </div>
+                            )}
+                            {user.permanentLimitLastUpdated && (
+                                <div style={{ fontSize: '0.6rem', color: '#666', marginTop: '4px' }}>
+                                    {formatDate(user.permanentLimitLastUpdated)}
+                                </div>
+                            )}
+                        </div>
+
+                        <div style={{ background: 'rgba(255,255,255,0.03)', padding: '10px', borderRadius: '8px' }}>
+                            <div style={{ color: '#888', fontSize: '0.8rem' }}>Lotereyadan</div>
+                            <div style={{ fontSize: '1rem', fontWeight: 'bold', color: '#f9d56e' }}>+{formatCurrency(user.dailyLimitIncrease)}</div>
+                            {user.dailyStatsLastUpdated && (
+                                <div style={{ fontSize: '0.6rem', color: '#666', marginTop: '4px' }}>
+                                    {formatDate(user.dailyStatsLastUpdated)}
+                                </div>
+                            )}
                         </div>
                     </div>
+
+                    {user.limitBreakdown && (
+                        <div style={{ marginTop: '15px', padding: '10px', background: 'rgba(0,0,0,0.2)', borderRadius: '8px', fontSize: '0.75rem', color: '#aaa', whiteSpace: 'pre-line', lineHeight: '1.4' }}>
+                            {user.limitBreakdown}
+                        </div>
+                    )}
                 </div>
 
                 {/* Management Actions */}
@@ -448,11 +483,11 @@ const UserProfilePage = () => {
 
             {/* SECTION 3.5: Daily User Stats (NEW) */}
             <div className="card" style={{ background: '#252a41', borderRadius: '15px', padding: '25px', marginBottom: '25px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '15px' }}>
                     <h2 style={{ fontSize: '1.4rem', margin: 0, display: 'flex', alignItems: 'center', gap: '10px' }}>
                         <FaCalendarAlt color="#f9d56e" /> Kunlik Statistika
                     </h2>
-                    <div className="filters" style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                    <div className="filters" style={{ display: 'flex', gap: '10px', alignItems: 'center', flexWrap: 'wrap' }}>
                         <input
                             type="date"
                             className="custom-date-input"
@@ -470,8 +505,8 @@ const UserProfilePage = () => {
                     </div>
                 </div>
 
-                <div className="table-responsive" style={{ overflowX: 'auto' }}>
-                    <table className="transaction-table" style={{ width: '100%', borderCollapse: 'collapse' }}>
+                <div className="transaction-list-container">
+                    <table className="transaction-table" style={{ borderCollapse: 'collapse' }}>
                         <thead>
                             <tr style={{ background: 'rgba(255,255,255,0.02)', borderBottom: '1px solid #444' }}>
                                 <th style={{ padding: '15px', textAlign: 'left', color: '#aaa' }}>Sana</th>
@@ -502,7 +537,7 @@ const UserProfilePage = () => {
                 </div>
                 {/* Pagination for Daily Stats */}
                 {dailyStats && dailyStats.totalPages > 1 && (
-                    <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '15px' }}>
+                    <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '15px', flexWrap: 'wrap' }}>
                         <Button disabled={dailyStats.first} onClick={() => setDailyStatsPage(p => p - 1)} secondary small>Oldingi</Button>
                         <span style={{ color: '#aaa' }}>Sahifa {dailyStats.number + 1} / {dailyStats.totalPages}</span>
                         <Button disabled={dailyStats.last} onClick={() => setDailyStatsPage(p => p + 1)} secondary small>Keyingi</Button>
