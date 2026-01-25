@@ -20,6 +20,7 @@ const SystemConfigPage = () => {
         ticketCalculationAmount: 0,
         dailyBonusTransferLimit: 0,
         topUpDailyLimitIncreasePercentage: 0,
+        depositDailyLimitIncreasePercentage: 0,
         lotteryCooldownSeconds: 0 // Added lotteryCooldownSeconds
     });
 
@@ -141,6 +142,23 @@ const SystemConfigPage = () => {
                                 />
                                 <span className="currency">UZS</span>
                             </div>
+                        </div>
+
+                        <div className="form__group">
+                            <label>Depozit orqali kunlik limit oshish foizi</label>
+                            <div className="input-wrapper">
+                                <input
+                                    type="number"
+                                    step="0.01"
+                                    name="depositDailyLimitIncreasePercentage"
+                                    value={config.depositDailyLimitIncreasePercentage}
+                                    onChange={handleInputChange}
+                                    min="0"
+                                    required
+                                />
+                                <span className="currency">%</span>
+                            </div>
+                            <small>Foydalanuvchi pul depozit qilganda, bu foiz ularga faqat bugungi kun uchun kunlik limitga qo'shiladi. Masalan: 1 = 1% yoki 0.5 = 0.5%. Agar 1 ga o'rnatilgan bo'lsa va foydalanuvchi 100,000 UZS depozit qilsa, bugungi limitga +1,000 UZS qo'shiladi. Yarim tunda qayta tiklanadi.</small>
                         </div>
                     </div>
                 </div>
