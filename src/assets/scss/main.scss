@@ -3926,3 +3926,672 @@ $border-radius: 8px;
     }
   }
 }
+
+// ===============================================
+// Styles for Bot Restart Page
+// ===============================================
+.bot-restart-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.bot-restart-card {
+  background: linear-gradient(145deg, $bg-light 0%, darken($bg-light, 5%) 100%);
+  border-radius: 20px;
+  padding: 3rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba($primary-color, 0.1);
+  position: relative;
+  overflow: hidden;
+
+  // Animated background gradient
+  &::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba($primary-color, 0.05) 0%, transparent 70%);
+    animation: rotate-bg 20s linear infinite;
+  }
+}
+
+@keyframes rotate-bg {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.timer-wrapper {
+  position: relative;
+  width: 220px;
+  height: 220px;
+  z-index: 1;
+}
+
+.timer-svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.timer-bg {
+  stroke: rgba($text-secondary, 0.2);
+}
+
+.timer-progress {
+  stroke: $primary-color;
+  transition: stroke-dashoffset 1s linear;
+  filter: drop-shadow(0 0 6px $primary-color);
+}
+
+.timer-glow {
+  stroke: rgba($primary-color, 0.3);
+  transition: stroke-dashoffset 1s linear;
+  filter: blur(8px);
+}
+
+.timer-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.timer-number {
+  font-size: 4rem;
+  font-weight: 700;
+  color: $text-primary;
+  line-height: 1;
+  text-shadow: 0 0 20px rgba($primary-color, 0.5);
+  animation: pulse-number 1s ease-in-out infinite;
+}
+
+@keyframes pulse-number {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.timer-label {
+  font-size: 1rem;
+  color: $text-secondary;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-top: 0.5rem;
+}
+
+.timer-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  svg {
+    width: 48px;
+    height: 48px;
+  }
+
+  &.idle {
+    color: $text-secondary;
+    animation: spin-slow 4s linear infinite;
+  }
+
+  &.success {
+    color: $secondary-color;
+    animation: success-pop 0.5s ease-out;
+  }
+
+  &.error {
+    color: $danger-color;
+    animation: shake 0.5s ease-out;
+  }
+}
+
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes success-pop {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+
+  50% {
+    transform: scale(1.2);
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes shake {
+
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  20%,
+  60% {
+    transform: translateX(-5px);
+  }
+
+  40%,
+  80% {
+    transform: translateX(5px);
+  }
+}
+
+// Particles effect
+.particles {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.particle {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: $primary-color;
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  opacity: 0;
+  animation: particle-float 2s ease-in-out infinite;
+}
+
+@for $i from 1 through 8 {
+  .particle-#{$i} {
+    animation-delay: #{$i * 0.25}s;
+    transform: rotate(#{$i * 45}deg) translateY(-120px);
+  }
+}
+
+@keyframes particle-float {
+
+  0%,
+  100% {
+    opacity: 0;
+    transform: rotate(var(--angle)) translateY(-80px) scale(0.5);
+  }
+
+  50% {
+    opacity: 1;
+    transform: rotate(var(--angle)) translateY(-120px) scale(1);
+  }
+}
+
+.status-text {
+  text-align: center;
+  min-height: 30px;
+  z-index: 1;
+
+  p {
+    margin: 0;
+    font-size: 1.1rem;
+    color: $text-secondary;
+  }
+
+  .pulsing {
+    animation: pulse-text 1.5s ease-in-out infinite;
+  }
+
+  .success-text {
+    color: $secondary-color;
+    font-weight: 600;
+    font-size: 1.3rem;
+  }
+
+  .error-text {
+    color: $danger-color;
+    font-weight: 500;
+  }
+}
+
+@keyframes pulse-text {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.action-buttons {
+  z-index: 1;
+}
+
+.restart-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+  background: linear-gradient(135deg, $primary-color 0%, darken($primary-color, 10%) 100%);
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 25px rgba($primary-color, 0.4);
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 35px rgba($primary-color, 0.5);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  .btn-icon {
+    transition: transform 0.3s ease;
+  }
+
+  &:hover .btn-icon {
+    transform: rotate(180deg);
+  }
+
+  &.success-btn {
+    background: linear-gradient(135deg, $secondary-color 0%, darken($secondary-color, 10%) 100%);
+    box-shadow: 0 8px 25px rgba($secondary-color, 0.4);
+
+    &:hover {
+      box-shadow: 0 12px 35px rgba($secondary-color, 0.5);
+    }
+
+    &:hover .btn-icon {
+      transform: scale(1.2);
+    }
+  }
+
+  &.error-btn {
+    background: linear-gradient(135deg, $danger-color 0%, darken($danger-color, 10%) 100%);
+    box-shadow: 0 8px 25px rgba($danger-color, 0.4);
+
+    &:hover {
+      box-shadow: 0 12px 35px rgba($danger-color, 0.5);
+    }
+  }
+}
+
+.info-panel {
+  background: $bg-light;
+  border-radius: $border-radius;
+  padding: 1.5rem 2rem;
+  width: 100%;
+  border-left: 4px solid $primary-color;
+
+  h3 {
+    margin: 0 0 1rem;
+    color: $primary-color;
+    font-size: 1.1rem;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 0;
+    color: $text-secondary;
+    border-bottom: 1px solid rgba($border-color, 0.5);
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  .info-icon {
+    font-size: 1.2rem;
+    flex-shrink: 0;
+  }
+}
+
+// ===============================================
+// Responsive Styles for Bot Restart Page
+// ===============================================
+
+// Large screens (1200px and above) - default styles above
+
+// Tablet devices (768px - 1024px)
+@include tablet {
+  .bot-restart-container {
+    max-width: 500px;
+    gap: 1.5rem;
+    padding: 0 1rem;
+  }
+
+  .bot-restart-card {
+    padding: 2.5rem 2rem;
+    gap: 1.75rem;
+    border-radius: 16px;
+  }
+
+  .timer-wrapper {
+    width: 200px;
+    height: 200px;
+  }
+
+  .timer-number {
+    font-size: 3.5rem;
+  }
+
+  .timer-label {
+    font-size: 0.9rem;
+    letter-spacing: 1.5px;
+  }
+
+  .status-text p {
+    font-size: 1rem;
+  }
+
+  .restart-btn {
+    padding: 0.9rem 1.75rem;
+    font-size: 0.95rem;
+  }
+
+  .info-panel {
+    padding: 1.25rem 1.5rem;
+
+    h3 {
+      font-size: 1rem;
+    }
+
+    li {
+      font-size: 0.9rem;
+      padding: 0.6rem 0;
+    }
+  }
+}
+
+// Mobile devices (up to 768px)
+@include mobile {
+  .bot-restart-container {
+    max-width: 100%;
+    gap: 1.25rem;
+    padding: 0 0.75rem;
+  }
+
+  .bot-restart-card {
+    padding: 2rem 1.25rem;
+    gap: 1.5rem;
+    border-radius: 14px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25),
+      0 0 0 1px rgba($primary-color, 0.1);
+  }
+
+  .timer-wrapper {
+    width: 170px;
+    height: 170px;
+  }
+
+  .timer-number {
+    font-size: 3rem;
+  }
+
+  .timer-label {
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    margin-top: 0.25rem;
+  }
+
+  .timer-icon {
+    svg {
+      width: 40px;
+      height: 40px;
+    }
+  }
+
+  .status-text {
+    min-height: 25px;
+    padding: 0 0.5rem;
+
+    p {
+      font-size: 0.95rem;
+      line-height: 1.4;
+    }
+
+    .success-text {
+      font-size: 1.1rem;
+    }
+  }
+
+  .action-buttons {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .restart-btn {
+    padding: 0.875rem 1.5rem;
+    font-size: 0.9rem;
+    gap: 0.5rem;
+    width: 100%;
+    max-width: 280px;
+    justify-content: center;
+
+    // Better touch target
+    min-height: 48px;
+  }
+
+  .info-panel {
+    padding: 1rem 1.25rem;
+    border-left-width: 3px;
+
+    h3 {
+      font-size: 0.95rem;
+      margin-bottom: 0.75rem;
+    }
+
+    li {
+      font-size: 0.85rem;
+      padding: 0.5rem 0;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .info-icon {
+      font-size: 1rem;
+    }
+  }
+
+  // Reduce particle effects on mobile for performance
+  .particle {
+    width: 6px;
+    height: 6px;
+  }
+
+  @for $i from 1 through 8 {
+    .particle-#{$i} {
+      transform: rotate(#{$i * 45}deg) translateY(-90px);
+    }
+  }
+}
+
+// Extra small devices (up to 380px)
+@media (max-width: 380px) {
+  .bot-restart-container {
+    padding: 0 0.5rem;
+  }
+
+  .bot-restart-card {
+    padding: 1.5rem 1rem;
+    gap: 1.25rem;
+    border-radius: 12px;
+  }
+
+  .timer-wrapper {
+    width: 140px;
+    height: 140px;
+  }
+
+  .timer-number {
+    font-size: 2.5rem;
+  }
+
+  .timer-label {
+    font-size: 0.75rem;
+  }
+
+  .timer-icon {
+    svg {
+      width: 32px;
+      height: 32px;
+    }
+  }
+
+  .status-text p {
+    font-size: 0.85rem;
+  }
+
+  .restart-btn {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.85rem;
+    max-width: 100%;
+  }
+
+  .info-panel {
+    padding: 0.875rem 1rem;
+
+    h3 {
+      font-size: 0.9rem;
+    }
+
+    li {
+      font-size: 0.8rem;
+    }
+  }
+
+  // Disable some animations on very small devices
+  .bot-restart-card::before {
+    animation: none;
+    opacity: 0.5;
+  }
+
+  .particles {
+    display: none;
+  }
+}
+
+// Landscape mode on mobile
+@media (max-width: 768px) and (orientation: landscape) {
+  .bot-restart-container {
+    flex-direction: row;
+    flex-wrap: wrap;
+    max-width: 100%;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .bot-restart-card {
+    flex: 1;
+    min-width: 280px;
+    max-width: 400px;
+    padding: 1.5rem;
+  }
+
+  .timer-wrapper {
+    width: 120px;
+    height: 120px;
+  }
+
+  .timer-number {
+    font-size: 2rem;
+  }
+
+  .info-panel {
+    flex: 1;
+    min-width: 250px;
+    max-width: 350px;
+  }
+}
+
+// High DPI / Retina displays
+@media (-webkit-min-device-pixel-ratio: 2),
+(min-resolution: 192dpi) {
+  .timer-progress {
+    filter: drop-shadow(0 0 4px $primary-color);
+  }
+
+  .timer-glow {
+    filter: blur(6px);
+  }
+}
+
+// Reduced motion preference (accessibility)
+@media (prefers-reduced-motion: reduce) {
+  .bot-restart-card::before {
+    animation: none;
+  }
+
+  .timer-number {
+    animation: none;
+  }
+
+  .timer-icon.idle {
+    animation: none;
+  }
+
+  .particle {
+    animation: none;
+    display: none;
+  }
+
+  .status-text .pulsing {
+    animation: none;
+  }
+
+  .restart-btn .btn-icon {
+    transition: none;
+  }
+}

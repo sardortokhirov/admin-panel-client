@@ -28,6 +28,7 @@ import PromoPage from "./pages/PromoPage";
 import BlockedUsersPage from "./pages/BlockedUsersPage";
 import UserPermissionsPage from "./pages/UserPermissionsPage";
 import SystemConfigPage from "./pages/SystemConfigPage";
+import BotRestartPage from "./pages/BotRestartPage";
 
 function App() {
   const { isAuthenticated } = useAuth();
@@ -188,6 +189,14 @@ function App() {
             element={
               <PrivateRoute>
                 <UserPermissionsPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/bot-restart"
+            element={
+              <PrivateRoute>
+                <BotRestartPage />
               </PrivateRoute>
             }
           />

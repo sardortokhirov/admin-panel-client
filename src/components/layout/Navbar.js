@@ -57,6 +57,9 @@ const Navbar = () => {
                         <NavLink to="/users-list" onClick={closeMobileMenu}>
                             Foydalanuvchilar
                         </NavLink>
+                        <NavLink to="/bot-restart" onClick={closeMobileMenu}>
+                            Bot Restart
+                        </NavLink>
                     </Dropdown>
                 </div>
 
