@@ -165,6 +165,7 @@ const UserProfilePage = () => {
         if (type === 'balance') setModalValue(user.balance);
         if (type === 'tickets') setModalValue(user.tickets);
         if (type === 'limit') setModalValue(user.permanentLimitIncrease);
+        if (type === 'baseDailyLimit') setModalValue(user.baseDailyLimit || 5000000);
         if (type === 'language') setModalValue(user.language);
         setModalOpen(true);
     };
@@ -182,6 +183,16 @@ const UserProfilePage = () => {
                         permanentLimitIncrease: res.data.permanentLimitIncrease,
                         effectiveDailyLimit: res.data.effectiveDailyLimit,
                         permanentLimitLastUpdated: res.data.lastUpdated
+                    }));
+                }
+            }
+            if (modalType === 'baseDailyLimit') {
+                const res = await usersService.updateBaseDailyLimit(chatId, modalValue);
+                if (res.data) {
+                    setUser(prev => ({
+                        ...prev,
+                        baseDailyLimit: res.data.baseDailyLimit,
+                        effectiveDailyLimit: res.data.effectiveDailyLimit
                     }));
                 }
             }
@@ -360,7 +371,9 @@ const UserProfilePage = () => {
 
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(110px, 1fr))', gap: '10px' }}>
                         <div style={{ background: 'rgba(255,255,255,0.03)', padding: '10px', borderRadius: '8px' }}>
-                            <div style={{ color: '#888', fontSize: '0.8rem' }}>Bazaviy</div>
+                            <div style={{ color: '#888', fontSize: '0.8rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                Bazaviy <FaEdit style={{ cursor: 'pointer', fontSize: '0.9rem', color: '#53bf9d' }} onClick={() => openModal('baseDailyLimit')} />
+                            </div>
                             <div style={{ fontSize: '1rem', fontWeight: 'bold' }}>{formatCurrency(user.baseDailyLimit || 5000000)}</div>
                         </div>
 
@@ -663,7 +676,7 @@ const UserProfilePage = () => {
                         <div className="modal-content" style={{
                             background: '#252a41', padding: '30px', borderRadius: '15px', width: '400px', maxWidth: '90%', border: '1px solid #444'
                         }}>
-                            <h2 style={{ marginTop: 0, marginBottom: '20px', color: '#fff' }}>Tahrirlash: {modalType === 'limit' ? 'Limitni Oshirish' : modalType}</h2>
+                            <h2 style={{ marginTop: 0, marginBottom: '20px', color: '#fff' }}>Tahrirlash: {modalType === 'limit' ? 'Doimiy Limit' : modalType === 'baseDailyLimit' ? 'Bazaviy Limit' : modalType}</h2>
                             <form onSubmit={handleModalSubmit}>
                                 <div className="form-group" style={{ marginBottom: '25px' }}>
                                     <label style={{ display: 'block', marginBottom: '8px', color: '#aaa' }}>
