@@ -174,7 +174,17 @@ const UserProfilePage = () => {
         try {
             if (modalType === 'balance') await usersService.updateBalance(chatId, modalValue);
             if (modalType === 'tickets') await usersService.updateTickets(chatId, modalValue);
-            if (modalType === 'limit') await usersService.updateLimit(chatId, modalValue);
+            if (modalType === 'limit') {
+                const res = await usersService.updateLimit(chatId, modalValue);
+                if (res.data) {
+                    setUser(prev => ({
+                        ...prev,
+                        permanentLimitIncrease: res.data.permanentLimitIncrease,
+                        effectiveDailyLimit: res.data.effectiveDailyLimit,
+                        permanentLimitLastUpdated: res.data.lastUpdated
+                    }));
+                }
+            }
             if (modalType === 'language') await usersService.updateLanguage(chatId, modalValue);
 
             alert("Muvaffaqiyatli saqlandi!");
