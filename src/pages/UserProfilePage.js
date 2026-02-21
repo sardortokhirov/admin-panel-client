@@ -165,7 +165,7 @@ const UserProfilePage = () => {
         if (type === 'balance') setModalValue(user.balance);
         if (type === 'tickets') setModalValue(user.tickets);
         if (type === 'limit') setModalValue(user.permanentLimitIncrease);
-        if (type === 'baseDailyLimit') setModalValue(user.baseDailyLimit || 5000000);
+        if (type === 'baseDailyLimit') setModalValue(user.baseDailyLimit ?? 0);
         if (type === 'language') setModalValue(user.language);
         setModalOpen(true);
     };
@@ -374,7 +374,7 @@ const UserProfilePage = () => {
                             <div style={{ color: '#888', fontSize: '0.8rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                 Bazaviy <FaEdit style={{ cursor: 'pointer', fontSize: '0.9rem', color: '#53bf9d' }} onClick={() => openModal('baseDailyLimit')} />
                             </div>
-                            <div style={{ fontSize: '1rem', fontWeight: 'bold' }}>{formatCurrency(user.baseDailyLimit || 5000000)}</div>
+                            <div style={{ fontSize: '1rem', fontWeight: 'bold' }}>{formatCurrency(user.baseDailyLimit ?? 0)}</div>
                         </div>
 
                         <div style={{ background: 'rgba(255,255,255,0.03)', padding: '10px', borderRadius: '8px' }}>
