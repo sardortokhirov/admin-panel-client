@@ -266,7 +266,7 @@ const UserProfilePage = () => {
             <div className="page-container" style={{ padding: '40px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 <FiAlertTriangle size={60} color="#e94560" style={{ marginBottom: '20px' }} />
                 <h2 style={{ color: '#fff', marginBottom: '10px' }}>{error}</h2>
-                <Button primary onClick={() => navigate('/users')}>Orqaga</Button>
+                <Button primary onClick={() => navigate('/users-list')}>Orqaga</Button>
             </div>
         );
     }
@@ -278,7 +278,7 @@ const UserProfilePage = () => {
             {/* Header */}
             <div className="page-header" style={{ marginBottom: '30px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-                    <Button secondary onClick={() => navigate('/users')}><FaArrowLeft /> Ro'yxatga</Button>
+                    <Button secondary onClick={() => navigate('/users-list')}><FaArrowLeft /> Ro'yxatga</Button>
                     <h1 style={{ margin: 0, fontSize: '1.8rem' }}>Foydalanuvchi Profili</h1>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>

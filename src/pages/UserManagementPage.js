@@ -252,6 +252,14 @@ const UserManagementPage = () => {
                     <table className="transaction-table">
                         <thead>
                             <tr>
+                                <th>Amallar</th>
+                                <th>Chat ID</th>
+                                <th>Telefon</th>
+                                <th>Til</th>
+                                <th>Balans</th>
+                                <th>Biletlar</th>
+                                <th>Limit (Kunlik)</th>
+                                <th>Holati</th>
                                 <th>
                                     <input
                                         type="checkbox"
@@ -260,25 +268,19 @@ const UserManagementPage = () => {
                                         disabled={!pageData?.content?.length}
                                     />
                                 </th>
-                                <th>Chat ID</th>
-                                <th>Telefon</th>
-                                <th>Til</th>
-                                <th>Balans</th>
-                                <th>Biletlar</th>
-                                <th>Limit (Kunlik)</th>
-                                <th>Holati</th>
-                                <th>Amallar</th>
                             </tr>
                         </thead>
                         <tbody>
                             {pageData?.content?.length > 0 ? pageData.content.map(user => (
                                 <tr key={user.chatId} className={selectedIds.includes(user.chatId) ? 'selected' : ''}>
                                     <td>
-                                        <input
-                                            type="checkbox"
-                                            checked={selectedIds.includes(user.chatId)}
-                                            onChange={() => handleSelect(user.chatId)}
-                                        />
+                                        <Button
+                                            secondary
+                                            style={{ padding: '5px 10px', fontSize: '0.9rem' }}
+                                            onClick={() => handleViewDetails(user.chatId)}
+                                        >
+                                            <FaEye />
+                                        </Button>
                                     </td>
                                     <td>{user.chatId}</td>
                                     <td>{user.phoneNumber || '-'}</td>
@@ -294,13 +296,11 @@ const UserManagementPage = () => {
                                         )}
                                     </td>
                                     <td>
-                                        <Button
-                                            secondary
-                                            style={{ padding: '5px 10px', fontSize: '0.9rem' }}
-                                            onClick={() => handleViewDetails(user.chatId)}
-                                        >
-                                            <FaEye />
-                                        </Button>
+                                        <input
+                                            type="checkbox"
+                                            checked={selectedIds.includes(user.chatId)}
+                                            onChange={() => handleSelect(user.chatId)}
+                                        />
                                     </td>
                                 </tr>
                             )) : (
