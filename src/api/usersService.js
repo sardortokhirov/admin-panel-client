@@ -50,9 +50,9 @@ export const usersService = {
         return apiService.put(`${BASE_URL}/${chatId}/limit`, { permanentLimitIncrease });
     },
 
-    // 2.6b Update User Base Daily Limit
-    updateBaseDailyLimit: (chatId, baseDailyLimit) => {
-        return apiService.put(`${BASE_URL}/${chatId}/base-daily-limit`, { baseDailyLimit });
+    // 2.6b Update User Base Daily Limit Percentage
+    updateBaseDailyLimit: (chatId, percentage) => {
+        return apiService.put(`${BASE_URL}/${chatId}/base-daily-limit`, { percentage });
     },
 
     // 2.7 Block User

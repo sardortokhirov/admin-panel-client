@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { usersService } from '../api/usersService';
+import { systemConfigService } from '../api/systemConfigService';
 import { setAuthHeader } from '../api/apiService';
 import Loader from '../components/common/Loader';
 import Button from '../components/common/Button';
@@ -52,6 +53,8 @@ const UserProfilePage = () => {
     const [modalOpen, setModalOpen] = useState(false);
     const [modalType, setModalType] = useState(null);
     const [modalValue, setModalValue] = useState('');
+    const [baseLimitPercent, setBaseLimitPercent] = useState('');
+    const [systemDefaultBaseDailyLimit, setSystemDefaultBaseDailyLimit] = useState(0);
 
     const fetchData = useCallback(async () => {
         setLoading(true);
@@ -124,6 +127,12 @@ const UserProfilePage = () => {
             setAuthHeader(token);
         }
         fetchData();
+        // Fetch system config default dailyBonusTransferLimit
+        systemConfigService.getConfiguration().then(res => {
+            if (res.data && res.data.dailyBonusTransferLimit !== undefined) {
+                setSystemDefaultBaseDailyLimit(res.data.dailyBonusTransferLimit);
+            }
+        }).catch(err => console.error('Failed to fetch system config:', err));
     }, [fetchData]);
 
     // Separate useEffect for Transfers
@@ -165,7 +174,15 @@ const UserProfilePage = () => {
         if (type === 'balance') setModalValue(user.balance);
         if (type === 'tickets') setModalValue(user.tickets);
         if (type === 'limit') setModalValue(user.permanentLimitIncrease);
-        if (type === 'baseDailyLimit') setModalValue(user.baseDailyLimit ?? 0);
+        if (type === 'baseDailyLimit') {
+            // Calculate current percentage relative to system default
+            const currentVal = user.baseDailyLimit ?? 0;
+            if (systemDefaultBaseDailyLimit > 0) {
+                setBaseLimitPercent(String(Math.round((currentVal / systemDefaultBaseDailyLimit) * 100)));
+            } else {
+                setBaseLimitPercent('100');
+            }
+        }
         if (type === 'language') setModalValue(user.language);
         setModalOpen(true);
     };
@@ -187,7 +204,8 @@ const UserProfilePage = () => {
                 }
             }
             if (modalType === 'baseDailyLimit') {
-                const res = await usersService.updateBaseDailyLimit(chatId, modalValue);
+                const percentage = Number(baseLimitPercent);
+                const res = await usersService.updateBaseDailyLimit(chatId, percentage);
                 if (res.data) {
                     setUser(prev => ({
                         ...prev,
@@ -674,31 +692,147 @@ const UserProfilePage = () => {
                         display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000, backdropFilter: 'blur(5px)'
                     }}>
                         <div className="modal-content" style={{
-                            background: '#252a41', padding: '30px', borderRadius: '15px', width: '400px', maxWidth: '90%', border: '1px solid #444'
+                            background: '#252a41', padding: '30px', borderRadius: '15px', width: '450px', maxWidth: '90%', border: '1px solid #444'
                         }}>
                             <h2 style={{ marginTop: 0, marginBottom: '20px', color: '#fff' }}>Tahrirlash: {modalType === 'limit' ? 'Doimiy Limit' : modalType === 'baseDailyLimit' ? 'Bazaviy Limit' : modalType}</h2>
                             <form onSubmit={handleModalSubmit}>
                                 <div className="form-group" style={{ marginBottom: '25px' }}>
-                                    <label style={{ display: 'block', marginBottom: '8px', color: '#aaa' }}>
-                                        {modalType === 'language' ? 'Yangi Til' : 'Yangi Qiymat'}
-                                    </label>
-                                    {modalType === 'language' ? (
-                                        <select
-                                            style={{ width: '100%', padding: '12px', borderRadius: '8px', background: '#1a1a2e', border: '1px solid #444', color: '#fff' }}
-                                            value={modalValue}
-                                            onChange={e => setModalValue(e.target.value)}
-                                        >
-                                            <option value="UZ">O'zbekcha (UZ)</option>
-                                            <option value="RU">Ruscha (RU)</option>
-                                        </select>
-                                    ) : (
-                                        <input
-                                            type="number"
-                                            style={{ width: '100%', padding: '12px', borderRadius: '8px', background: '#1a1a2e', border: '1px solid #444', color: '#fff', fontSize: '1.2rem' }}
-                                            value={modalValue}
-                                            onChange={e => setModalValue(e.target.value)}
-                                            autoFocus
-                                        />
+                                    {modalType === 'baseDailyLimit' && (
+                                        <>
+                                            {/* System default display */}
+                                            <div style={{
+                                                background: 'rgba(102, 126, 234, 0.08)',
+                                                border: '1px solid rgba(102, 126, 234, 0.2)',
+                                                borderRadius: '10px',
+                                                padding: '12px 16px',
+                                                marginBottom: '12px',
+                                                display: 'flex',
+                                                justifyContent: 'space-between',
+                                                alignItems: 'center'
+                                            }}>
+                                                <span style={{ color: '#aaa', fontSize: '0.85rem' }}>Tizim standart limiti:</span>
+                                                <span style={{ color: '#667eea', fontWeight: 'bold', fontSize: '1rem' }}>{formatCurrency(systemDefaultBaseDailyLimit)}</span>
+                                            </div>
+
+                                            {/* Current user value display */}
+                                            <div style={{
+                                                background: 'rgba(83, 191, 157, 0.08)',
+                                                border: '1px solid rgba(83, 191, 157, 0.2)',
+                                                borderRadius: '10px',
+                                                padding: '12px 16px',
+                                                marginBottom: '20px',
+                                                display: 'flex',
+                                                justifyContent: 'space-between',
+                                                alignItems: 'center'
+                                            }}>
+                                                <span style={{ color: '#aaa', fontSize: '0.85rem' }}>Hozirgi qiymat:</span>
+                                                <span style={{ color: '#53bf9d', fontWeight: 'bold', fontSize: '1rem' }}>{formatCurrency(user.baseDailyLimit ?? 0)}</span>
+                                            </div>
+
+                                            {/* Percent input */}
+                                            <label style={{ display: 'block', marginBottom: '8px', color: '#aaa' }}>Foiz qiymati (0% - 200%)</label>
+                                            <div style={{ position: 'relative' }}>
+                                                <input
+                                                    type="number"
+                                                    step="1"
+                                                    min="0"
+                                                    max="200"
+                                                    style={{
+                                                        width: '100%',
+                                                        padding: '14px',
+                                                        paddingRight: '45px',
+                                                        borderRadius: '8px',
+                                                        background: '#1a1a2e',
+                                                        border: '1px solid #444',
+                                                        color: '#fff',
+                                                        fontSize: '1.3rem',
+                                                        fontWeight: 'bold',
+                                                        boxSizing: 'border-box'
+                                                    }}
+                                                    value={baseLimitPercent}
+                                                    onChange={e => {
+                                                        const val = e.target.value;
+                                                        if (val === '' || (Number(val) >= 0 && Number(val) <= 200)) {
+                                                            setBaseLimitPercent(val);
+                                                        }
+                                                    }}
+                                                    placeholder="masalan: 120"
+                                                    autoFocus
+                                                />
+                                                <span style={{
+                                                    position: 'absolute',
+                                                    right: '14px',
+                                                    top: '50%',
+                                                    transform: 'translateY(-50%)',
+                                                    color: '#667eea',
+                                                    fontWeight: 'bold',
+                                                    fontSize: '1.1rem'
+                                                }}>%</span>
+                                            </div>
+                                            <small style={{ display: 'block', marginTop: '6px', color: '#666', fontSize: '0.75rem' }}>
+                                                100% = Kunlik bonus o'tkazma limiti. 120% = 20% ko'proq. 50% = 2 baravar kam.
+                                            </small>
+
+                                            {/* Real-time calculation preview */}
+                                            {baseLimitPercent !== '' && (
+                                                <div style={{
+                                                    marginTop: '15px',
+                                                    background: 'rgba(102, 126, 234, 0.1)',
+                                                    border: '1px solid rgba(102, 126, 234, 0.25)',
+                                                    borderRadius: '10px',
+                                                    padding: '14px 16px'
+                                                }}>
+                                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                                                        <span style={{ color: '#aaa', fontSize: '0.85rem' }}>Hisoblash:</span>
+                                                        <span style={{ color: '#888', fontSize: '0.8rem', fontFamily: 'monospace' }}>
+                                                            {formatCurrency(systemDefaultBaseDailyLimit)} × {baseLimitPercent}%
+                                                        </span>
+                                                    </div>
+                                                    <div style={{
+                                                        display: 'flex',
+                                                        justifyContent: 'space-between',
+                                                        alignItems: 'center',
+                                                        borderTop: '1px solid rgba(255,255,255,0.05)',
+                                                        paddingTop: '8px'
+                                                    }}>
+                                                        <span style={{ color: '#aaa', fontSize: '0.85rem' }}>Yangi qiymat:</span>
+                                                        <span style={{
+                                                            color: '#53bf9d',
+                                                            fontWeight: 'bold',
+                                                            fontSize: '1.3rem'
+                                                        }}>
+                                                            {formatCurrency(Math.round((Number(baseLimitPercent) / 100) * systemDefaultBaseDailyLimit))}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </>
+                                    )}
+
+                                    {modalType !== 'baseDailyLimit' && (
+                                        <>
+                                            <label style={{ display: 'block', marginBottom: '8px', color: '#aaa' }}>
+                                                {modalType === 'language' ? 'Yangi Til' : 'Yangi Qiymat'}
+                                            </label>
+                                            {modalType === 'language' ? (
+                                                <select
+                                                    style={{ width: '100%', padding: '12px', borderRadius: '8px', background: '#1a1a2e', border: '1px solid #444', color: '#fff' }}
+                                                    value={modalValue}
+                                                    onChange={e => setModalValue(e.target.value)}
+                                                >
+                                                    <option value="UZ">O'zbekcha (UZ)</option>
+                                                    <option value="RU">Ruscha (RU)</option>
+                                                </select>
+                                            ) : (
+                                                <input
+                                                    type="number"
+                                                    style={{ width: '100%', padding: '12px', borderRadius: '8px', background: '#1a1a2e', border: '1px solid #444', color: '#fff', fontSize: '1.2rem' }}
+                                                    value={modalValue}
+                                                    onChange={e => setModalValue(e.target.value)}
+                                                    autoFocus
+                                                />
+                                            )}
+                                        </>
                                     )}
                                 </div>
                                 <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
