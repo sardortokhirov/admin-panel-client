@@ -27,7 +27,7 @@ All endpoints require **Basic Authentication**:
 ```
 GET /api/users?page=0&size=20&blocked=false&language=UZ&hasBalance=true
 ```
-
+ 
 **Response**: `Page<UserDTO>`
 ```json
 {

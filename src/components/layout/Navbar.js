@@ -60,6 +60,9 @@ const Navbar = () => {
                         <NavLink to="/bot-restart" onClick={closeMobileMenu}>
                             Bot Restart
                         </NavLink>
+                        <NavLink to="/apk-link-bot" onClick={closeMobileMenu}>
+                            APK/Link Bot
+                        </NavLink>
                     </Dropdown>
                 </div>
 

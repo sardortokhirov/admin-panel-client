@@ -13,10 +13,11 @@
   &__grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 1.25rem;
+    gap: 1.5rem;
 
     @include mobile {
       grid-template-columns: 1fr;
+      gap: 1rem;
     }
   }
 
@@ -26,20 +27,27 @@
     color: $text-secondary;
   }
 
-  input, select {
+  input,
+  select {
     width: 100%;
     padding: 0.75rem 1rem;
     border-radius: $border-radius;
     border: 1px solid $border-color;
-    background-color: $bg-color;
+    background-color: rgba($bg-lighter, 0.3); // Softer input background
     color: $text-primary;
     font-size: 1rem;
     font-family: inherit;
+    transition: all 0.2s ease;
+
+    &::placeholder {
+      color: rgba($text-primary, 0.3);
+    }
 
     &:focus {
       outline: none;
       border-color: $primary-color;
-      box-shadow: 0 0 0 3px rgba($primary-color, 0.3);
+      box-shadow: 0 0 0 3px rgba($primary-color, 0.2);
+      background-color: rgba($bg-lighter, 0.5);
     }
   }
 
@@ -47,78 +55,25 @@
     display: flex;
     justify-content: flex-end;
     gap: 1rem;
-    margin-top: 1rem;
+    margin-top: 1.5rem;
+    border-top: 1px solid $border-color;
+    padding-top: 1.5rem;
+
+    @include mobile {
+      flex-direction: column-reverse;
+
+      .btn {
+        width: 100%;
+      }
+    }
   }
 
   &__error {
     color: $danger-color;
-    font-size: 0.9rem;
-    text-align: center;
-    padding: 0.5rem;
-    background: rgba($danger-color, 0.1);
+    background-color: rgba($danger-color, 0.1);
+    padding: 1rem;
     border-radius: $border-radius;
-  }
-}
-// ... (keep your existing .form, .form__group, and input styles)
-
-// Add these new responsive styles
-.form__grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
-
-  @include mobile {
-    grid-template-columns: 1fr;
-    gap: 0;
-  }
-}
-
-.form__actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 1rem;
-  margin-top: 2rem;
-  border-top: 1px solid $border-color;
-  padding-top: 1.5rem;
-
-  @include mobile {
-    flex-direction: column-reverse;
-    .btn {
-      width: 100%;
-    }
-  }
-}
-
-.form__error {
-  color: $danger-color;
-  background-color: rgba($danger-color, 0.1);
-  padding: 1rem;
-  border-radius: $border-radius;
-  border-left: 4px solid $danger-color;
-  margin-bottom: 1.5rem;
-}
-.form__grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
-
-  @include mobile {
-    grid-template-columns: 1fr;
-    gap: 0;
-  }
-}
-
-.form__actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 1rem;
-  // These styles are now applied in the modal-footer context
-  // but keeping them here is good for other forms.
-
-  @include mobile {
-    flex-direction: column-reverse;
-    .btn {
-      width: 100%;
-    }
+    border-left: 4px solid $danger-color;
+    margin-bottom: 1.5rem;
   }
 }

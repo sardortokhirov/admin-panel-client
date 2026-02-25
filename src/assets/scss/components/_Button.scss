@@ -25,7 +25,7 @@
 
   &--primary {
     background-color: $primary-color;
-    color: #fff;
+    color: $text-primary;
     border-color: $primary-color;
 
     &:hover {
@@ -41,7 +41,7 @@
 
     &:hover {
       background-color: $danger-color;
-      color: #fff;
+      color: $text-primary;
     }
   }
 }

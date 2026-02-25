@@ -29,6 +29,7 @@ import BlockedUsersPage from "./pages/BlockedUsersPage";
 import UserPermissionsPage from "./pages/UserPermissionsPage";
 import SystemConfigPage from "./pages/SystemConfigPage";
 import BotRestartPage from "./pages/BotRestartPage";
+import ApkLinkBotPage from "./pages/ApkLinkBotPage";
 
 function App() {
   const { isAuthenticated } = useAuth();
@@ -197,6 +198,14 @@ function App() {
             element={
               <PrivateRoute>
                 <BotRestartPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/apk-link-bot"
+            element={
+              <PrivateRoute>
+                <ApkLinkBotPage />
               </PrivateRoute>
             }
           />
