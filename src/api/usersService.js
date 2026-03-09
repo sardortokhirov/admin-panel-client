@@ -92,5 +92,10 @@ export const usersService = {
     // 2.13 Get Daily Stats
     getDailyStats: (chatId, params) => {
         return apiService.get(`${BASE_URL}/${chatId}/daily-stats`, { params });
+    },
+
+    // 2.14 Add Withdraw Quota
+    addWithdrawQuota: (chatId, amount) => {
+        return apiService.put(`${BASE_URL}/${chatId}/withdraw-quota`, { amount });
     }
 };

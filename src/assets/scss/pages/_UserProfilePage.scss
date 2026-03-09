@@ -1,0 +1,171 @@
+@import "../variables";
+@import "../mixins";
+
+.user-profile-page {
+    .assets-card {
+        background: linear-gradient(145deg, #1e2235 0%, #252a41 100%);
+        border: 1px solid rgba($secondary-color, 0.1);
+        padding: 1.5rem;
+
+        @include tablet {
+            padding: 1.25rem;
+        }
+
+        .balance-item {
+            text-align: center;
+            margin-bottom: 2rem;
+
+            .label {
+                color: $text-secondary;
+                font-size: 0.9rem;
+                margin-bottom: 0.5rem;
+                display: block;
+            }
+
+            .value {
+                font-size: 2rem;
+                font-weight: 800;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 0.75rem;
+
+                @include tablet {
+                    font-size: 1.75rem;
+                }
+
+                &.referral {
+                    color: $secondary-color;
+                }
+
+                &.wallet {
+                    color: #36a2eb;
+                }
+            }
+        }
+    }
+
+    .quota-section {
+        margin-top: 1.5rem;
+        background: rgba(0, 0, 10, 0.4);
+        border-radius: 1rem;
+        padding: 1.25rem;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+
+        .quota-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.25rem;
+            gap: 1rem;
+
+            .title-group {
+                display: flex;
+                align-items: center;
+                gap: 0.75rem;
+                color: $text-secondary;
+                font-size: 1rem;
+                font-weight: 600;
+
+                svg {
+                    color: $secondary-color;
+                }
+            }
+        }
+
+        .quota-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+
+            @media (max-width: 480px) {
+                grid-template-columns: 1fr;
+            }
+
+            .quota-item {
+                background: rgba(255, 255, 255, 0.03);
+                padding: 1rem;
+                border-radius: 0.75rem;
+                border: 1px solid rgba(255, 255, 255, 0.03);
+                transition: transform 0.2s, background-color 0.2s;
+
+                &:hover {
+                    background: rgba(255, 255, 255, 0.05);
+                }
+
+                .q-label {
+                    font-size: 0.75rem;
+                    color: rgba($text-secondary, 0.8);
+                    text-transform: uppercase;
+                    letter-spacing: 0.5px;
+                    margin-bottom: 0.25rem;
+                    display: block;
+                }
+
+                .q-value {
+                    font-size: 1.125rem;
+                    font-weight: 700;
+                    color: $text-primary;
+                    line-height: 1.2;
+
+                    &.bonus {
+                        color: #f9d56e;
+                    }
+
+                    &.used {
+                        color: #e94560;
+                    }
+
+                    &.remaining {
+                        color: $secondary-color;
+                    }
+                }
+
+                .q-info {
+                    margin-top: 4px;
+                    font-size: 0.7rem;
+                    color: rgba($text-secondary, 0.6);
+                    font-style: italic;
+                }
+
+                &.highlight {
+                    background: rgba($secondary-color, 0.05);
+                    border-color: rgba($secondary-color, 0.15);
+                    grid-column: span 1;
+
+                    @media (max-width: 480px) {
+                        grid-column: span 1;
+                    }
+                }
+            }
+        }
+
+        .quota-progress {
+            margin-top: 1.25rem;
+
+            .progress-bar-container {
+                height: 6px;
+                background: rgba(255, 255, 255, 0.05);
+                border-radius: 3px;
+                overflow: hidden;
+                box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
+
+                .progress-fill {
+                    height: 100%;
+                    background: linear-gradient(90deg, #53bf9d, #36a2eb);
+                    transition: width 0.6s cubic-bezier(0.1, 0, 0.1, 1);
+                }
+            }
+
+            .progress-text {
+                display: flex;
+                justify-content: space-between;
+                font-size: 0.75rem;
+                color: #64748b;
+                margin-top: 0.5rem;
+                font-weight: 500;
+            }
+        }
+    }
+}

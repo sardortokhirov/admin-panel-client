@@ -189,6 +189,7 @@ const UserProfilePage = () => {
             }
         }
         if (type === 'language') setModalValue(user.language);
+        if (type === 'withdrawQuota') setModalValue('');
         setModalOpen(true);
     };
 
@@ -220,6 +221,14 @@ const UserProfilePage = () => {
                 }
             }
             if (modalType === 'language') await usersService.updateLanguage(chatId, modalValue);
+            if (modalType === 'withdrawQuota') {
+                const amount = Number(modalValue);
+                if (isNaN(amount) || amount < 0) {
+                    alert("Miqdor 0 dan katta bo'lishi kerak");
+                    return;
+                }
+                await usersService.addWithdrawQuota(chatId, amount);
+            }
 
             alert("Muvaffaqiyatli saqlandi!");
             setModalOpen(false);
@@ -348,27 +357,69 @@ const UserProfilePage = () => {
                 </div>
 
                 {/* Assets Card */}
-                <div className="card assets-card" style={{ background: 'linear-gradient(145deg, #1e2235 0%, #252a41 100%)', borderRadius: '15px', padding: '25px', display: 'flex', flexDirection: 'column', justifyContent: 'center', border: '1px solid rgba(83, 191, 157, 0.1)' }}>
-                    <div style={{ marginBottom: '25px', textAlign: 'center' }}>
-                        <label style={{ color: '#a0a0a0', fontSize: '1rem', marginBottom: '5px', display: 'block' }}>Hozirgi Balans (Referral)</label>
-                        <div style={{ fontSize: '2.2rem', fontWeight: '800', color: '#53bf9d', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
+                <div className="card assets-card">
+                    <div className="balance-item">
+                        <span className="label">Hozirgi Balans (Referral)</span>
+                        <div className="value referral">
                             <FaCoins /> {formatCurrency(user.balance)}
                             <Button secondary small onClick={() => openModal('balance')} style={{ marginLeft: '10px' }}><FaEdit /></Button>
                         </div>
                     </div>
-                    <div style={{ marginBottom: '25px', textAlign: 'center' }}>
-                        <label style={{ color: '#a0a0a0', fontSize: '1rem', marginBottom: '5px', display: 'block' }}>Hamyon Balansi</label>
-                        <div style={{ fontSize: '2.2rem', fontWeight: '800', color: '#36a2eb', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
+
+                    <div className="balance-item" style={{ marginBottom: 0 }}>
+                        <span className="label">Hamyon Balansi</span>
+                        <div className="value wallet">
                             <FiCreditCard /> {formatCurrency(user.walletBalance || 0)}
                         </div>
-                        {user.walletQuota !== undefined && (
-                            <div style={{ fontSize: '0.85rem', color: '#a0a0a0', marginTop: '8px' }}>
-                                <FiInfo style={{ verticalAlign: 'middle', marginRight: '4px' }} />
-                                Yechish kvotasi: <span style={{ color: '#fff', fontWeight: 'bold' }}>{formatCurrency(user.walletQuota)}</span>
+
+                        {/* Withdrawal Quota Info */}
+                        <div className="quota-section">
+                            <div className="quota-header">
+                                <div className="title-group">
+                                    <FiActivity /> Yechish Kvotasi
+                                </div>
+                                <Button secondary small onClick={() => openModal('withdrawQuota')}>+ Quota</Button>
                             </div>
-                        )}
+
+                            <div className="quota-grid">
+                                <div className="quota-item">
+                                    <span className="q-label">Ishlangan</span>
+                                    <span className="q-value">{formatCurrency(user.walletQuotaEarned || 0)}</span>
+                                    <p className="q-info">Platformadan yig'ilgan</p>
+                                </div>
+                                <div className="quota-item">
+                                    <span className="q-label">Bonus</span>
+                                    <span className="q-value bonus">{formatCurrency(user.walletQuotaBonus || 0)}</span>
+                                    <p className="q-info">Admin qo'shgan</p>
+                                </div>
+                                <div className="quota-item">
+                                    <span className="q-label">Ishlatilgan</span>
+                                    <span className="q-value used">{formatCurrency(user.walletQuotaUsed || 0)}</span>
+                                    <p className="q-info">Yechib olingan</p>
+                                </div>
+                                <div className="quota-item highlight">
+                                    <span className="q-label">Qolgan</span>
+                                    <span className="q-value remaining">{formatCurrency(user.walletQuotaRemaining || 0)}</span>
+                                    <p className="q-info">Mavjud summa</p>
+                                </div>
+                            </div>
+
+                            <div className="quota-progress">
+                                <div className="progress-bar-container">
+                                    <div
+                                        className="progress-fill"
+                                        style={{ width: `${Math.min((user.walletQuotaRemaining / ((user.walletQuotaEarned || 1) + (user.walletQuotaBonus || 0))) * 100, 100)}%` }}
+                                    ></div>
+                                </div>
+                                <div className="progress-text">
+                                    <span>Mavjud foiz</span>
+                                    <span>{Math.round(Math.min((user.walletQuotaRemaining / ((user.walletQuotaEarned || 1) + (user.walletQuotaBonus || 0))) * 100, 100))}%</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(0,0,0,0.2)', padding: '15px', borderRadius: '10px' }}>
+
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(0,0,0,0.2)', padding: '15px', borderRadius: '10px', marginTop: '20px' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                             <FaTicketAlt size={24} color="#f9d56e" />
                             <div>
@@ -488,76 +539,78 @@ const UserProfilePage = () => {
             </div>
 
             {/* SECTION 3: Activity Statistics */}
-            {summary && (
-                <div className="section-container" style={{ marginBottom: '25px', overflow: 'hidden' }}>
-                    <h2 style={{ fontSize: '1.4rem', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                        <FiActivity /> Faoliyat Statistikasi
-                    </h2>
-                    <div className="responsive-grid-thirds-stats">
-                        {/* Stats Summary Cards (Left) */}
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-                            <div className="stat-card" style={{ background: '#252a41', padding: '15px', borderRadius: '12px', borderLeft: '4px solid #53bf9d' }}>
-                                <div style={{ color: '#888', fontSize: '0.9rem' }}>Jami Top-uplar</div>
-                                <div style={{ fontSize: '1.3rem', fontWeight: 'bold' }}>{formatCurrency(summary.totalTopUps)}</div>
-                                <div style={{ color: '#53bf9d', display: 'flex', alignItems: 'center', fontSize: '0.85rem' }}><FiArrowDownLeft /> Kirim</div>
+            {
+                summary && (
+                    <div className="section-container" style={{ marginBottom: '25px', overflow: 'hidden' }}>
+                        <h2 style={{ fontSize: '1.4rem', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                            <FiActivity /> Faoliyat Statistikasi
+                        </h2>
+                        <div className="responsive-grid-thirds-stats">
+                            {/* Stats Summary Cards (Left) */}
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                                <div className="stat-card" style={{ background: '#252a41', padding: '15px', borderRadius: '12px', borderLeft: '4px solid #53bf9d' }}>
+                                    <div style={{ color: '#888', fontSize: '0.9rem' }}>Jami Top-uplar</div>
+                                    <div style={{ fontSize: '1.3rem', fontWeight: 'bold' }}>{formatCurrency(summary.totalTopUps)}</div>
+                                    <div style={{ color: '#53bf9d', display: 'flex', alignItems: 'center', fontSize: '0.85rem' }}><FiArrowDownLeft /> Kirim</div>
+                                </div>
+                                <div className="stat-card" style={{ background: '#252a41', padding: '15px', borderRadius: '12px', borderLeft: '4px solid #36a2eb' }}>
+                                    <div style={{ color: '#888', fontSize: '0.9rem' }}>Hamyon Balansi</div>
+                                    <div style={{ fontSize: '1.3rem', fontWeight: 'bold' }}>{formatCurrency(summary.walletBalance || 0)}</div>
+                                    <div style={{ color: '#36a2eb', display: 'flex', alignItems: 'center', fontSize: '0.85rem' }}><FiActivity /> Joriy</div>
+                                </div>
+                                <div className="stat-card" style={{ background: '#252a41', padding: '15px', borderRadius: '12px', borderLeft: '4px solid #36a2eb' }}>
+                                    <div style={{ color: '#888', fontSize: '0.9rem' }}>Jami Transferlar</div>
+                                    <div style={{ fontSize: '1.3rem', fontWeight: 'bold' }}>{formatCurrency(summary.totalTransfers)}</div>
+                                    <div style={{ color: '#36a2eb', display: 'flex', alignItems: 'center', fontSize: '0.85rem' }}><FiArrowUpRight /> Chiqim</div>
+                                </div>
+                                <div className="stat-card" style={{ background: '#252a41', padding: '15px', borderRadius: '12px', borderLeft: '4px solid #f9d56e' }}>
+                                    <div style={{ color: '#888', fontSize: '0.9rem' }}>Bot Rivoji Uchun Hissalar</div>
+                                    <div style={{ fontSize: '1.3rem', fontWeight: 'bold' }}>{formatCurrency(summary.totalTips)}</div>
+                                    <div style={{ color: '#f9d56e', display: 'flex', alignItems: 'center', gap: '5px', fontSize: '0.85rem' }}><FaCoins /> Hissa</div>
+                                </div>
                             </div>
-                            <div className="stat-card" style={{ background: '#252a41', padding: '15px', borderRadius: '12px', borderLeft: '4px solid #36a2eb' }}>
-                                <div style={{ color: '#888', fontSize: '0.9rem' }}>Hamyon Balansi</div>
-                                <div style={{ fontSize: '1.3rem', fontWeight: 'bold' }}>{formatCurrency(summary.walletBalance || 0)}</div>
-                                <div style={{ color: '#36a2eb', display: 'flex', alignItems: 'center', fontSize: '0.85rem' }}><FiActivity /> Joriy</div>
-                            </div>
-                            <div className="stat-card" style={{ background: '#252a41', padding: '15px', borderRadius: '12px', borderLeft: '4px solid #36a2eb' }}>
-                                <div style={{ color: '#888', fontSize: '0.9rem' }}>Jami Transferlar</div>
-                                <div style={{ fontSize: '1.3rem', fontWeight: 'bold' }}>{formatCurrency(summary.totalTransfers)}</div>
-                                <div style={{ color: '#36a2eb', display: 'flex', alignItems: 'center', fontSize: '0.85rem' }}><FiArrowUpRight /> Chiqim</div>
-                            </div>
-                            <div className="stat-card" style={{ background: '#252a41', padding: '15px', borderRadius: '12px', borderLeft: '4px solid #f9d56e' }}>
-                                <div style={{ color: '#888', fontSize: '0.9rem' }}>Bot Rivoji Uchun Hissalar</div>
-                                <div style={{ fontSize: '1.3rem', fontWeight: 'bold' }}>{formatCurrency(summary.totalTips)}</div>
-                                <div style={{ color: '#f9d56e', display: 'flex', alignItems: 'center', gap: '5px', fontSize: '0.85rem' }}><FaCoins /> Hissa</div>
-                            </div>
-                        </div>
 
-                        {/* Volume Chart (Middle) */}
-                        <div className="card graph-card" style={{ background: '#252a41', borderRadius: '15px', padding: '15px', minHeight: '250px', maxWidth: '100%', boxSizing: 'border-box' }}>
-                            <h4 style={{ textAlign: 'center', marginBottom: '10px', color: '#aaa', fontSize: '1rem' }}>Kirim va Chiqim Hajmi</h4>
-                            <div style={{ height: '200px', width: '100%', maxWidth: '100%' }}>
-                                <Bar
-                                    data={getVolumeStatsData()}
-                                    options={{
-                                        responsive: true,
-                                        maintainAspectRatio: false,
-                                        plugins: { legend: { position: 'bottom', labels: { boxWidth: 8, padding: 10, font: { size: 11 } } } },
-                                        scales: {
-                                            y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { font: { size: 10 } } },
-                                            x: { grid: { display: false }, ticks: { font: { size: 10 } } }
-                                        }
-                                    }}
-                                />
+                            {/* Volume Chart (Middle) */}
+                            <div className="card graph-card" style={{ background: '#252a41', borderRadius: '15px', padding: '15px', minHeight: '250px', maxWidth: '100%', boxSizing: 'border-box' }}>
+                                <h4 style={{ textAlign: 'center', marginBottom: '10px', color: '#aaa', fontSize: '1rem' }}>Kirim va Chiqim Hajmi</h4>
+                                <div style={{ height: '200px', width: '100%', maxWidth: '100%' }}>
+                                    <Bar
+                                        data={getVolumeStatsData()}
+                                        options={{
+                                            responsive: true,
+                                            maintainAspectRatio: false,
+                                            plugins: { legend: { position: 'bottom', labels: { boxWidth: 8, padding: 10, font: { size: 11 } } } },
+                                            scales: {
+                                                y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { font: { size: 10 } } },
+                                                x: { grid: { display: false }, ticks: { font: { size: 10 } } }
+                                            }
+                                        }}
+                                    />
+                                </div>
                             </div>
-                        </div>
 
-                        {/* Status Chart (Right) */}
-                        <div className="card pie-card" style={{ background: '#252a41', borderRadius: '15px', padding: '15px', display: 'flex', flexDirection: 'column', alignItems: 'center', maxWidth: '100%', boxSizing: 'border-box' }}>
-                            <h4 style={{ textAlign: 'center', marginBottom: '10px', color: '#aaa', fontSize: '1rem' }}>So'rovlar Holati</h4>
-                            <div style={{ height: '180px', width: '100%', maxWidth: '180px' }}>
-                                <Doughnut
-                                    data={getRequestStatsData()}
-                                    options={{
-                                        responsive: true,
-                                        maintainAspectRatio: false,
-                                        plugins: { legend: { position: 'bottom', labels: { boxWidth: 8, padding: 10, color: '#fff', font: { size: 10 } } } },
-                                        borderWidth: 0
-                                    }}
-                                />
-                            </div>
-                            <div style={{ marginTop: '15px', textAlign: 'center', fontWeight: 'bold', fontSize: '1.2rem' }}>
-                                {summary.totalRequests} <span style={{ fontSize: '0.9rem', color: '#888', fontWeight: 'normal' }}>Jami</span>
+                            {/* Status Chart (Right) */}
+                            <div className="card pie-card" style={{ background: '#252a41', borderRadius: '15px', padding: '15px', display: 'flex', flexDirection: 'column', alignItems: 'center', maxWidth: '100%', boxSizing: 'border-box' }}>
+                                <h4 style={{ textAlign: 'center', marginBottom: '10px', color: '#aaa', fontSize: '1rem' }}>So'rovlar Holati</h4>
+                                <div style={{ height: '180px', width: '100%', maxWidth: '180px' }}>
+                                    <Doughnut
+                                        data={getRequestStatsData()}
+                                        options={{
+                                            responsive: true,
+                                            maintainAspectRatio: false,
+                                            plugins: { legend: { position: 'bottom', labels: { boxWidth: 8, padding: 10, color: '#fff', font: { size: 10 } } } },
+                                            borderWidth: 0
+                                        }}
+                                    />
+                                </div>
+                                <div style={{ marginTop: '15px', textAlign: 'center', fontWeight: 'bold', fontSize: '1.2rem' }}>
+                                    {summary.totalRequests} <span style={{ fontSize: '0.9rem', color: '#888', fontWeight: 'normal' }}>Jami</span>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            )}
+                )
+            }
 
             {/* SECTION 3.5: Daily User Stats (NEW) */}
             <div className="card" style={{ background: '#252a41', borderRadius: '15px', padding: '25px', marginBottom: '25px' }}>
@@ -731,7 +784,12 @@ const UserProfilePage = () => {
                         <div className="modal-content" style={{
                             background: '#252a41', padding: '30px', borderRadius: '15px', width: '450px', maxWidth: '90%', border: '1px solid #444'
                         }}>
-                            <h2 style={{ marginTop: 0, marginBottom: '20px', color: '#fff' }}>Tahrirlash: {modalType === 'limit' ? 'Doimiy Limit' : modalType === 'baseDailyLimit' ? 'Bazaviy Limit' : modalType}</h2>
+                            <h2 style={{ marginTop: 0, marginBottom: '20px', color: '#fff' }}>
+                                {modalType === 'limit' ? 'Doimiy Limit' :
+                                    modalType === 'baseDailyLimit' ? 'Bazaviy Limit' :
+                                        modalType === 'withdrawQuota' ? 'Extra Quota Qo\'shish' :
+                                            modalType}
+                            </h2>
                             <form onSubmit={handleModalSubmit}>
                                 <div className="form-group" style={{ marginBottom: '25px' }}>
                                     {modalType === 'baseDailyLimit' && (
@@ -849,7 +907,9 @@ const UserProfilePage = () => {
                                     {modalType !== 'baseDailyLimit' && (
                                         <>
                                             <label style={{ display: 'block', marginBottom: '8px', color: '#aaa' }}>
-                                                {modalType === 'language' ? 'Yangi Til' : 'Yangi Qiymat'}
+                                                {modalType === 'language' ? 'Yangi Til' :
+                                                    modalType === 'withdrawQuota' ? 'Qo\'shiladigan Quota Miqdori (UZS)' :
+                                                        'Yangi Qiymat'}
                                             </label>
                                             {modalType === 'language' ? (
                                                 <select
