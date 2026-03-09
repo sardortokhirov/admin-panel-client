@@ -12,6 +12,9 @@
 @import "components/Modal";
 @import "components/Loader";
 @import "components/Card";
+@import "pages/TipsPage";
+@import "pages/DashboardPage";
+@import "pages/TransactionsPage";
 
 $telegram-blue: #0088cc;
 $telegram-bg: #e6ecf0;
@@ -234,12 +237,21 @@ $telegram-success: #4caf50;
   &.status--pending,
   &.status--pending_sms,
   &.status--pending_admin,
-  &.status--pending_payment {
+  &.status--pending_payment,
+  &.status--pending_screenshot {
     background-color: #fca130;
+  }
+
+  &.status--processing {
+    background-color: #36a2eb; // blue color for processing
   }
 
   &.status--canceled {
     background-color: #6c757d;
+  }
+
+  &.status--user_canceled {
+    background-color: #ff5c5c; // different from canceled
   }
 
   &.status--failed {
@@ -945,6 +957,7 @@ select {
   // Hide the ugly up/down arrows on number inputs
   &[type="number"] {
     -moz-appearance: textfield;
+    appearance: textfield;
 
     &::-webkit-outer-spin-button,
     &::-webkit-inner-spin-button {
@@ -2510,10 +2523,6 @@ hr {
     gap: 0.5rem; // Space between icon and text in buttons
   }
 
-  // Make the primary action stand out more if needed
-  a>.btn {
-    // You can add specific styles for the "Edit" button if you want
-  }
 }
 
 // src/styles/main.scss

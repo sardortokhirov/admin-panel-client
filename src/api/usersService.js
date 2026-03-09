@@ -66,9 +66,12 @@ export const usersService = {
     },
 
     // 2.9 Delete User
-    deleteUser: (chatId, deleteType = 'soft') => {
-        // Note: passing deleteType as query param
-        return apiService.delete(`${BASE_URL}/${chatId}`, { params: { deleteType } });
+    deleteUser: (chatId, deleteType = null) => {
+        // Note: passing deleteType as query param if provided. 
+        // Backend now performs HARD DELETE by default if no param is sent.
+        const params = {};
+        if (deleteType) params.deleteType = deleteType;
+        return apiService.delete(`${BASE_URL}/${chatId}`, { params });
     },
 
     // 2.10 Update User Language

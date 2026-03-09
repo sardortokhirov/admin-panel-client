@@ -9,9 +9,10 @@ import Button from '../components/common/Button';
 import {
     FaArrowLeft, FaEdit, FaTrash, FaBan, FaCheck, FaCoins, FaTicketAlt, FaChartLine, FaGlobe, FaPhone, FaCalendarAlt, FaGamepad, FaShieldAlt
 } from 'react-icons/fa';
-import { FiRefreshCw, FiAlertTriangle, FiActivity, FiArrowUpRight, FiArrowDownLeft, FiInfo } from 'react-icons/fi';
+import { FiRefreshCw, FiAlertTriangle, FiActivity, FiArrowUpRight, FiArrowDownLeft, FiInfo, FiCreditCard } from 'react-icons/fi';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title } from 'chart.js';
 import { Doughnut, Bar } from 'react-chartjs-2';
+import { STATUS_MAP } from '../constants/statusConstants';
 
 // Register ChartJS components
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title);
@@ -157,8 +158,12 @@ const UserProfilePage = () => {
         }
     };
 
-    const handleDelete = async (deleteType) => {
-        if (!window.confirm(`Foydalanuvchini ${deleteType === 'hard' ? 'BUTUNLAY (Qaytarib bo\'lmaydi!)' : 'yumshoq'} o'chirmoqchimisiz?`)) return;
+    const handleDelete = async (deleteType = 'hard') => {
+        const msg = deleteType === 'hard'
+            ? "Foydalanuvchini BUTUNLAY (barcha tarix, so'rovlar va limitlar bilan birga) o'chirmoqchimisiz? Bu amalni ortga qaytarib bo'lmaydi!"
+            : "Foydalanuvchini yumshoq o'chirmoqchimisiz? (Foydalanuvchi bloklanadi va BARCHA balanslari, jumladan hamyoni ham nolga tushiriladi)";
+
+        if (!window.confirm(msg)) return;
         try {
             await usersService.deleteUser(chatId, deleteType);
             alert("Foydalanuvchi o'chirildi.");
@@ -231,13 +236,23 @@ const UserProfilePage = () => {
     const getRequestStatsData = () => {
         if (!summary) return null;
         return {
-            labels: ['Tasdiqlangan', 'Bekor qilingan', 'Kutilmoqda', 'Muvaffaqiyatsiz'],
+            labels: [
+                STATUS_MAP.APPROVED.label,
+                STATUS_MAP.CANCELED.label,
+                STATUS_MAP.PENDING.label,
+                STATUS_MAP.FAILED.label
+            ],
             datasets: [
                 {
                     data: [summary.approvedRequests, summary.canceledRequests, summary.pendingRequests, summary.failedRequests],
-                    backgroundColor: ['#53bf9d', '#e94560', '#f9d56e', '#a0a0a0'],
-                    borderColor: ['#53bf9d', '#e94560', '#f9d56e', '#a0a0a0'],
-                    borderWidth: 1,
+                    backgroundColor: [
+                        STATUS_MAP.APPROVED.color,
+                        STATUS_MAP.CANCELED.color,
+                        STATUS_MAP.PENDING.color,
+                        STATUS_MAP.FAILED.color
+                    ],
+                    borderColor: '#1a1a2e',
+                    borderWidth: 2,
                 },
             ],
         };
@@ -335,11 +350,23 @@ const UserProfilePage = () => {
                 {/* Assets Card */}
                 <div className="card assets-card" style={{ background: 'linear-gradient(145deg, #1e2235 0%, #252a41 100%)', borderRadius: '15px', padding: '25px', display: 'flex', flexDirection: 'column', justifyContent: 'center', border: '1px solid rgba(83, 191, 157, 0.1)' }}>
                     <div style={{ marginBottom: '25px', textAlign: 'center' }}>
-                        <label style={{ color: '#a0a0a0', fontSize: '1rem', marginBottom: '5px', display: 'block' }}>Hozirgi Balans</label>
-                        <div style={{ fontSize: '2.5rem', fontWeight: '800', color: '#53bf9d', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
+                        <label style={{ color: '#a0a0a0', fontSize: '1rem', marginBottom: '5px', display: 'block' }}>Hozirgi Balans (Referral)</label>
+                        <div style={{ fontSize: '2.2rem', fontWeight: '800', color: '#53bf9d', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
                             <FaCoins /> {formatCurrency(user.balance)}
                             <Button secondary small onClick={() => openModal('balance')} style={{ marginLeft: '10px' }}><FaEdit /></Button>
                         </div>
+                    </div>
+                    <div style={{ marginBottom: '25px', textAlign: 'center' }}>
+                        <label style={{ color: '#a0a0a0', fontSize: '1rem', marginBottom: '5px', display: 'block' }}>Hamyon Balansi</label>
+                        <div style={{ fontSize: '2.2rem', fontWeight: '800', color: '#36a2eb', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
+                            <FiCreditCard /> {formatCurrency(user.walletBalance || 0)}
+                        </div>
+                        {user.walletQuota !== undefined && (
+                            <div style={{ fontSize: '0.85rem', color: '#a0a0a0', marginTop: '8px' }}>
+                                <FiInfo style={{ verticalAlign: 'middle', marginRight: '4px' }} />
+                                Yechish kvotasi: <span style={{ color: '#fff', fontWeight: 'bold' }}>{formatCurrency(user.walletQuota)}</span>
+                            </div>
+                        )}
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(0,0,0,0.2)', padding: '15px', borderRadius: '10px' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -450,10 +477,10 @@ const UserProfilePage = () => {
                         <Button secondary onClick={() => handleAction(() => usersService.resetDailyStats(chatId), "Kunlik statistika reset qilindi")} style={{ height: '60px', display: 'flex', justifyContent: 'center', gap: '10px' }}>
                             <FiRefreshCw /> Kunlik Reset
                         </Button>
-                        <Button warning outline onClick={() => handleAction(() => usersService.resetBalance(chatId), "Balans va biletlar reset qilindi")} style={{ height: '60px', display: 'flex', justifyContent: 'center', gap: '10px' }}>
+                        <Button warning outline onClick={() => handleAction(() => usersService.resetBalance(chatId), "Barcha balanslar (Referral, Hamyon, Biletlar) reset qilindi")} style={{ height: '60px', display: 'flex', justifyContent: 'center', gap: '10px' }}>
                             <FaCoins /> Balans Reset
                         </Button>
-                        <Button danger outline onClick={() => handleDelete('soft')} style={{ height: '60px', display: 'flex', justifyContent: 'center', gap: '10px' }}>
+                        <Button danger outline onClick={() => handleDelete('hard')} style={{ height: '60px', display: 'flex', justifyContent: 'center', gap: '10px' }}>
                             <FaTrash /> O'chirish
                         </Button>
                     </div>
@@ -475,9 +502,19 @@ const UserProfilePage = () => {
                                 <div style={{ color: '#53bf9d', display: 'flex', alignItems: 'center', fontSize: '0.85rem' }}><FiArrowDownLeft /> Kirim</div>
                             </div>
                             <div className="stat-card" style={{ background: '#252a41', padding: '15px', borderRadius: '12px', borderLeft: '4px solid #36a2eb' }}>
+                                <div style={{ color: '#888', fontSize: '0.9rem' }}>Hamyon Balansi</div>
+                                <div style={{ fontSize: '1.3rem', fontWeight: 'bold' }}>{formatCurrency(summary.walletBalance || 0)}</div>
+                                <div style={{ color: '#36a2eb', display: 'flex', alignItems: 'center', fontSize: '0.85rem' }}><FiActivity /> Joriy</div>
+                            </div>
+                            <div className="stat-card" style={{ background: '#252a41', padding: '15px', borderRadius: '12px', borderLeft: '4px solid #36a2eb' }}>
                                 <div style={{ color: '#888', fontSize: '0.9rem' }}>Jami Transferlar</div>
                                 <div style={{ fontSize: '1.3rem', fontWeight: 'bold' }}>{formatCurrency(summary.totalTransfers)}</div>
                                 <div style={{ color: '#36a2eb', display: 'flex', alignItems: 'center', fontSize: '0.85rem' }}><FiArrowUpRight /> Chiqim</div>
+                            </div>
+                            <div className="stat-card" style={{ background: '#252a41', padding: '15px', borderRadius: '12px', borderLeft: '4px solid #f9d56e' }}>
+                                <div style={{ color: '#888', fontSize: '0.9rem' }}>Bot Rivoji Uchun Hissalar</div>
+                                <div style={{ fontSize: '1.3rem', fontWeight: 'bold' }}>{formatCurrency(summary.totalTips)}</div>
+                                <div style={{ color: '#f9d56e', display: 'flex', alignItems: 'center', gap: '5px', fontSize: '0.85rem' }}><FaCoins /> Hissa</div>
                             </div>
                         </div>
 

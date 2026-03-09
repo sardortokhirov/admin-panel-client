@@ -183,6 +183,9 @@ const UsersPage = () => {
                                 <th onClick={() => handleSort('balance')} className={sortBy === 'balance' ? 'active-sort' : ''}>
                                     <FiTrendingUp /> Balans {sortBy === 'balance' && (sortDirection === 'ASC' ? '▲' : '▼')}
                                 </th>
+                                <th>
+                                    <FiCreditCard /> Hamyon
+                                </th>
                                 <th onClick={() => handleSort('tickets')} className={sortBy === 'tickets' ? 'active-sort' : ''}>
                                     <FiCreditCard /> Biletlar {sortBy === 'tickets' && (sortDirection === 'ASC' ? '▲' : '▼')}
                                 </th>
@@ -200,13 +203,13 @@ const UsersPage = () => {
                                             />
                                         </td>
                                         <td>{user.chatId}</td>
-                                        <td>{formatCurrency(user.balance)}</td>
+                                        <td>{formatCurrency(user.balance)}</td><td>{formatCurrency(user.walletBalance || 0)}</td>
                                         <td>{user.tickets.toLocaleString()}</td>
                                     </tr>
                                 ))
                             ) : (
                                 <tr>
-                                    <td colSpan="4" className="no-data">Foydalanuvchi balanslari topilmadi.</td>
+                                    <td colSpan="5" className="no-data">Foydalanuvchi balanslari topilmadi.</td>
                                 </tr>
                             )}
                         </tbody>

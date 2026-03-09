@@ -5,7 +5,8 @@ import { cardService } from '../api/cardService';
 import { platformService } from '../api/platformService';
 import Loader from '../components/common/Loader';
 import Button from '../components/common/Button';
-import { FaTrash, FaFilter, FaTimes } from 'react-icons/fa'; // Added FaTimes for the clear button
+import { STATUS_MAP, TRANSACTION_TYPE_MAP, getStatusInfo, getTypeInfo } from '../constants/statusConstants';
+import { FaTrash, FaFilter, FaTimes, FaSpinner, FaTimesCircle, FaImage, FaCoins, FaWallet, FaExchangeAlt, FaArrowDown, FaArrowUp } from 'react-icons/fa';
 
 const requestStatuses = [
     "PENDING",
@@ -16,9 +17,11 @@ const requestStatuses = [
     "CANCELED",
     "PENDING_PAYMENT",
     "FAILED",
-    "PENDING_SCREENSHOT"
+    "PENDING_SCREENSHOT",
+    "PROCESSING",
+    "USER_CANCELED"
 ];
-const requestTypes = ["TOP_UP", "WITHDRAWAL"];
+const requestTypes = ["TOP_UP", "WITHDRAWAL", "TIP", "WALLET_DEPOSIT", "WALLET_WITHDRAWAL", "WALLET_TO_PLATFORM"];
 
 const TransactionsPage = () => {
     const { isAuthenticated } = useAuth();
@@ -129,9 +132,35 @@ const TransactionsPage = () => {
         }
     };
 
-    const StatusBadge = ({ status }) => (
-        <span className={`status-badge status--${status.toLowerCase()}`}>{status}</span>
-    );
+    const TypeBadge = ({ type }) => {
+        const info = getTypeInfo(type);
+        return (
+            <span style={{ color: info.color, display: 'inline-flex', alignItems: 'center', gap: '8px', fontWeight: '700', fontSize: '0.85rem' }}>
+                {info.icon}
+                {info.label}
+            </span>
+        );
+    };
+
+    const StatusBadge = ({ status }) => {
+        const info = getStatusInfo(status);
+        return (
+            <span className={`status-badge-v2 ${info.className}`} style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                padding: '4px 12px',
+                borderRadius: '20px',
+                fontSize: '0.75rem',
+                fontWeight: '600',
+                background: `${info.color}15`,
+                color: info.color,
+                border: `1px solid ${info.color}30`
+            }}>
+                {info.icon} {info.label}
+            </span>
+        );
+    };
 
     return (
         <div className="page-container transactions-page">
@@ -153,12 +182,16 @@ const TransactionsPage = () => {
                         {platforms.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
                     </select>
                     <select name="status" value={filters.status} onChange={handleFilterChange}>
-                        <option value="">Barcha Statuslar</option> {/* Translated */}
-                        {requestStatuses.map(s => <option key={s} value={s}>{s}</option>)}
+                        <option value="">Barcha Statuslar</option>
+                        {Object.entries(STATUS_MAP).map(([key, info]) => (
+                            <option key={key} value={key}>{info.label}</option>
+                        ))}
                     </select>
                     <select name="type" value={filters.type} onChange={handleFilterChange}>
-                        <option value="">Barcha Turlar</option> {/* Translated */}
-                        {requestTypes.map(t => <option key={t} value={t}>{t}</option>)}
+                        <option value="">Barcha Turlar</option>
+                        {Object.entries(TRANSACTION_TYPE_MAP).map(([key, info]) => (
+                            <option key={key} value={key}>{info.label}</option>
+                        ))}
                     </select>
                 </div>
                 <div className="filter-actions">
@@ -182,42 +215,42 @@ const TransactionsPage = () => {
                 <div className="transaction-list-container">
                     <table className="transaction-table">
                         <thead>
-                        <tr>
-                            <th><input type="checkbox" onChange={handleSelectAll} checked={transactions.length > 0 && selectedIds.length === transactions.length}/></th>
-                            <th>ID</th>
-                            <th>Platforma</th>
-                            <th>Foydalanuvchi</th>
-                            <th>Karta</th>
-                            <th>Miqdor</th>
-                            <th>Tur</th>
-                            <th>Status</th>
-                            <th>Sana</th>
-                            <th>Amallar</th>
-                        </tr>
+                            <tr>
+                                <th><input type="checkbox" onChange={handleSelectAll} checked={transactions.length > 0 && selectedIds.length === transactions.length} /></th>
+                                <th>ID</th>
+                                <th>Platforma</th>
+                                <th>Foydalanuvchi</th>
+                                <th>Karta</th>
+                                <th>Miqdor</th>
+                                <th>Tur</th>
+                                <th>Status</th>
+                                <th>Sana</th>
+                                <th>Amallar</th>
+                            </tr>
                         </thead>
                         <tbody>
-                        {transactions.length > 0 ? transactions.map(t => (
-                            <tr key={t.id} className={selectedIds.includes(t.id) ? 'selected' : ''}>
-                                <td><input type="checkbox" checked={selectedIds.includes(t.id)} onChange={() => handleSelect(t.id)} /></td>
-                                <td>{t.id}</td>
-                                <td>{t.platform}</td>
-                                <td>{t.fullName || `ChatID: ${t.chatId}`}</td>
-                                <td>...{t.cardNumber?.slice(-4)}</td>
-                                <td>{t.uniqueAmount}</td>
-                                <td>{t.type}</td>
-                                <td><StatusBadge status={t.status} /></td>
-                                <td>{new Date(t.createdAt).toLocaleString()}</td>
-                                <td>
-                                    <button className="action-btn-icon" onClick={() => handleDelete(t.id)} title="O'chirish">
-                                        <FaTrash />
-                                    </button>
-                                </td>
-                            </tr>
-                        )) : (
-                            <tr>
-                                <td colSpan="10" className="no-data">Tranzaksiyalar topilmadi.</td>
-                            </tr>
-                        )}
+                            {transactions.length > 0 ? transactions.map(t => (
+                                <tr key={t.id} className={selectedIds.includes(t.id) ? 'selected' : ''}>
+                                    <td><input type="checkbox" checked={selectedIds.includes(t.id)} onChange={() => handleSelect(t.id)} /></td>
+                                    <td>{t.id}</td>
+                                    <td>{t.platform}</td>
+                                    <td>{t.fullName || `ChatID: ${t.chatId}`}</td>
+                                    <td>...{t.cardNumber?.slice(-4)}</td>
+                                    <td>{t.uniqueAmount}</td>
+                                    <td><TypeBadge type={t.type} /></td>
+                                    <td><StatusBadge status={t.status} /></td>
+                                    <td>{new Date(t.createdAt).toLocaleString()}</td>
+                                    <td>
+                                        <button className="action-btn-icon" onClick={() => handleDelete(t.id)} title="O'chirish">
+                                            <FaTrash />
+                                        </button>
+                                    </td>
+                                </tr>
+                            )) : (
+                                <tr>
+                                    <td colSpan="10" className="no-data">Tranzaksiyalar topilmadi.</td>
+                                </tr>
+                            )}
                         </tbody>
                     </table>
                 </div>

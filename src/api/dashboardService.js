@@ -79,9 +79,14 @@ const ToggleController = {
     return res.data;
   },
 };
+const getWalletBalances = () => {
+  return apiService.get(`${API_URL}/wallet-balances`);
+};
+
 export const dashboardService = {
   getDashboardStats,
   getTotalApprovedBonusAmount, // Export the new function
   GetToggles,
   ToggleController,
+  getWalletBalances,
 };

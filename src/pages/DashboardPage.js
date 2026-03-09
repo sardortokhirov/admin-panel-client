@@ -21,14 +21,15 @@ import {
 } from "chart.js";
 import { Doughnut, Bar, Line } from "react-chartjs-2";
 import { setAuthHeader } from "../api/apiService";
-// Import icons
 import {
   FiTrendingUp,
   FiArrowUpCircle,
   FiArrowDownCircle,
   FiUsers,
   FiAward,
+  FiHeart
 } from "react-icons/fi";
+import { STATUS_MAP } from "../constants/statusConstants";
 
 // Register Chart.js components
 ChartJS.register(
@@ -89,14 +90,16 @@ const DashboardPage = () => {
     }
 
     try {
-      const [statsResponse, bonusResponse] = await Promise.all([
+      const [statsResponse, bonusResponse, walletResponse] = await Promise.all([
         dashboardService.getDashboardStats(params),
         dashboardService.getTotalApprovedBonusAmount(params),
+        dashboardService.getWalletBalances().catch(() => ({ data: { totalWalletMoney: 0, userBalances: [] } })),
       ]);
 
       const combinedStats = {
         ...statsResponse.data,
         totalApprovedBonusAmount: bonusResponse.data,
+        walletBalances: walletResponse.data,
       };
 
       setStats(combinedStats);
@@ -234,27 +237,18 @@ const DashboardPage = () => {
     ],
   };
 
-  const STATUS_COLORS = {
-    APPROVED: "#53bf9d",
-    PENDING: "#fca130",
-    PENDING_ADMIN: "#fca130",
-    PENDING_SMS: "#fca130",
-    PENDING_PAYMENT: "#fca130",
-    FAILED: "#ff5c5c",
-    CANCELED: "#6c757d",
-    BONUS_APPROVED: "#9b59b6",
-    default: "#16213e",
-  };
+
   const statusLabels = stats?.statusDistribution
     ? Object.keys(stats.statusDistribution)
     : [];
+
   const statusChartData = {
-    labels: statusLabels,
+    labels: statusLabels.map(s => STATUS_MAP[s]?.label || s),
     datasets: [
       {
         data: statusLabels.map((label) => stats.statusDistribution[label]),
         backgroundColor: statusLabels.map(
-          (status) => STATUS_COLORS[status] || STATUS_COLORS.default
+          (status) => STATUS_MAP[status]?.color || "#16213e"
         ),
         borderColor: "#1a1a2e",
         borderWidth: 4,
@@ -314,86 +308,50 @@ const DashboardPage = () => {
   return (
     <div className="page-container dashboard-v2">
       <div className="ToggleContainer">
-        <div className="toggle-element">
-          <p>Bonus:</p>
+        <div className="toggle-element" onClick={() => changeTogle("bonusEnabled", toggleState.bonusEnabled)}>
+          <p><FiAward /> Bonus Tizimi:</p>
           <div className="toggle-switch">
-            <div
-              className={`toggle-slider ${toggleState.bonusEnabled ? "on" : "off"
-                }`}
-              onClick={() =>
-                changeTogle("bonusEnabled", toggleState.bonusEnabled)
-              }
-            >
+            <div className={`toggle-slider ${toggleState.bonusEnabled ? "on" : "off"}`}>
               <span className="toggle-knob"></span>
             </div>
           </div>
         </div>
-        <div className="toggle-element">
-          <p>Pul yechish:</p>
+        <div className="toggle-element" onClick={() => changeTogle("withdrawEnabled", toggleState.withdrawEnabled)}>
+          <p><FiArrowUpCircle /> Pul Yechish:</p>
           <div className="toggle-switch">
-            <div
-              className={`toggle-slider ${toggleState.withdrawEnabled ? "on" : "off"
-                }`}
-              onClick={() =>
-                changeTogle("withdrawEnabled", toggleState.withdrawEnabled)
-              }
-            >
+            <div className={`toggle-slider ${toggleState.withdrawEnabled ? "on" : "off"}`}>
               <span className="toggle-knob"></span>
             </div>
           </div>
         </div>
-        <div className="toggle-element">
-          <p>To'ldirish:</p>
+        <div className="toggle-element" onClick={() => changeTogle("topUpEnabled", toggleState.topUpEnabled)}>
+          <p><FiArrowDownCircle /> Hisob To'ldirish:</p>
           <div className="toggle-switch">
-            <div
-              className={`toggle-slider ${toggleState.topUpEnabled ? "on" : "off"
-                }`}
-              onClick={() =>
-                changeTogle("topUpEnabled", toggleState.topUpEnabled)
-              }
-            >
+            <div className={`toggle-slider ${toggleState.topUpEnabled ? "on" : "off"}`}>
               <span className="toggle-knob"></span>
             </div>
           </div>
         </div>
-        <div className="toggle-element">
-          <p>Promo:</p>
+        <div className="toggle-element" onClick={() => changeTogle("promoEnabled", toggleState.promoEnabled)}>
+          <p><FiTrendingUp /> Promo Rejim:</p>
           <div className="toggle-switch">
-            <div
-              className={`toggle-slider ${toggleState.promoEnabled ? "on" : "off"
-                }`}
-              onClick={() =>
-                changeTogle("promoEnabled", toggleState.promoEnabled)
-              }
-            >
+            <div className={`toggle-slider ${toggleState.promoEnabled ? "on" : "off"}`}>
               <span className="toggle-knob"></span>
             </div>
           </div>
         </div>
-        <div className="toggle-element">
-          <p>Bonus Limiti:</p>
+        <div className="toggle-element" onClick={() => changeTogle("bonusLimitEnabled", toggleState.bonusLimitEnabled)}>
+          <p><FiUsers /> Bonus Limiti:</p>
           <div className="toggle-switch">
-            <div
-              className={`toggle-slider ${toggleState.bonusLimitEnabled ? "on" : "off"
-                }`}
-              onClick={() =>
-                changeTogle("bonusLimitEnabled", toggleState.bonusLimitEnabled)
-              }
-            >
+            <div className={`toggle-slider ${toggleState.bonusLimitEnabled ? "on" : "off"}`}>
               <span className="toggle-knob"></span>
             </div>
           </div>
         </div>
-        <div className="toggle-element">
-          <p>Pay Toggle:</p>
+        <div className="toggle-element" onClick={() => changeTogle("payEnabled", toggleState.payEnabled)}>
+          <p><FiTrendingUp /> Pay Tizimi:</p>
           <div className="toggle-switch">
-            <div
-              className={`toggle-slider ${toggleState.payEnabled ? "on" : "off"
-                }`}
-              onClick={() =>
-                changeTogle("payEnabled", toggleState.payEnabled)
-              }
-            >
+            <div className={`toggle-slider ${toggleState.payEnabled ? "on" : "off"}`}>
               <span className="toggle-knob"></span>
             </div>
           </div>
@@ -461,6 +419,14 @@ const DashboardPage = () => {
           color="#9b59b6"
         />
         <StatCard
+          icon={<FiHeart />}
+          title="Jami Bot Rivoji"
+          value={`${stats.totalApprovedTipAmount?.toLocaleString("uz-UZ") || 0
+            } so'm`}
+          detail="Bot rivojiga qilingan hissa"
+          color="#f39c12"
+        />
+        <StatCard
           icon={<FiTrendingUp />}
           title="Jami So'rovlar"
           value={stats.totalRequests?.toLocaleString() || 0}
@@ -474,6 +440,13 @@ const DashboardPage = () => {
           value={`${Object.keys(stats.topUsers || {})[0] || "N/A"}`}
           detail={`${Object.values(stats.topUsers || {})[0] || 0} so'rov bilan`}
           color="#fca130"
+        />
+        <StatCard
+          icon={<FiArrowUpCircle />}
+          title="Jami Hamyonlar"
+          value={`${(stats.walletBalances?.totalWalletMoney || 0).toLocaleString("uz-UZ")} so'm`}
+          detail="Barcha foydalanuvchilar qolgan ballari"
+          color="#10b981"
         />
       </div>
       <div className="dashboard-main-content-grid">
@@ -505,7 +478,7 @@ const DashboardPage = () => {
                 <thead>
                   <tr>
                     <th>Foydalanuvchi ID</th>
-                    <th>So'rovlar Soni</th>
+                    <th>So'rovlar</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -521,6 +494,38 @@ const DashboardPage = () => {
                   ) : (
                     <tr>
                       <td colSpan="2">Ma'lumot yo'q</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div className="table-container-v2" style={{ marginTop: '2rem' }}>
+            <h3>Hamyon Balanslari</h3>
+            <div className="table-wrapper">
+              <table className="wallet-balances-table">
+                <thead>
+                  <tr>
+                    <th>Foydalanuvchi ID</th>
+                    <th>Balans</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {stats.walletBalances?.userBalances?.length > 0 ? (
+                    stats.walletBalances.userBalances
+                      .sort((a, b) => b.walletBalance - a.walletBalance)
+                      .slice(0, 10)
+                      .map((user) => (
+                        <tr key={user.chatId}>
+                          <td>{user.chatId}</td>
+                          <td style={{ color: '#53bf9d', fontWeight: 'bold' }}>
+                            {user.walletBalance.toLocaleString("uz-UZ")}
+                          </td>
+                        </tr>
+                      ))
+                  ) : (
+                    <tr>
+                      <td colSpan="2">Ma'lumot topilmadi</td>
                     </tr>
                   )}
                 </tbody>

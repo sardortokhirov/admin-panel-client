@@ -30,6 +30,7 @@ import UserPermissionsPage from "./pages/UserPermissionsPage";
 import SystemConfigPage from "./pages/SystemConfigPage";
 import BotRestartPage from "./pages/BotRestartPage";
 import ApkLinkBotPage from "./pages/ApkLinkBotPage";
+import TipsPage from "./pages/TipsPage";
 
 function App() {
   const { isAuthenticated } = useAuth();
@@ -206,6 +207,14 @@ function App() {
             element={
               <PrivateRoute>
                 <ApkLinkBotPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/tips-config"
+            element={
+              <PrivateRoute>
+                <TipsPage />
               </PrivateRoute>
             }
           />

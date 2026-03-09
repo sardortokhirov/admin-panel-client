@@ -4,7 +4,7 @@ import { systemConfigService } from '../api/systemConfigService';
 import { setAuthHeader } from '../api/apiService';
 import Loader from '../components/common/Loader';
 import Button from '../components/common/Button';
-import { FiSave, FiRefreshCw, FiSettings, FiInfo, FiZap, FiPercent } from 'react-icons/fi';
+import { FiSave, FiRefreshCw, FiSettings, FiInfo, FiZap, FiPercent, FiCreditCard } from 'react-icons/fi';
 
 const SystemConfigPage = () => {
     const [config, setConfig] = useState({
@@ -21,7 +21,9 @@ const SystemConfigPage = () => {
         dailyBonusTransferLimit: 0,
         topUpDailyLimitIncreasePercentage: 0,
         depositDailyLimitIncreasePercentage: 0,
-        lotteryCooldownSeconds: 0 // Added lotteryCooldownSeconds
+        lotteryCooldownSeconds: 0,
+        walletWithdrawRatio: 1,
+        walletMinWithdrawAmount: 0
     });
 
     const [isLoading, setIsLoading] = useState(true);
@@ -71,7 +73,19 @@ const SystemConfigPage = () => {
             setError('');
             setSuccess('');
 
+            // Save main config
             const response = await systemConfigService.updateConfiguration(config);
+
+            // Explicitly update ratio via PATCH as requested
+            if (config.walletWithdrawRatio) {
+                await systemConfigService.updateWalletWithdrawRatio(config.walletWithdrawRatio);
+            }
+
+            // Update wallet minimum withdraw amount via PATCH
+            if (config.walletMinWithdrawAmount !== undefined) {
+                await systemConfigService.updateWalletMinWithdraw(config.walletMinWithdrawAmount);
+            }
+
             setConfig(response.data);
             setSuccess('Sozlamalar muvaffaqiyatli saqlandi!');
 
@@ -341,6 +355,48 @@ const SystemConfigPage = () => {
                         </div>
                     </div>
                 </div>
+                <div className="config-section">
+                    <div className="section-header">
+                        <FiCreditCard /> <h3>Hamyon Sozlamalari</h3>
+                    </div>
+                    <div className="form-grid">
+                        <div className="form__group">
+                            <label>Hamyonni yechish koeffitsienti (Wallet Withdraw Ratio)</label>
+                            <div className="input-wrapper">
+                                <span className="ratio-prefix">1 : </span>
+                                <input
+                                    type="number"
+                                    name="walletWithdrawRatio"
+                                    value={config.walletWithdrawRatio}
+                                    onChange={handleInputChange}
+                                    min="1"
+                                    required
+                                    style={{ paddingLeft: '3.5rem' }}
+                                />
+                            </div>
+                            <small>
+                                <strong>Koeffitsient: 1 : {config.walletWithdrawRatio}</strong>.
+                                Bu shuni anglatadiki, platformaga o'tkazilgan har bir 1 UZS uchun foydalanuvchi {config.walletWithdrawRatio} UZS yechib olish kvotasiga ega bo'ladi.
+                            </small>
+                        </div>
+
+                        <div className="form__group">
+                            <label>Minimal yechib olish summasi</label>
+                            <div className="input-wrapper">
+                                <input
+                                    type="number"
+                                    name="walletMinWithdrawAmount"
+                                    value={config.walletMinWithdrawAmount}
+                                    onChange={handleInputChange}
+                                    min="1"
+                                    required
+                                />
+                                <span className="currency">UZS</span>
+                            </div>
+                            <small>Foydalanuvchi hamyonidan kartaga pul yechishi uchun talab qilinadigan minimal summa.</small>
+                        </div>
+                    </div>
+                </div>
 
                 <div className="form-actions-bar">
                     <Button type="submit" primary disabled={isSaving} className="save-btn">
@@ -474,6 +530,14 @@ const SystemConfigPage = () => {
                     background: rgba(233, 69, 96, 0.1);
                     padding: 0.2rem 0.5rem;
                     border-radius: 4px;
+                }
+                .ratio-prefix {
+                    position: absolute;
+                    left: 1.2rem;
+                    color: #a0a0a0;
+                    font-weight: 600;
+                    font-size: 1rem;
+                    z-index: 1;
                 }
                 small {
                     display: block;

@@ -102,6 +102,9 @@ const Navbar = () => {
                         <NavLink to="/promo" onClick={closeMobileMenu}>
                             Promo
                         </NavLink>
+                        <NavLink to="/tips-config" onClick={closeMobileMenu}>
+                            Bot Rivoji Sozlamalari
+                        </NavLink>
                         <NavLink to="/user-permissions" onClick={closeMobileMenu}>
                             Huquqlar
                         </NavLink>

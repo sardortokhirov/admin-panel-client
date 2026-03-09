@@ -256,7 +256,7 @@ const UserManagementPage = () => {
                                 <th>Chat ID</th>
                                 <th>Telefon</th>
                                 <th>Til</th>
-                                <th>Balans</th>
+                                <th>Balans</th><th>Hamyon</th>
                                 <th>Biletlar</th>
                                 <th>Limit (Kunlik)</th>
                                 <th>Holati</th>
@@ -285,7 +285,7 @@ const UserManagementPage = () => {
                                     <td>{user.chatId}</td>
                                     <td>{user.phoneNumber || '-'}</td>
                                     <td>{user.language}</td>
-                                    <td>{formatCurrency(user.balance)}</td>
+                                    <td>{formatCurrency(user.balance)}</td><td>{formatCurrency(user.walletBalance || 0)}</td>
                                     <td>{user.tickets}</td>
                                     <td>{formatCurrency(user.effectiveDailyLimit)}</td>
                                     <td>
@@ -305,7 +305,7 @@ const UserManagementPage = () => {
                                 </tr>
                             )) : (
                                 <tr>
-                                    <td colSpan="9" className="no-data" style={{
+                                    <td colSpan="10" className="no-data" style={{
                                         textAlign: 'center',
                                         padding: '50px',
                                         color: '#a0a0a0',
