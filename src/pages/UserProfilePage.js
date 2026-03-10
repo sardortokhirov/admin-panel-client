@@ -190,6 +190,7 @@ const UserProfilePage = () => {
         }
         if (type === 'language') setModalValue(user.language);
         if (type === 'withdrawQuota') setModalValue('');
+        if (type === 'walletBalance') setModalValue(user.walletBalance || 0);
         setModalOpen(true);
     };
 
@@ -197,6 +198,7 @@ const UserProfilePage = () => {
         e.preventDefault();
         try {
             if (modalType === 'balance') await usersService.updateBalance(chatId, modalValue);
+            if (modalType === 'walletBalance') await usersService.updateWalletBalance(chatId, modalValue);
             if (modalType === 'tickets') await usersService.updateTickets(chatId, modalValue);
             if (modalType === 'limit') {
                 const res = await usersService.updateLimit(chatId, modalValue);
@@ -370,6 +372,7 @@ const UserProfilePage = () => {
                         <span className="label">Hamyon Balansi</span>
                         <div className="value wallet">
                             <FiCreditCard /> {formatCurrency(user.walletBalance || 0)}
+                            <Button secondary small onClick={() => openModal('walletBalance')} style={{ marginLeft: '10px' }}><FaEdit /></Button>
                         </div>
 
                         {/* Withdrawal Quota Info */}
@@ -788,7 +791,11 @@ const UserProfilePage = () => {
                                 {modalType === 'limit' ? 'Doimiy Limit' :
                                     modalType === 'baseDailyLimit' ? 'Bazaviy Limit' :
                                         modalType === 'withdrawQuota' ? 'Extra Quota Qo\'shish' :
-                                            modalType}
+                                            modalType === 'balance' ? 'Referral Balans' :
+                                                modalType === 'walletBalance' ? 'Hamyon Balansi' :
+                                                    modalType === 'tickets' ? 'Biletlar' :
+                                                        modalType === 'language' ? 'Til' :
+                                                            modalType}
                             </h2>
                             <form onSubmit={handleModalSubmit}>
                                 <div className="form-group" style={{ marginBottom: '25px' }}>
@@ -908,8 +915,11 @@ const UserProfilePage = () => {
                                         <>
                                             <label style={{ display: 'block', marginBottom: '8px', color: '#aaa' }}>
                                                 {modalType === 'language' ? 'Yangi Til' :
-                                                    modalType === 'withdrawQuota' ? 'Qo\'shiladigan Quota Miqdori (UZS)' :
-                                                        'Yangi Qiymat'}
+                                                    modalType === 'walletBalance' ? 'Yangi Hamyon Balansi (UZS)' :
+                                                        modalType === 'balance' ? 'Yangi Referral Balans (UZS)' :
+                                                            modalType === 'tickets' ? 'Yangi Biletlar Soni' :
+                                                                modalType === 'withdrawQuota' ? 'Qo\'shiladigan Quota Miqdori (UZS)' :
+                                                                    'Yangi Qiymat'}
                                             </label>
                                             {modalType === 'language' ? (
                                                 <select

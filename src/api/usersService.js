@@ -97,5 +97,10 @@ export const usersService = {
     // 2.14 Add Withdraw Quota
     addWithdrawQuota: (chatId, amount) => {
         return apiService.put(`${BASE_URL}/${chatId}/withdraw-quota`, { amount });
+    },
+
+    // 2.15 Update User Wallet Balance
+    updateWalletBalance: (chatId, walletBalance) => {
+        return apiService.put(`${BASE_URL}/${chatId}/wallet`, { walletBalance });
     }
 };
