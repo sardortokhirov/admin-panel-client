@@ -23,7 +23,9 @@ const SystemConfigPage = () => {
         depositDailyLimitIncreasePercentage: 0,
         lotteryCooldownSeconds: 0,
         walletWithdrawRatio: 1,
-        walletMinWithdrawAmount: 0
+        walletMinWithdrawAmount: 0,
+        walletTransferMinAmount: 0,
+        walletTransferMaxAmount: 0
     });
 
     const [isLoading, setIsLoading] = useState(true);
@@ -35,9 +37,18 @@ const SystemConfigPage = () => {
         try {
             setIsLoading(true);
             setError('');
-            const response = await systemConfigService.getConfiguration();
-            if (response.data) {
-                setConfig(response.data);
+            const [configRes, limitsRes] = await Promise.all([
+                systemConfigService.getConfiguration(),
+                systemConfigService.getWalletTransferAmountLimits()
+            ]);
+
+            if (configRes.data) {
+                const combinedConfig = {
+                    ...configRes.data,
+                    walletTransferMinAmount: limitsRes.data?.walletTransferMinAmount || 0,
+                    walletTransferMaxAmount: limitsRes.data?.walletTransferMaxAmount || 0
+                };
+                setConfig(combinedConfig);
             }
         } catch (err) {
             setError('Tizim sozlamalarini yuklab bo\'lmadi. Avtorizatsiyani tekshiring.');
@@ -84,6 +95,14 @@ const SystemConfigPage = () => {
             // Update wallet minimum withdraw amount via PATCH
             if (config.walletMinWithdrawAmount !== undefined) {
                 await systemConfigService.updateWalletMinWithdraw(config.walletMinWithdrawAmount);
+            }
+
+            // Update wallet transfer amount limits via PATCH
+            if (config.walletTransferMinAmount !== undefined) {
+                await systemConfigService.updateWalletTransferMin(config.walletTransferMinAmount);
+            }
+            if (config.walletTransferMaxAmount !== undefined) {
+                await systemConfigService.updateWalletTransferMax(config.walletTransferMaxAmount);
             }
 
             setConfig(response.data);
@@ -394,6 +413,46 @@ const SystemConfigPage = () => {
                                 <span className="currency">UZS</span>
                             </div>
                             <small>Foydalanuvchi hamyonidan kartaga pul yechishi uchun talab qilinadigan minimal summa.</small>
+                        </div>
+                    </div>
+
+                    <div className="section-divider" style={{ margin: '1.5rem 0', height: '1px', background: 'rgba(255,255,255,0.05)' }}></div>
+
+                    <div className="section-header" style={{ marginBottom: '1.2rem' }}>
+                        <FiRefreshCw style={{ fontSize: '0.9rem' }} /> <h4 style={{ margin: 0, fontSize: '0.9rem', color: '#e94560' }}>HAMYONDAN PLATFORMAGA O'TKAZISH (TRANSFER)</h4>
+                    </div>
+
+                    <div className="form-grid">
+                        <div className="form__group">
+                            <label>Hamyondan o'tkazish - Minimal</label>
+                            <div className="input-wrapper">
+                                <input
+                                    type="number"
+                                    name="walletTransferMinAmount"
+                                    value={config.walletTransferMinAmount}
+                                    onChange={handleInputChange}
+                                    min="0"
+                                    required
+                                />
+                                <span className="currency">UZS</span>
+                            </div>
+                            <small>Hamyondan platformaga (masalan: 1XBET) o'tkazish uchun minimal summa.</small>
+                        </div>
+
+                        <div className="form__group">
+                            <label>Hamyondan o'tkazish - Maksimal</label>
+                            <div className="input-wrapper">
+                                <input
+                                    type="number"
+                                    name="walletTransferMaxAmount"
+                                    value={config.walletTransferMaxAmount}
+                                    onChange={handleInputChange}
+                                    min="0"
+                                    required
+                                />
+                                <span className="currency">UZS</span>
+                            </div>
+                            <small>Hamyondan platformaga o'tkazish uchun maksimal ruxsat etilgan summa.</small>
                         </div>
                     </div>
                 </div>
