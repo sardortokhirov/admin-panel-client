@@ -663,26 +663,34 @@ const TipsPage = () => {
                             )}
                         </div>
 
-                        {/* Tip Limit Increase Section */}
+                        {/* Tip Limit Increase Section - REDESIGNED UX */}
                         <div className="bonus-system-header" style={{ marginTop: '2.5rem', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                             <FiTrendingUp style={{ color: '#3b82f6', fontSize: '1.5rem' }} />
-                            <h4 style={{ margin: 0, fontSize: '1.2rem', fontWeight: '800', color: '#fff' }}>Limit O'sishi (Tip orqali)</h4>
+                            <h4 style={{ margin: 0, fontSize: '1.2rem', fontWeight: '800', color: '#fff' }}>Hissa uchun Limit (Doimiy)</h4>
                         </div>
 
-                        <div className="form-group-premium bonus-logic-panel-advanced" style={{
-                            background: 'rgba(255,255,255,0.02)',
+                        <div className="limit-logic-premium-card" style={{
+                            background: formData.tipLimitIncreaseEnabled ? 'linear-gradient(145deg, rgba(59, 130, 246, 0.1) 0%, rgba(15, 23, 42, 0.4) 100%)' : 'rgba(255,255,255,0.02)',
                             padding: '1.5rem',
-                            borderRadius: '20px',
-                            border: '1.5px solid rgba(255,255,255,0.07)',
-                            boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
-                            marginBottom: '2rem'
+                            border: `1px solid ${formData.tipLimitIncreaseEnabled ? 'rgba(59, 130, 246, 0.3)' : 'rgba(255,255,255,0.05)'}`,
+                            borderRadius: '24px',
+                            marginBottom: '2rem',
+                            transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
                         }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.8rem', paddingBottom: '1.2rem', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                                    <span style={{ fontWeight: '700', fontSize: '1.1rem', color: formData.tipLimitIncreaseEnabled ? '#3b82f6' : '#fff' }}>
-                                        {formData.tipLimitIncreaseEnabled ? 'Limit O\'sishi FAOL' : 'Limit O\'sishi O\'CHIK'}
-                                    </span>
-                                    <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>Tip yuborilganda doimiy limitni oshirish</span>
+                            {/* Toggle Header */}
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: formData.tipLimitIncreaseEnabled ? '2rem' : '0' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                    <div style={{
+                                        width: '40px', height: '40px', borderRadius: '12px',
+                                        background: formData.tipLimitIncreaseEnabled ? 'rgba(59, 130, 246, 0.2)' : 'rgba(255,255,255,0.05)',
+                                        display: 'flex', alignItems: 'center', justifyContent: 'center'
+                                    }}>
+                                        <FiZap style={{ color: formData.tipLimitIncreaseEnabled ? '#3b82f6' : '#64748b' }} />
+                                    </div>
+                                    <div>
+                                        <div style={{ fontWeight: '700', color: '#fff' }}>Avtomatik Limit Oshirish</div>
+                                        <div style={{ fontSize: '0.75rem', color: '#94a3b8' }}>Har bir Tip uchun doimiy limit sovg'a qilish</div>
+                                    </div>
                                 </div>
                                 <label className="premium-toggle">
                                     <input
@@ -691,57 +699,95 @@ const TipsPage = () => {
                                         checked={formData.tipLimitIncreaseEnabled}
                                         onChange={handleChange}
                                     />
-                                    <span className="slider round" style={{ background: formData.tipLimitIncreaseEnabled ? '#3b82f6' : '#ccc' }}></span>
+                                    <span className="slider round" style={{ background: formData.tipLimitIncreaseEnabled ? '#3b82f6' : '#334155' }}></span>
                                 </label>
                             </div>
 
                             {formData.tipLimitIncreaseEnabled && (
-                                <div className="animate-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
-                                        <div className="form-group-premium">
-                                            <label style={{ color: '#fff', fontSize: '0.85rem', fontWeight: '600', marginBottom: '8px', display: 'block' }}>Har (UZS) tip uchun</label>
-                                            <div className="input-wrapper">
+                                <div className="animate-fade-in">
+                                    {/* Sentence-like UI */}
+                                    <div className="rule-sentence-ui" style={{
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        gap: '20px',
+                                        padding: '20px',
+                                        background: 'rgba(0,0,0,0.2)',
+                                        borderRadius: '16px',
+                                        border: '1px solid rgba(255,255,255,0.05)'
+                                    }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+                                            <span style={{ color: '#94a3b8', fontWeight: '500' }}>Har har bir</span>
+                                            <div style={{ position: 'relative', width: '120px' }}>
                                                 <input
                                                     type="number"
                                                     name="tipLimitPerAmountUzs"
                                                     value={formData.tipLimitPerAmountUzs}
                                                     onChange={handleChange}
-                                                    placeholder="Masalan: 1000"
-                                                    style={{ background: '#0f172a', border: '1px solid #334155' }}
+                                                    placeholder="1000"
+                                                    style={{
+                                                        width: '100%', padding: '8px 12px', background: '#0f172a',
+                                                        border: '2px solid #334155', borderRadius: '8px', color: '#fff', textAlign: 'center', fontWeight: 'bold'
+                                                    }}
                                                 />
                                             </div>
-                                            <small style={{ color: '#64748b', fontSize: '0.75rem' }}>Hissa miqdori bo'linmasi</small>
+                                            <span style={{ color: '#94a3b8', fontWeight: '500' }}>UZS yuborilgan tip uchun,</span>
                                         </div>
-                                        <div className="form-group-premium">
-                                            <label style={{ color: '#fff', fontSize: '0.85rem', fontWeight: '600', marginBottom: '8px', display: 'block' }}>Limitni oshirish (UZS)</label>
-                                            <div className="input-wrapper">
+
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+                                            <span style={{ color: '#94a3b8', fontWeight: '500' }}>Foydalanuvchi limitini</span>
+                                            <div style={{ position: 'relative', width: '100px' }}>
                                                 <input
                                                     type="number"
                                                     name="tipLimitAmountUzs"
                                                     value={formData.tipLimitAmountUzs}
                                                     onChange={handleChange}
-                                                    placeholder="Masalan: 50"
-                                                    style={{ background: '#0f172a', border: '1px solid #334155' }}
+                                                    placeholder="50"
+                                                    style={{
+                                                        width: '100%', padding: '8px 12px', background: '#0f172a',
+                                                        border: '2px solid #3b82f6', borderRadius: '8px', color: '#3b82f6', textAlign: 'center', fontWeight: 'bold'
+                                                    }}
                                                 />
                                             </div>
-                                            <small style={{ color: '#64748b', fontSize: '0.75rem' }}>Qo'shiladigan doimiy limit miqdori</small>
+                                            <span style={{ color: '#fff', fontWeight: '700' }}>UZS ga oshirib berish.</span>
                                         </div>
                                     </div>
 
-                                    <div className="example-scenario-box" style={{
-                                        padding: '1.2rem',
-                                        background: 'rgba(59, 130, 246, 0.03)',
-                                        border: '1px dashed rgba(59, 130, 246, 0.2)',
-                                        borderRadius: '12px'
-                                    }}>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.8rem', color: '#3b82f6', fontWeight: '700', fontSize: '0.9rem' }}>
-                                            <FiInfo /> Hisoblash shakli:
+                                    {/* Real-time Visualization (SIMULATION) */}
+                                    <div className="logic-visualization" style={{ marginTop: '24px' }}>
+                                        <div style={{ fontSize: '0.8rem', color: '#64748b', marginBottom: '12px', textTransform: 'uppercase', letterSpacing: '1px', fontWeight: '600' }}>
+                                            Vizual Tasvir (Simulyatsiya)
                                         </div>
-                                        <div style={{ fontSize: '0.85rem', color: '#cbd5e1', lineHeight: '1.6' }}>
-                                            Har bir yuborilgan <strong>{formData.tipLimitPerAmountUzs || '0'} UZS</strong> tip uchun
-                                            foydalanuvchi doimiy limiti <strong>{formData.tipLimitAmountUzs || '0'} UZS</strong> ga oshadi.
-                                            <br />
-                                            <small style={{ color: '#94a3b8' }}>Misol: 5000 tip yuborilsa va "Har 1000 uchun 50" bo'lsa, limit 250 ga oshadi.</small>
+                                        <div style={{
+                                            display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center', gap: '15px',
+                                            background: 'rgba(59, 130, 246, 0.05)', padding: '20px', borderRadius: '16px', border: '1px dashed rgba(59, 130, 246, 0.2)'
+                                        }}>
+                                            <div style={{ textAlign: 'center' }}>
+                                                <div style={{ fontSize: '0.7rem', color: '#94a3b8', marginBottom: '4px' }}>Tip Miqdori</div>
+                                                <div style={{ fontSize: '1.1rem', fontWeight: '800', color: '#fff' }}>10 000 UZS</div>
+                                                <div style={{ width: '100%', height: '4px', background: 'rgba(255,255,255,0.1)', borderRadius: '2px', marginTop: '8px' }}>
+                                                    <div style={{ width: '100%', height: '100%', background: '#fff', borderRadius: '2px' }}></div>
+                                                </div>
+                                            </div>
+
+                                            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                                <div style={{ color: '#3b82f6', fontSize: '1.2rem' }}>&rarr;</div>
+                                                <div style={{ fontSize: '0.6rem', color: '#3b82f6', fontWeight: '700' }}>LOGIKA</div>
+                                            </div>
+
+                                            <div style={{ textAlign: 'center' }}>
+                                                <div style={{ fontSize: '0.7rem', color: '#94a3b8', marginBottom: '4px' }}>Doimiy Limit +</div>
+                                                <div style={{ fontSize: '1.3rem', fontWeight: '900', color: '#3b82f6' }}>
+                                                    {formData.tipLimitPerAmountUzs && formData.tipLimitAmountUzs ?
+                                                        (Math.floor(10000 / Number(formData.tipLimitPerAmountUzs)) * Number(formData.tipLimitAmountUzs)).toLocaleString() : '0'
+                                                    } UZS
+                                                </div>
+                                                <div style={{ width: '100%', height: '4px', background: 'rgba(59, 130, 246, 0.2)', borderRadius: '2px', marginTop: '8px' }}>
+                                                    <div style={{ width: '70%', height: '100%', background: '#3b82f6', borderRadius: '2px', boxShadow: '0 0 10px rgba(59, 130, 246, 0.5)' }}></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div style={{ marginTop: '12px', fontSize: '0.75rem', color: '#94a3b8', textAlign: 'center', fontStyle: 'italic' }}>
+                                            * Yuqoridagi misol 10 000 UZS tip yuborilgandagi natijani ko'rsatmoqda
                                         </div>
                                     </div>
                                 </div>
