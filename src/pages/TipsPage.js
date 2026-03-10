@@ -699,7 +699,7 @@ const TipsPage = () => {
                                         checked={formData.tipLimitIncreaseEnabled}
                                         onChange={handleChange}
                                     />
-                                    <span className="slider round" style={{ background: formData.tipLimitIncreaseEnabled ? '#3b82f6' : '#334155' }}></span>
+                                    <span className="slider round"></span>
                                 </label>
                             </div>
 
