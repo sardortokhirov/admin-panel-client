@@ -152,7 +152,8 @@ const DashboardPage = () => {
       setToggleState({
         ...toggles,
         payEnabled: toggles.payToggleEnabled !== undefined ? toggles.payToggleEnabled : toggles.payEnabled,
-        promoEnabled: toggles.promoEnabled
+        promoEnabled: toggles.promoEnabled,
+        walletEnabled: toggles.walletEnabled
       });
     })();
   }, []);
@@ -174,6 +175,8 @@ const DashboardPage = () => {
       res = await dashboardService?.ToggleController?.toggleBonusLimit(!value);
     } else if (key === "payEnabled") {
       res = await dashboardService?.ToggleController?.togglePay(!value);
+    } else if (key === "walletEnabled") {
+      res = await dashboardService?.ToggleController?.toggleWallet(!value);
     }
     const toggles = await dashboardService.GetToggles();
 
@@ -183,7 +186,8 @@ const DashboardPage = () => {
     setToggleState({
       ...toggles,
       payEnabled: toggles.payToggleEnabled !== undefined ? toggles.payToggleEnabled : toggles.payEnabled,
-      promoEnabled: toggles.promoEnabled
+      promoEnabled: toggles.promoEnabled,
+      walletEnabled: toggles.walletEnabled
     });
     setIsLoading(0);
   };
@@ -352,6 +356,14 @@ const DashboardPage = () => {
           <p><FiTrendingUp /> Pay Tizimi:</p>
           <div className="toggle-switch">
             <div className={`toggle-slider ${toggleState.payEnabled ? "on" : "off"}`}>
+              <span className="toggle-knob"></span>
+            </div>
+          </div>
+        </div>
+        <div className="toggle-element" onClick={() => changeTogle("walletEnabled", toggleState.walletEnabled)}>
+          <p><FiUsers /> Hamyon Tizimi:</p>
+          <div className="toggle-switch">
+            <div className={`toggle-slider ${toggleState.walletEnabled ? "on" : "off"}`}>
               <span className="toggle-knob"></span>
             </div>
           </div>

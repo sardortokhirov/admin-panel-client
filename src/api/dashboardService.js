@@ -78,6 +78,14 @@ const ToggleController = {
     );
     return res.data;
   },
+
+  // POST - Toggle Wallet
+  toggleWallet: async (enabled) => {
+    const res = await apiService.post(
+      `/features/toggle/wallet?enabled=${enabled}`
+    );
+    return res.data;
+  },
 };
 const getWalletBalances = () => {
   return apiService.get(`${API_URL}/wallet-balances`);
