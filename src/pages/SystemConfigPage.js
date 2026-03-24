@@ -16,7 +16,8 @@ const SystemConfigPage = () => {
         minTickets: 5,
         maxTickets: 400,
         referralCommissionPercentage: 0.001,
-        ticketCalculationAmount: 10000
+        ticketCalculationAmount: 10000,
+        withdrawFeePercentage: 1
     });
     const [isLoading, setIsLoading] = useState(true);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -37,7 +38,8 @@ const SystemConfigPage = () => {
                     minTickets: data.minTickets,
                     maxTickets: data.maxTickets,
                     referralCommissionPercentage: data.referralCommissionPercentage,
-                    ticketCalculationAmount: data.ticketCalculationAmount
+                    ticketCalculationAmount: data.ticketCalculationAmount,
+                    withdrawFeePercentage: data.withdrawFeePercentage !== null ? data.withdrawFeePercentage : 1
                 });
             }
         } catch (err) {
@@ -205,6 +207,23 @@ const SystemConfigPage = () => {
                                 onChange={handleInputChange}
                                 required
                             />
+                        </div>
+                        <div className="form__group">
+                            <label>Pul yechish komissiyasi (%)</label>
+                            <input
+                                type="number"
+                                step="0.01"
+                                min="0"
+                                max="100"
+                                name="withdrawFeePercentage"
+                                value={formState.withdrawFeePercentage}
+                                onChange={handleInputChange}
+                                required
+                            />
+                            <small className="form-helper" style={{ display: 'block', marginTop: '0.25rem', color: '#666', fontSize: '0.8rem' }}>
+                                Percentage deducted from the withdrawn amount before the amount credited to the user. 1 = 1% commission.
+                                {config && config.withdrawFeePercentage === null && <span style={{ color: '#d97706', fontWeight: 'bold' }}> Default 1% until saved.</span>}
+                            </small>
                         </div>
                     </div>
 
