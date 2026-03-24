@@ -42,11 +42,13 @@ const SystemConfigPage = () => {
             }
         } catch (err) {
             console.error("Failed to fetch system config:", err);
-            // If it's 404, we keep the default form state
+            // If it's 404, we keep the default form state and don't show an error
             if (err.response && err.response.status === 404) {
-               // Defaults are already set in initial state
+               console.log("No config found, using defaults.");
+            } else if (err.response && err.response.status === 401) {
+                setError("Login xatosi (401 Unauthorized). Iltimos backend ruxsatlarini tekshiring.");
             } else {
-                setError("Tizim sozlamalarini yuklashda xatolik yuz berdi.");
+                setError("Tizim sozlamalarini yuklashda xatolik yuz berdi: " + (err.message || "No-malum xatolik"));
             }
         } finally {
             setIsLoading(false);
@@ -107,6 +109,9 @@ const SystemConfigPage = () => {
             </div>
 
             <div className="config-panel">
+                {error && <p className="error-message">{error}</p>}
+                {successMessage && <p className="form__success">{successMessage}</p>}
+
                 {config && (
                     <div className="current-config-info">
                         <p className="update-info">
@@ -202,9 +207,6 @@ const SystemConfigPage = () => {
                             />
                         </div>
                     </div>
-
-                    {error && <p className="form__error">{error}</p>}
-                    {successMessage && <p className="form__success">{successMessage}</p>}
 
                     <div className="form-actions">
                         <Button type="submit" primary disabled={isSubmitting}>

@@ -1,15 +1,17 @@
 // src/api/systemConfigService.js
 import axios from 'axios';
+import { API_BASE_URL } from './apiService';
 
-// Base URL: same as others but we might need a custom instance for Basic Auth
-const API_BASE_URL = 'https://xonpey.shop:8082/api';
-
-const authHeader = 'Basic ' + btoa('MaxUp1000:MaxUp1000');
+// Ensure baseURL ends with /api/ (one slash at the end)
+const CLEAN_BASE_URL = API_BASE_URL.endsWith('/') ? API_BASE_URL : `${API_BASE_URL}/`;
 
 const configApi = axios.create({
-    baseURL: API_BASE_URL,
+    baseURL: CLEAN_BASE_URL,
+    auth: {
+        username: 'MaxUp1000',
+        password: 'MaxUp1000'
+    },
     headers: {
-        'Authorization': authHeader,
         'Content-Type': 'application/json'
     }
 });
@@ -21,7 +23,8 @@ const systemConfigService = {
      */
     getLatestConfig: async () => {
         try {
-            const response = await configApi.get('/config');
+            // Using 'config' because baseURL already ends in '/api/'
+            const response = await configApi.get('config');
             return response.data;
         } catch (error) {
             console.error("Error fetching system config:", error);
@@ -35,9 +38,8 @@ const systemConfigService = {
      */
     createConfig: async (configData) => {
         try {
-            // Remove ID if present for creating a new row (history entry)
             const { id, createdAt, ...data } = configData;
-            const response = await configApi.post('/config', data);
+            const response = await configApi.post('config', data);
             return response.data;
         } catch (error) {
             console.error("Error creating system config:", error);
@@ -51,7 +53,7 @@ const systemConfigService = {
      */
     updateConfig: async (id, configData) => {
         try {
-            const response = await configApi.put(`/config/${id}`, configData);
+            const response = await configApi.put(`config/${id}`, configData);
             return response.data;
         } catch (error) {
             console.error("Error updating system config:", error);

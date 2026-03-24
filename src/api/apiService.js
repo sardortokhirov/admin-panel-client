@@ -1,12 +1,10 @@
 // src/api/apiService.js
-
 import axios from 'axios';
 
 // IMPORTANT: Replace with your actual backend URL
 // const API_BASE_URL = 'http://localhost:8080/api';
 // const API_BASE_URL = 'http://128.199.44.140:8080/api';
-// const API_BASE_URL = 'https://xonpey.shop:8082/api';
-const API_BASE_URL = 'https://misterpey.uz:8082/api';
+export const API_BASE_URL = 'https://misterpey.uz:8082/api';
 
 
 const apiService = axios.create({
