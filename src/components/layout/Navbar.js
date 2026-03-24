@@ -84,6 +84,9 @@ const Navbar = () => {
                         <NavLink to="/humo" onClick={closeMobileMenu}>
                             Humo Service
                         </NavLink>
+                        <NavLink to="/system-config" onClick={closeMobileMenu}>
+                            Tizim Sozlamalari
+                        </NavLink>
                     </Dropdown>
                 </div>
 

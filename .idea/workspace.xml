@@ -1,0 +1,539 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="02dfe031-9c88-4887-ac65-dfdf9f4723e7" name="Changes" comment="fix isses with use effect">
+      <change beforePath="$PROJECT_DIR$/src/api/apiService.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/apiService.js" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;sardortokhirov&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/sardortokhirov/admin-panel-client.git&quot;,
+    &quot;accountId&quot;: &quot;e6a2be4e-f2a9-4e74-a6db-7cba2aca0078&quot;
+  }
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 3
+}</component>
+  <component name="ProjectId" id="34hS48ANO8v4MO89vicjxfS8bT1" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;npm.start dev.executor&quot;: &quot;Run&quot;,
+    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\Program Files\\JetBrains\\WebStorm 2025.2.2\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RunManager">
+    <configuration name="start dev" type="js.build_tools.npm" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="start" />
+      <arguments value="dev" />
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-9c94529fcfe0-JavaScript-WS-252.26199.162" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="02dfe031-9c88-4887-ac65-dfdf9f4723e7" name="Changes" comment="" />
+      <created>1761664116952</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1761664116952</updated>
+      <workItem from="1761664119454" duration="116000" />
+      <workItem from="1761668343173" duration="317000" />
+      <workItem from="1761671185356" duration="4838000" />
+      <workItem from="1761872251238" duration="1734000" />
+      <workItem from="1761913275019" duration="9987000" />
+      <workItem from="1762311669059" duration="3595000" />
+      <workItem from="1762358731855" duration="4430000" />
+      <workItem from="1763455059844" duration="655000" />
+      <workItem from="1763642768608" duration="607000" />
+      <workItem from="1764530294677" duration="10000" />
+      <workItem from="1766118427935" duration="1901000" />
+      <workItem from="1766218581781" duration="1000" />
+      <workItem from="1766218819061" duration="395000" />
+      <workItem from="1766298684384" duration="6166000" />
+      <workItem from="1766313047310" duration="2540000" />
+      <workItem from="1767273040025" duration="1213000" />
+      <workItem from="1767437765319" duration="2510000" />
+      <workItem from="1767721959604" duration="2404000" />
+      <workItem from="1767798359240" duration="828000" />
+      <workItem from="1767976473238" duration="1174000" />
+      <workItem from="1768644598900" duration="920000" />
+      <workItem from="1768646468764" duration="83000" />
+      <workItem from="1768674098330" duration="1638000" />
+      <workItem from="1768678405015" duration="1687000" />
+      <workItem from="1768760867262" duration="2659000" />
+      <workItem from="1768766615661" duration="594000" />
+      <workItem from="1768847401161" duration="2339000" />
+      <workItem from="1768859778592" duration="1426000" />
+      <workItem from="1769345777764" duration="127000" />
+      <workItem from="1769346077190" duration="4000" />
+      <workItem from="1769880969566" duration="1535000" />
+      <workItem from="1771687074736" duration="216000" />
+      <workItem from="1771689024705" duration="1391000" />
+      <workItem from="1771763817747" duration="1845000" />
+      <workItem from="1771871156451" duration="4442000" />
+      <workItem from="1772031415937" duration="3944000" />
+      <workItem from="1772045888506" duration="3526000" />
+      <workItem from="1772659311928" duration="2103000" />
+      <workItem from="1772850241438" duration="2552000" />
+      <workItem from="1772895754642" duration="2638000" />
+      <workItem from="1772921446986" duration="3487000" />
+      <workItem from="1773033043778" duration="1638000" />
+      <workItem from="1773038179343" duration="2987000" />
+      <workItem from="1773124016971" duration="634000" />
+      <workItem from="1773126321178" duration="416000" />
+      <workItem from="1773127114204" duration="271000" />
+      <workItem from="1773173910123" duration="515000" />
+      <workItem from="1773465509085" duration="1117000" />
+      <workItem from="1773845028881" duration="768000" />
+    </task>
+    <task id="LOCAL-00002" summary="asdasda">
+      <option name="closed" value="true" />
+      <created>1761675203989</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1761675203989</updated>
+    </task>
+    <task id="LOCAL-00003" summary="asdasda">
+      <option name="closed" value="true" />
+      <created>1761935775028</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1761935775028</updated>
+    </task>
+    <task id="LOCAL-00004" summary="asdasda">
+      <option name="closed" value="true" />
+      <created>1761970171635</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1761970171635</updated>
+    </task>
+    <task id="LOCAL-00005" summary="asdasda">
+      <option name="closed" value="true" />
+      <created>1762321345315</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1762321345315</updated>
+    </task>
+    <task id="LOCAL-00006" summary="asdasda">
+      <option name="closed" value="true" />
+      <created>1762321382233</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1762321382233</updated>
+    </task>
+    <task id="LOCAL-00007" summary="new  users page">
+      <option name="closed" value="true" />
+      <created>1762363041208</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1762363041208</updated>
+    </task>
+    <task id="LOCAL-00008" summary="referal promo and award">
+      <option name="closed" value="true" />
+      <created>1766299226396</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1766299226396</updated>
+    </task>
+    <task id="LOCAL-00009" summary="referal promo and award">
+      <option name="closed" value="true" />
+      <created>1766305181975</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1766305181975</updated>
+    </task>
+    <task id="LOCAL-00010" summary="referal promo and award">
+      <option name="closed" value="true" />
+      <created>1766309838536</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1766309838536</updated>
+    </task>
+    <task id="LOCAL-00011" summary="referal promo and award">
+      <option name="closed" value="true" />
+      <created>1766310543824</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1766310543824</updated>
+    </task>
+    <task id="LOCAL-00012" summary="referal promo and award">
+      <option name="closed" value="true" />
+      <created>1766312262504</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1766312262504</updated>
+    </task>
+    <task id="LOCAL-00013" summary="referal promo and award">
+      <option name="closed" value="true" />
+      <created>1766314324840</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1766314324840</updated>
+    </task>
+    <task id="LOCAL-00014" summary="referal promo and award">
+      <option name="closed" value="true" />
+      <created>1767273049800</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1767273049800</updated>
+    </task>
+    <task id="LOCAL-00015" summary="referal promo and award">
+      <option name="closed" value="true" />
+      <created>1767438181209</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1767438181209</updated>
+    </task>
+    <task id="LOCAL-00016" summary="referal promo and award">
+      <option name="closed" value="true" />
+      <created>1767439022316</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1767439022316</updated>
+    </task>
+    <task id="LOCAL-00017" summary="referal promo and award">
+      <option name="closed" value="true" />
+      <created>1767439685979</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1767439685979</updated>
+    </task>
+    <task id="LOCAL-00018" summary="referal promo and award">
+      <option name="closed" value="true" />
+      <created>1767722419857</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1767722419857</updated>
+    </task>
+    <task id="LOCAL-00019" summary="referal promo and award">
+      <option name="closed" value="true" />
+      <created>1767726669489</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1767726669489</updated>
+    </task>
+    <task id="LOCAL-00020" summary="referal promo and award">
+      <option name="closed" value="true" />
+      <created>1767726897034</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1767726897034</updated>
+    </task>
+    <task id="LOCAL-00021" summary="fix isses with use effect">
+      <option name="closed" value="true" />
+      <created>1767798529145</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1767798529145</updated>
+    </task>
+    <task id="LOCAL-00022" summary="fix isses with use effect">
+      <option name="closed" value="true" />
+      <created>1767979275108</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1767979275108</updated>
+    </task>
+    <task id="LOCAL-00023" summary="fix isses with use effect">
+      <option name="closed" value="true" />
+      <created>1768644793306</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1768644793306</updated>
+    </task>
+    <task id="LOCAL-00024" summary="fix isses with use effect">
+      <option name="closed" value="true" />
+      <created>1768645574596</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1768645574596</updated>
+    </task>
+    <task id="LOCAL-00025" summary="fix isses with use effect">
+      <option name="closed" value="true" />
+      <created>1768646546933</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1768646546933</updated>
+    </task>
+    <task id="LOCAL-00026" summary="fix isses with use effect">
+      <option name="closed" value="true" />
+      <created>1768676152434</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1768676152434</updated>
+    </task>
+    <task id="LOCAL-00027" summary="fix isses with use effect">
+      <option name="closed" value="true" />
+      <created>1768679445578</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1768679445578</updated>
+    </task>
+    <task id="LOCAL-00028" summary="fix isses with use effect">
+      <option name="closed" value="true" />
+      <created>1768765754170</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1768765754170</updated>
+    </task>
+    <task id="LOCAL-00029" summary="fix isses with use effect">
+      <option name="closed" value="true" />
+      <created>1768767020307</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1768767020307</updated>
+    </task>
+    <task id="LOCAL-00030" summary="fix isses with use effect">
+      <option name="closed" value="true" />
+      <created>1768847631443</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1768847631443</updated>
+    </task>
+    <task id="LOCAL-00031" summary="fix isses with use effect">
+      <option name="closed" value="true" />
+      <created>1768848401247</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1768848401247</updated>
+    </task>
+    <task id="LOCAL-00032" summary="fix isses with use effect">
+      <option name="closed" value="true" />
+      <created>1768860952356</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1768860952356</updated>
+    </task>
+    <task id="LOCAL-00033" summary="fix isses with use effect">
+      <option name="closed" value="true" />
+      <created>1768861201088</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1768861201088</updated>
+    </task>
+    <task id="LOCAL-00034" summary="fix isses with use effect">
+      <option name="closed" value="true" />
+      <created>1769345897788</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1769345897788</updated>
+    </task>
+    <task id="LOCAL-00035" summary="fix isses with use effect">
+      <option name="closed" value="true" />
+      <created>1769884327267</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1769884327267</updated>
+    </task>
+    <task id="LOCAL-00036" summary="fix isses with use effect">
+      <option name="closed" value="true" />
+      <created>1771687092732</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1771687092732</updated>
+    </task>
+    <task id="LOCAL-00037" summary="fix isses with use effect">
+      <option name="closed" value="true" />
+      <created>1771689071649</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1771689071649</updated>
+    </task>
+    <task id="LOCAL-00038" summary="fix isses with use effect">
+      <option name="closed" value="true" />
+      <created>1771689649084</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1771689649084</updated>
+    </task>
+    <task id="LOCAL-00039" summary="fix isses with use effect">
+      <option name="closed" value="true" />
+      <created>1771769989386</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1771769989386</updated>
+    </task>
+    <task id="LOCAL-00040" summary="fix isses with use effect">
+      <option name="closed" value="true" />
+      <created>1772058346662</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1772058346662</updated>
+    </task>
+    <task id="LOCAL-00041" summary="fix isses with use effect">
+      <option name="closed" value="true" />
+      <created>1773051872074</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1773051872074</updated>
+    </task>
+    <task id="LOCAL-00042" summary="fix isses with use effect">
+      <option name="closed" value="true" />
+      <created>1773052892794</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1773052892794</updated>
+    </task>
+    <task id="LOCAL-00043" summary="fix isses with use effect">
+      <option name="closed" value="true" />
+      <created>1773054667936</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1773054667936</updated>
+    </task>
+    <task id="LOCAL-00044" summary="fix isses with use effect">
+      <option name="closed" value="true" />
+      <created>1773124044286</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1773124044286</updated>
+    </task>
+    <task id="LOCAL-00045" summary="fix isses with use effect">
+      <option name="closed" value="true" />
+      <created>1773126349158</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1773126349158</updated>
+    </task>
+    <task id="LOCAL-00046" summary="fix isses with use effect">
+      <option name="closed" value="true" />
+      <created>1773126738264</created>
+      <option name="number" value="00046" />
+      <option name="presentableId" value="LOCAL-00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1773126738264</updated>
+    </task>
+    <task id="LOCAL-00047" summary="fix isses with use effect">
+      <option name="closed" value="true" />
+      <created>1773127179903</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1773127179903</updated>
+    </task>
+    <task id="LOCAL-00048" summary="fix isses with use effect">
+      <option name="closed" value="true" />
+      <created>1773127374905</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1773127374905</updated>
+    </task>
+    <task id="LOCAL-00049" summary="fix isses with use effect">
+      <option name="closed" value="true" />
+      <created>1773174038599</created>
+      <option name="number" value="00049" />
+      <option name="presentableId" value="LOCAL-00049" />
+      <option name="project" value="LOCAL" />
+      <updated>1773174038599</updated>
+    </task>
+    <task id="LOCAL-00050" summary="fix isses with use effect">
+      <option name="closed" value="true" />
+      <created>1773465522953</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1773465522954</updated>
+    </task>
+    <option name="localTasksCounter" value="51" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="asdasda" />
+    <MESSAGE value="new  users page" />
+    <MESSAGE value="referal promo and award" />
+    <MESSAGE value="fix isses with use effect" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix isses with use effect" />
+  </component>
+</project>

@@ -21,6 +21,7 @@ import OsonConfigsListPage from "./pages/OsonConfigPage";
 import OsonConfigDetailPage from "./pages/OsonConfigDetailPage";
 import BroadcastPage from "./pages/BroadcastPage";
 import HumoService from "./pages/HumoService";
+import SystemConfigPage from "./pages/SystemConfigPage"; // <-- IMPORT original system config
 
 function App() {
   const { isAuthenticated } = useAuth();
@@ -133,6 +134,15 @@ function App() {
             element={
               <PrivateRoute>
                 <HumoService />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/system-config"
+            element={
+              <PrivateRoute>
+                <SystemConfigPage />
               </PrivateRoute>
             }
           />
