@@ -20,7 +20,25 @@ const unblockUser = (chatId) => {
     });
 };
 
+const blockPhone = (phone) => {
+    return apiService.post(`${BLOCKED_USERS_URL}/block-phone`, null, {
+        params: {
+            phone
+        }
+    });
+};
+
+const unblockPhone = (phone) => {
+    return apiService.post(`${BLOCKED_USERS_URL}/unblock-phone`, null, {
+        params: {
+            phone
+        }
+    });
+};
+
 export const blockedUsersService = {
     getAllBlockedUsers,
-    unblockUser
+    unblockUser,
+    blockPhone,
+    unblockPhone
 };

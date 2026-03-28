@@ -13,6 +13,9 @@ const BlockedUsersPage = () => {
     const [totalElements, setTotalElements] = useState(0);
 
     const [fetching, setFetching] = useState(false);
+    const [submittingPhone, setSubmittingPhone] = useState(false);
+    const [phoneToBlock, setPhoneToBlock] = useState("");
+    const [phoneToUnblock, setPhoneToUnblock] = useState("");
     const [message, setMessage] = useState(null);
     const [error, setError] = useState(null);
 
@@ -61,13 +64,51 @@ const BlockedUsersPage = () => {
         try {
             const response = await blockedUsersService.unblockUser(chatId);
             // The response data contains the success message from backend
-            setMessage(response.data || `✅ Foydalanuvchi blokdan chiqarildi: ${chatId}`);
+            setMessage(response.data || `✅ Foydalanuvchi blokdan chiqarildi: ${chatId}. Shuningdek, ushbu foydalanuvchining telefon raqami ham blok ro'yxatidan o'chirildi.`);
             fetchBlockedUsers(page); // Refresh current page list
             setTimeout(() => setMessage(null), 5000);
         } catch (err) {
             console.error(err);
             const errorMsg = err.response?.data || "Blokdan chiqarishda xatolik yuz berdi";
             alert(errorMsg);
+        }
+    };
+
+    const handleBlockPhone = async (e) => {
+        e.preventDefault();
+        if (!phoneToBlock) return;
+        
+        setSubmittingPhone(true);
+        try {
+            const response = await blockedUsersService.blockPhone(phoneToBlock);
+            setMessage(response.data || `✅ Telefon raqami global bloklash ro'yxatiga qo'shildi: ${phoneToBlock}`);
+            setPhoneToBlock("");
+            setTimeout(() => setMessage(null), 5000);
+            fetchBlockedUsers(0);
+        } catch (err) {
+            console.error(err);
+            alert(err.response?.data || "Telefon raqamini bloklashda xatolik yuz berdi");
+        } finally {
+            setSubmittingPhone(false);
+        }
+    };
+
+    const handleUnblockPhone = async (e) => {
+        e.preventDefault();
+        if (!phoneToUnblock) return;
+
+        setSubmittingPhone(true);
+        try {
+            const response = await blockedUsersService.unblockPhone(phoneToUnblock);
+            setMessage(response.data || `✅ Telefon raqami bloklash ro'yxatidan olib tashlandi: ${phoneToUnblock}`);
+            setPhoneToUnblock("");
+            setTimeout(() => setMessage(null), 5000);
+            fetchBlockedUsers(0);
+        } catch (err) {
+            console.error(err);
+            alert(err.response?.data || "Telefon raqamini blokdan chiqarishda xatolik yuz berdi");
+        } finally {
+            setSubmittingPhone(false);
         }
     };
 
@@ -94,6 +135,42 @@ const BlockedUsersPage = () => {
                         {error}
                     </div>
                 )}
+
+                <div className="phone-actions-grid">
+                    <div className="phone-action-card">
+                        <h3>Telefon orqali bloklash</h3>
+                        <p className="card-hint">Xuddi shu raqamli istalgan Telegram hisobidan qayta ro'yxatdan o'tishni taqiqlaydi.</p>
+                        <form onSubmit={handleBlockPhone} className="phone-form">
+                            <input
+                                type="text"
+                                placeholder="+998901234567"
+                                value={phoneToBlock}
+                                onChange={(e) => setPhoneToBlock(e.target.value)}
+                                className="phone-input"
+                            />
+                            <button type="submit" className="action-btn block-btn" disabled={submittingPhone}>
+                                {submittingPhone ? "..." : "Bloklash"}
+                            </button>
+                        </form>
+                    </div>
+
+                    <div className="phone-action-card">
+                        <h3>Telefon orqali ochish</h3>
+                        <p className="card-hint">Raqamni global blokdan chiqarish.</p>
+                        <form onSubmit={handleUnblockPhone} className="phone-form">
+                            <input
+                                type="text"
+                                placeholder="+998901234567"
+                                value={phoneToUnblock}
+                                onChange={(e) => setPhoneToUnblock(e.target.value)}
+                                className="phone-input"
+                            />
+                            <button type="submit" className="action-btn unblock-btn" disabled={submittingPhone}>
+                                {submittingPhone ? "..." : "Ochish"}
+                            </button>
+                        </form>
+                    </div>
+                </div>
 
                 <div className="users-list-card">
                     {fetching ? (
@@ -362,8 +439,77 @@ const BlockedUsersPage = () => {
                         padding: 3rem;
                         font-style: italic;
                     }
+
+                    .phone-actions-grid {
+                        display: grid;
+                        grid-template-columns: 1fr 1fr;
+                        gap: 1.5rem;
+                        margin-bottom: 2rem;
+                    }
+                    .phone-action-card {
+                        background: #16213e;
+                        border-radius: 12px;
+                        padding: 1.5rem;
+                        border: 1px solid rgba(255, 255, 255, 0.05);
+                        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+                    }
+                    .phone-action-card h3 {
+                        margin: 0 0 0.5rem 0;
+                        font-size: 1.1rem;
+                        color: #fff;
+                    }
+                    .card-hint {
+                        font-size: 0.8rem;
+                        color: #a0a0a0;
+                        margin-bottom: 1rem;
+                    }
+                    .phone-form {
+                        display: flex;
+                        gap: 0.5rem;
+                    }
+                    .phone-input {
+                        flex: 1;
+                        background: rgba(15, 52, 96, 0.8);
+                        border: 1px solid rgba(255, 255, 255, 0.1);
+                        border-radius: 6px;
+                        padding: 0.6rem 1rem;
+                        color: #fff;
+                        font-size: 0.95rem;
+                        outline: none;
+                        transition: border-color 0.2s;
+                    }
+                    .phone-input:focus {
+                        border-color: #53bf9d;
+                    }
+                    .action-btn {
+                        padding: 0.6rem 1.2rem;
+                        border-radius: 6px;
+                        font-weight: 600;
+                        cursor: pointer;
+                        border: none;
+                        transition: all 0.2s;
+                    }
+                    .block-btn {
+                        background: rgba(233, 69, 96, 0.9);
+                        color: #fff;
+                    }
+                    .block-btn:hover {
+                        background: #e94560;
+                        transform: translateY(-2px);
+                    }
+                    .unblock-btn {
+                        background: rgba(83, 191, 157, 0.9);
+                        color: #fff;
+                    }
+                    .unblock-btn:hover {
+                        background: #53bf9d;
+                        transform: translateY(-2px);
+                    }
                     
                     @media (max-width: 768px) {
+                        .phone-actions-grid {
+                            grid-template-columns: 1fr;
+                        }
                         .transaction-table th, 
                         .transaction-table td {
                             padding: 0.8rem 1rem;
