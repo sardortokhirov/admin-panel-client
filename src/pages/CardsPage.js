@@ -36,9 +36,11 @@ const CardsPage = () => {
   const [currentCard, setCurrentCard] = useState(null);
   const [selectedOsonConfigId, setSelectedOsonConfigId] = useState("");
 
-  // State for Toggle
   const [toggleState, setToggleState] = useState({ humoEnabled: true });
   const [isToggling, setIsToggling] = useState(false);
+
+  // Search and Filter State
+  const [searchQuery, setSearchQuery] = useState("");
 
   // Fetch BOTH cards and oson configs when the page loads
   const fetchData = useCallback(async () => {
@@ -169,56 +171,84 @@ const CardsPage = () => {
     }
   };
 
+  const filteredCards = cards.filter((card) => {
+    const searchLow = searchQuery.toLowerCase();
+    const cardNumber = card.cardNumber || "";
+    const ownerName = card.ownerName?.toLowerCase() || "";
+    return cardNumber.includes(searchLow) || ownerName.includes(searchLow);
+  });
+
   if (isLoading) return <Loader />;
 
   return (
-    <div className="page-container">
-      <div className="page-header">
-        <h1>All Admin Cards</h1>
-        <div style={{ display: 'flex', gap: '15px', alignItems: 'center' }}>
-          {/* Humo Toggle UI */}
-          <div className="toggle-element" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '0 10px' }}>
-            <span style={{ margin: 0, fontWeight: '600', color: 'inherit' }}>Humo:</span>
-            <div
-              className="toggle-switch"
-              style={{
-                margin: 0, // Override global margin
-                position: 'relative',
-                width: '50px',
-                height: '26px',
-                borderRadius: '20px',
-                cursor: 'pointer',
-                backgroundColor: toggleState.humoEnabled ? '#53bf9d' : '#e94560'
-              }}
-              onClick={() => !isToggling && handleToggleHumo()}
-            >
-              <div
-                className="toggle-knob"
-                style={{
-                  position: 'absolute',
-                  top: '3px',
-                  left: '3px',
-                  width: '20px',
-                  height: '20px',
-                  backgroundColor: '#fff',
-                  borderRadius: '50%',
-                  transition: 'transform 0.3s',
-                  transform: toggleState.humoEnabled ? 'translateX(24px)' : 'translateX(0)'
-                }}
-              ></div>
-            </div>
+    <div className="page-container cards-management-page">
+      <div className="page-header custom-cards-header">
+        <div className="header-title-section">
+          <h1>All Admin Cards</h1>
+          <span className="cards-count-badge">{filteredCards.length} Cards</span>
+        </div>
+        
+        <div className="header-actions-group">
+          {/* Search Bar */}
+          <div className="search-bar-container">
+            <FiCreditCard className="search-icon" />
+            <input
+              type="text"
+              placeholder="Search by name or card number..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="custom-search-input"
+            />
+            {searchQuery && (
+              <button className="clear-search" onClick={() => setSearchQuery("")}>&times;</button>
+            )}
           </div>
 
-          <Button primary onClick={() => handleOpenModal()}>
-            <FiPlusCircle /> Add New Card
-          </Button>
+          <div className="toggle-and-add">
+            {/* Humo Toggle UI */}
+            <div className="toggle-element" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '0 10px' }}>
+              <span className="toggle-label">Humo:</span>
+              <div
+                className="toggle-switch"
+                style={{
+                  margin: 0,
+                  position: 'relative',
+                  width: '50px',
+                  height: '26px',
+                  borderRadius: '20px',
+                  cursor: 'pointer',
+                  backgroundColor: toggleState.humoEnabled ? '#53bf9d' : '#e94560'
+                }}
+                onClick={() => !isToggling && handleToggleHumo()}
+              >
+                <div
+                  className="toggle-knob"
+                  style={{
+                    position: 'absolute',
+                    top: '3px',
+                    left: '3px',
+                    width: '20px',
+                    height: '20px',
+                    backgroundColor: '#fff',
+                    borderRadius: '50%',
+                    transition: 'transform 0.3s',
+                    transform: toggleState.humoEnabled ? 'translateX(24px)' : 'translateX(0)'
+                  }}
+                ></div>
+              </div>
+            </div>
+
+            <Button primary onClick={() => handleOpenModal()} className="add-card-btn">
+              <FiPlusCircle /> <span>Add New Card</span>
+            </Button>
+          </div>
         </div>
       </div>
 
       {error && <p className="error-message">{error}</p>}
 
       <div className="cards-grid">
-        {cards.map((card) => (
+        {filteredCards.map((card) => (
           <div
             key={card.id}
             className={`admin-card ${card.osonConfig.primaryConfig ? "primary-account" : ""}`}
@@ -405,6 +435,128 @@ const CardsPage = () => {
           </Button>
         </form>
       </Modal>
+
+      <style>{`
+        .custom-cards-header {
+          display: flex;
+          flex-direction: column;
+          gap: 20px;
+          align-items: flex-start;
+          width: 100%;
+          margin-bottom: 30px;
+        }
+
+        .header-title-section {
+          display: flex;
+          align-items: center;
+          gap: 15px;
+        }
+
+        .cards-count-badge {
+          background: rgba(83, 191, 157, 0.1);
+          color: #53bf9d;
+          padding: 4px 12px;
+          border-radius: 20px;
+          font-size: 0.85rem;
+          font-weight: 600;
+        }
+
+        .header-actions-group {
+          display: flex;
+          width: 100%;
+          gap: 20px;
+          align-items: center;
+          justify-content: space-between;
+          flex-wrap: wrap;
+        }
+
+        .search-bar-container {
+          position: relative;
+          flex: 1;
+          min-width: 300px;
+          max-width: 500px;
+        }
+
+        .search-icon {
+          position: absolute;
+          left: 12px;
+          top: 50%;
+          transform: translateY(-50%);
+          color: #a0a0a0;
+          pointer-events: none;
+        }
+
+        .custom-search-input {
+          width: 100%;
+          padding: 12px 40px;
+          background: #0f3460;
+          border: 1px solid rgba(255, 255, 255, 0.05);
+          border-radius: 12px;
+          color: #fff;
+          font-size: 0.95rem;
+          transition: all 0.3s;
+        }
+
+        .custom-search-input:focus {
+          border-color: #0088cc;
+          box-shadow: 0 0 0 3px rgba(0, 136, 204, 0.1);
+          outline: none;
+        }
+
+        .clear-search {
+          position: absolute;
+          right: 12px;
+          top: 50%;
+          transform: translateY(-50%);
+          background: none;
+          border: none;
+          color: #a0a0a0;
+          font-size: 1.2rem;
+          cursor: pointer;
+          padding: 0;
+        }
+
+        .toggle-and-add {
+          display: flex;
+          align-items: center;
+          gap: 20px;
+        }
+
+        .toggle-label {
+           font-weight: 600;
+           color: #fff;
+        }
+
+        @media (max-width: 768px) {
+          .header-actions-group {
+            flex-direction: column;
+            align-items: stretch;
+          }
+
+          .search-bar-container {
+            max-width: none;
+            min-width: 0;
+          }
+
+          .toggle-and-add {
+            justify-content: space-between;
+          }
+
+          .add-card-btn span {
+            display: none;
+          }
+          
+          .add-card-btn {
+            padding: 12px;
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+        }
+      `}</style>
     </div>
   );
 };
