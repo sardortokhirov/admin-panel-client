@@ -253,22 +253,20 @@ const CardsPage = () => {
               </div>
               <div className="card-info-item">
                 <div className="card-info-text">
-                  <span>Payment System</span>
-                  <p>{card.paymentSystem === "HUMO" ? "TELEGRAM" : "OSON"}</p>
+                  <span>Verification / Channel</span>
+                  <p style={{ 
+                    fontWeight: 'bold', 
+                    color: card.paymentSystem === 'HUMO' ? '#0088cc' : (card.uzcardRail === 'CARDXABAR' ? '#e94560' : '#53bf9d')
+                  }}>
+                    {card.paymentSystem === 'HUMO' ? 'Humo (Telegram bot)' : 
+                     (card.uzcardRail === 'CARDXABAR' ? 'CardXabar (Uzcard bot)' : 'Oson API (Uzcard)')}
+                  </p>
                 </div>
-                {card.paymentSystem === "UZCARD" && (
-                   <div style={{ marginLeft: '1rem', borderLeft: '1px solid rgba(255,255,255,0.1)', paddingLeft: '1rem' }}>
-                      <span style={{ fontSize: '0.7rem', color: '#a0a0a0', display: 'block', textTransform: 'uppercase' }}>Verified via</span>
-                      <p style={{ margin: 0, fontSize: '0.9rem', color: card.uzcardRail === 'OSON' ? '#53bf9d' : '#e94560', fontWeight: 'bold' }}>
-                         {card.uzcardRail === 'CARDXABAR' ? '2806 BOT' : 'OSON API'}
-                      </p>
-                   </div>
-                )}
-                <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', color: '#0088cc' }}>
+                <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center' }}>
                   {card.paymentSystem === "HUMO" ? (
-                    <FiSend size={32} title="TELEGRAM" />
+                    <FiSend size={32} title="TELEGRAM" color="#0088cc" />
                   ) : (
-                    <FiSmartphone size={32} title="OSON" style={{ color: '#53bf9d' }} />
+                    <FiSmartphone size={32} title="OSON" style={{ color: card.uzcardRail === 'CARDXABAR' ? '#e94560' : '#53bf9d' }} />
                   )}
                 </div>
               </div>
@@ -319,42 +317,39 @@ const CardsPage = () => {
           )}
 
           <div className="form__group">
-            <label htmlFor="paymentSystem">Payment System (Oson/Telegram)</label>
+            <label htmlFor="mode_selector">Verification Method / Channel</label>
             <select
-              id="paymentSystem"
-              value={currentCard?.paymentSystem}
-              onChange={(e) =>
-                setCurrentCard({
-                  ...currentCard,
-                  paymentSystem: e.target.value,
-                })
-              }
+              id="mode_selector"
+              value={currentCard?.paymentSystem === 'HUMO' ? 'HUMO' : `UZCARD_${currentCard?.uzcardRail || 'OSON'}`}
+              onChange={(e) => {
+                const val = e.target.value;
+                if (val === 'HUMO') {
+                  setCurrentCard({
+                    ...currentCard,
+                    paymentSystem: 'HUMO',
+                    uzcardRail: null
+                  });
+                } else if (val === 'UZCARD_OSON') {
+                   setCurrentCard({
+                    ...currentCard,
+                    paymentSystem: 'UZCARD',
+                    uzcardRail: 'OSON'
+                   });
+                } else if (val === 'UZCARD_CARDXABAR') {
+                   setCurrentCard({
+                    ...currentCard,
+                    paymentSystem: 'UZCARD',
+                    uzcardRail: 'CARDXABAR'
+                   });
+                }
+              }}
               required
             >
-              <option key={1} value={"HUMO"}>
-                TELEGRAM
-              </option>
-              <option key={2} value={"UZCARD"}>
-                OSON
-              </option>
+              <option value="UZCARD_OSON">Oson API (Uzcard plastics)</option>
+              <option value="UZCARD_CARDXABAR">CardXabar / 2806 (Uzcard plastics)</option>
+              <option value="HUMO">Humo cards (Telegram bot)</option>
             </select>
           </div>
-
-          {currentCard?.paymentSystem === "UZCARD" && (
-            <div className="form__group">
-               <label htmlFor="uzcardRail">Verified via (Oson API / CardXabar)</label>
-               <select
-                  id="uzcardRail"
-                  name="uzcardRail"
-                  value={currentCard?.uzcardRail || "OSON"}
-                  onChange={handleInputChange}
-                  required
-               >
-                  <option value="OSON">OSON API</option>
-                  <option value="CARDXABAR">CARDXABAR (2806 bot)</option>
-               </select>
-            </div>
-          )}
 
           <div className="form__group">
             <label htmlFor="cardNumber">Card Number (16 digits)</label>
