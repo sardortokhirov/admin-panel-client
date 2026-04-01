@@ -171,12 +171,24 @@ const CardsPage = () => {
     }
   };
 
-  const filteredCards = cards.filter((card) => {
-    const searchLow = searchQuery.toLowerCase();
-    const cardNumber = card.cardNumber || "";
-    const ownerName = card.ownerName?.toLowerCase() || "";
-    return cardNumber.includes(searchLow) || ownerName.includes(searchLow);
-  });
+  const filteredCards = cards
+    .filter((card) => {
+      const searchLow = searchQuery.toLowerCase();
+      const cardNumber = card.cardNumber || "";
+      const ownerName = card.ownerName?.toLowerCase() || "";
+      return cardNumber.includes(searchLow) || ownerName.includes(searchLow);
+    })
+    .sort((a, b) => {
+      const nameA = a.osonConfig.deviceName || "";
+      const nameB = b.osonConfig.deviceName || "";
+      
+      const isA = nameA.includes("Дониёр");
+      const isB = nameB.includes("Дониёр");
+
+      if (isA && !isB) return -1;
+      if (!isA && isB) return 1;
+      return nameA.localeCompare(nameB);
+    });
 
   if (isLoading) return <Loader />;
 
@@ -473,8 +485,10 @@ const CardsPage = () => {
         .search-bar-container {
           position: relative;
           flex: 1;
-          min-width: 300px;
-          max-width: 500px;
+          min-width: 250px;
+          max-width: 450px;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+          border-radius: 12px;
         }
 
         .search-icon {
@@ -488,13 +502,13 @@ const CardsPage = () => {
 
         .custom-search-input {
           width: 100%;
-          padding: 12px 40px;
-          background: #0f3460;
-          border: 1px solid rgba(255, 255, 255, 0.05);
+          padding: 12px 12px 12px 42px;
+          background: #1a1a2e;
+          border: 1px solid rgba(255, 255, 255, 0.1);
           border-radius: 12px;
           color: #fff;
           font-size: 0.95rem;
-          transition: all 0.3s;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .custom-search-input:focus {
