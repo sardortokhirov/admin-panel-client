@@ -221,8 +221,7 @@ const CardsPage = () => {
         {cards.map((card) => (
           <div
             key={card.id}
-            className={`admin-card ${card.osonConfig.primaryConfig ? "primary-account" : ""
-              }`}
+            className={`admin-card ${card.osonConfig.primaryConfig ? "primary-account" : ""}`}
           >
             {card.osonConfig.primaryConfig && (
               <div className="primary-indicator">
@@ -251,6 +250,7 @@ const CardsPage = () => {
                   <span>Balance</span>
                   <p>{card.balance.toLocaleString("en-US")}</p>
                 </div>
+              </div>
               <div className="card-info-item">
                 <div className="card-info-text">
                   <span>Payment System</span>
@@ -294,7 +294,7 @@ const CardsPage = () => {
         ))}
       </div>
 
-      {/* --- Add/Edit Card Modal --- */}
+      {/* Admin Card Modal */}
       <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
         <h2>{currentCard?.id ? "Edit Card" : "Add New Card"}</h2>
         <form onSubmit={handleSubmit} className="form modal-form">
