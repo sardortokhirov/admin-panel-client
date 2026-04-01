@@ -8,6 +8,7 @@ const BotRestartPage = () => {
     const [errorMessage, setErrorMessage] = useState("");
 
     const RESTART_API = "https://xonpey.shop:8087/restart";
+    const COUNTDOWN_SECONDS = 35;
 
     const handleRestart = useCallback(async () => {
         setIsRestarting(true);
