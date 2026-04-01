@@ -258,8 +258,8 @@ const CardsPage = () => {
                     fontWeight: 'bold', 
                     color: card.paymentSystem === 'HUMO' ? '#0088cc' : (card.uzcardRail === 'CARDXABAR' ? '#e94560' : '#53bf9d')
                   }}>
-                    {card.paymentSystem === 'HUMO' ? 'Humo (Telegram bot)' : 
-                     (card.uzcardRail === 'CARDXABAR' ? 'CardXabar (Uzcard bot)' : 'Oson API (Uzcard)')}
+                    {card.paymentSystem === 'HUMO' ? 'Humo' : 
+                     (card.uzcardRail === 'CARDXABAR' ? 'CardXabar' : 'Oson API')}
                   </p>
                 </div>
                 <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center' }}>
@@ -371,8 +371,8 @@ const CardsPage = () => {
                 }}
                 required
               >
-                <option value="HUMO">Humo (Bot)</option>
-                <option value="CARDXABAR">CardXabar (2806 Bot)</option>
+                <option value="HUMO">Humo</option>
+                <option value="CARDXABAR">CardXabar</option>
               </select>
             </div>
           )}
