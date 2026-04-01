@@ -107,6 +107,7 @@ const CardsPage = () => {
         cardNumber: "",
         ownerName: "",
         paymentSystem: "HUMO",
+        uzcardRail: "OSON",
         balance: 0,
       });
       // Set default selection to the first available config, if any
@@ -250,12 +251,19 @@ const CardsPage = () => {
                   <span>Balance</span>
                   <p>{card.balance.toLocaleString("en-US")}</p>
                 </div>
-              </div>
               <div className="card-info-item">
                 <div className="card-info-text">
                   <span>Payment System</span>
                   <p>{card.paymentSystem === "HUMO" ? "TELEGRAM" : "OSON"}</p>
                 </div>
+                {card.paymentSystem === "UZCARD" && (
+                   <div style={{ marginLeft: '1rem', borderLeft: '1px solid rgba(255,255,255,0.1)', paddingLeft: '1rem' }}>
+                      <span style={{ fontSize: '0.7rem', color: '#a0a0a0', display: 'block', textTransform: 'uppercase' }}>Lane</span>
+                      <p style={{ margin: 0, fontSize: '0.9rem', color: card.uzcardRail === 'OSON' ? '#53bf9d' : '#e94560', fontWeight: 'bold' }}>
+                         {card.uzcardRail || 'OSON'}
+                      </p>
+                   </div>
+                )}
                 <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', color: '#0088cc' }}>
                   {card.paymentSystem === "HUMO" ? (
                     <FiSend size={32} title="TELEGRAM" />
@@ -331,6 +339,22 @@ const CardsPage = () => {
               </option>
             </select>
           </div>
+
+          {currentCard?.paymentSystem === "UZCARD" && (
+            <div className="form__group">
+               <label htmlFor="uzcardRail">Lane (Oson API / CardXabar)</label>
+               <select
+                  id="uzcardRail"
+                  name="uzcardRail"
+                  value={currentCard?.uzcardRail || "OSON"}
+                  onChange={handleInputChange}
+                  required
+               >
+                  <option value="OSON">OSON API</option>
+                  <option value="CARDXABAR">CARDXABAR (2806 bot)</option>
+               </select>
+            </div>
+          )}
 
           <div className="form__group">
             <label htmlFor="cardNumber">Card Number (16 digits)</label>

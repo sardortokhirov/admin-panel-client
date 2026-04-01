@@ -222,8 +222,9 @@ const SystemConfigPage = () => {
                             >
                                 <option value="OSON">OSON API</option>
                                 <option value="CARDXABAR">CARDXABAR (2806 bot)</option>
+                                <option value="OFF">OFF (UZCARD o'chiq)</option>
                             </select>
-                            <small>Barcha UZCARD kartalari uchun to'lovni tasdiqlash usuli.</small>
+                            <small>Barcha UZCARD kartalari uchun to'lovni tasdiqlash usuli. "OFF" tanlansa, Uzcard kartalari botda ko'rinmaydi.</small>
                         </div>
                         
                         <div className="form__group" style={{ marginBottom: 0 }}>
