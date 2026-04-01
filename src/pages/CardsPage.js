@@ -17,10 +17,10 @@ import {
   FiTrash2,
   FiPlusCircle,
   FiServer,
+  FiSend,
+  FiSmartphone,
 } from "react-icons/fi";
 
-import HumoLogo from "../assets/humo.webp";
-import UzcardLogo from "../assets/uzcard.png";
 
 const CardsPage = () => {
   // State for data
@@ -253,14 +253,16 @@ const CardsPage = () => {
               </div>
               <div className="card-info-item">
                 <div className="card-info-text">
-                  <span>Karta turi</span>
-                  <p>{card.paymentSystem}</p>
+                  <span>Payment System</span>
+                  <p>{card.paymentSystem === "HUMO" ? "TELEGRAM" : "OSON"}</p>
                 </div>
-                <img
-                  className="cardType"
-                  src={card.paymentSystem === "HUMO" ? HumoLogo : UzcardLogo}
-                  alt={card.paymentSystem}
-                />
+                <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', color: '#0088cc' }}>
+                  {card.paymentSystem === "HUMO" ? (
+                    <FiSend size={32} title="TELEGRAM" />
+                  ) : (
+                    <FiSmartphone size={32} title="OSON" style={{ color: '#53bf9d' }} />
+                  )}
+                </div>
               </div>
             </div>
 
@@ -323,10 +325,10 @@ const CardsPage = () => {
                 required
               >
                 <option key={1} value={"HUMO"}>
-                  OSON
+                  TELEGRAM
                 </option>
                 <option key={2} value={"UZCARD"}>
-                  TELEGRAM
+                  OSON
                 </option>
               </select>
             </div>
