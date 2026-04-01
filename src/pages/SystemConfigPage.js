@@ -26,8 +26,7 @@ const SystemConfigPage = () => {
         walletMinWithdrawAmount: 0,
         walletTransferMinAmount: 0,
         walletTransferMaxAmount: 0,
-        uzcardRail: "OSON",
-        humoLegacyDualCheckEnd: null
+        uzcardRail: "OSON"
     });
 
     const [isLoading, setIsLoading] = useState(true);
@@ -225,40 +224,6 @@ const SystemConfigPage = () => {
                                 <option value="OFF">OFF (UZCARD o'chiq)</option>
                             </select>
                             <small>Barcha UZCARD plastik kartalari uchun to'lovni tasdiqlash usuli. "OFF" tanlansa, Uzcard kartalari do'kondan o'chiriladi. (Humo alohida ishlayveradi).</small>
-                        </div>
-                        
-                        <div className="form__group" style={{ marginBottom: 0 }}>
-                            <label>Humo Dual Check Yakunlanishi</label>
-                            <div className="input-wrapper" style={{ gap: '10px' }}>
-                                <input
-                                    type="datetime-local"
-                                    name="humoLegacyDualCheckEnd"
-                                    value={config.humoLegacyDualCheckEnd ? new Date(config.humoLegacyDualCheckEnd).toISOString().substring(0, 16) : ""}
-                                    onChange={(e) => {
-                                        const isoVal = e.target.value ? new Date(e.target.value).toISOString() : null;
-                                        setConfig(prev => ({ ...prev, humoLegacyDualCheckEnd: isoVal }));
-                                    }}
-                                    style={{ 
-                                        flex: 1, 
-                                        padding: '0.9rem 1.2rem', 
-                                        background: '#0f3460', 
-                                        border: '1.5px solid rgba(255, 255, 255, 0.05)', 
-                                        borderRadius: '10px', 
-                                        color: '#fff' 
-                                    }}
-                                />
-                                {config.humoLegacyDualCheckEnd && (
-                                    <Button 
-                                        type="button" 
-                                        danger 
-                                        onClick={() => setConfig(prev => ({ ...prev, humoLegacyDualCheckEnd: null }))}
-                                        style={{ height: '48px', padding: '0 15px' }}
-                                    >
-                                        O'chirish
-                                    </Button>
-                                )}
-                            </div>
-                            <small>Belgilangan vaqtdan keyin faqat HUMO (2806) orqali tekshiriladi.</small>
                         </div>
                     </div>
                 </div>
