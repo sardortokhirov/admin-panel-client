@@ -7,7 +7,7 @@ const BotRestartPage = () => {
     const [status, setStatus] = useState("idle"); // idle, restarting, success, error
     const [errorMessage, setErrorMessage] = useState("");
 
-    const RESTART_API = "https://xonpey.shop:8087/restart";
+    const RESTART_API = process.env.REACT_APP_RESTART_API || "https://misterpey.uz:8087/restart";
     const COUNTDOWN_SECONDS = 35;
 
     const handleRestart = useCallback(async () => {

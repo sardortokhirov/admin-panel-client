@@ -25,7 +25,9 @@ const SystemConfigPage = () => {
         walletWithdrawRatio: 1,
         walletMinWithdrawAmount: 0,
         walletTransferMinAmount: 0,
-        walletTransferMaxAmount: 0
+        walletTransferMaxAmount: 0,
+        uzcardRail: "OSON",
+        humoLegacyDualCheckEnd: null
     });
 
     const [isLoading, setIsLoading] = useState(true);
@@ -192,6 +194,70 @@ const SystemConfigPage = () => {
                                 <span className="currency">%</span>
                             </div>
                             <small>Foydalanuvchi pul depozit qilganda, bu foiz ularga faqat bugungi kun uchun kunlik limitga qo'shiladi. Masalan: 1 = 1% yoki 0.5 = 0.5%. Agar 1 ga o'rnatilgan bo'lsa va foydalanuvchi 100,000 UZS depozit qilsa, bugungi limitga +1,000 UZS qo'shiladi. Yarim tunda qayta tiklanadi.</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="config-section">
+                    <div className="section-header">
+                        <FiSettings /> <h3>To'lovni Tasdiqlash (Verification)</h3>
+                    </div>
+                    <div className="form-grid">
+                        <div className="form__group" style={{ marginBottom: 0 }}>
+                            <label>Uzcard Tasdiqlash Tizimi (UZCARD rail)</label>
+                            <select
+                                name="uzcardRail"
+                                value={config.uzcardRail || "OSON"}
+                                onChange={handleInputChange}
+                                required
+                                style={{
+                                    width: '100%',
+                                    padding: '0.9rem 1.2rem',
+                                    background: '#0f3460',
+                                    border: '1.5px solid rgba(255, 255, 255, 0.05)',
+                                    borderRadius: '10px',
+                                    color: '#fff',
+                                    outline: 'none'
+                                }}
+                            >
+                                <option value="OSON">OSON API</option>
+                                <option value="CARDXABAR">CARDXABAR (2806 bot)</option>
+                            </select>
+                            <small>Barcha UZCARD kartalari uchun to'lovni tasdiqlash usuli.</small>
+                        </div>
+                        
+                        <div className="form__group" style={{ marginBottom: 0 }}>
+                            <label>Humo Dual Check Yakunlanishi</label>
+                            <div className="input-wrapper" style={{ gap: '10px' }}>
+                                <input
+                                    type="datetime-local"
+                                    name="humoLegacyDualCheckEnd"
+                                    value={config.humoLegacyDualCheckEnd ? new Date(config.humoLegacyDualCheckEnd).toISOString().substring(0, 16) : ""}
+                                    onChange={(e) => {
+                                        const isoVal = e.target.value ? new Date(e.target.value).toISOString() : null;
+                                        setConfig(prev => ({ ...prev, humoLegacyDualCheckEnd: isoVal }));
+                                    }}
+                                    style={{ 
+                                        flex: 1, 
+                                        padding: '0.9rem 1.2rem', 
+                                        background: '#0f3460', 
+                                        border: '1.5px solid rgba(255, 255, 255, 0.05)', 
+                                        borderRadius: '10px', 
+                                        color: '#fff' 
+                                    }}
+                                />
+                                {config.humoLegacyDualCheckEnd && (
+                                    <Button 
+                                        type="button" 
+                                        danger 
+                                        onClick={() => setConfig(prev => ({ ...prev, humoLegacyDualCheckEnd: null }))}
+                                        style={{ height: '48px', padding: '0 15px' }}
+                                    >
+                                        O'chirish
+                                    </Button>
+                                )}
+                            </div>
+                            <small>Belgilangan vaqtdan keyin faqat HUMO (2806) orqali tekshiriladi.</small>
                         </div>
                     </div>
                 </div>

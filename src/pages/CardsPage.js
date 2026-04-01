@@ -310,29 +310,27 @@ const CardsPage = () => {
             </div>
           )}
 
-          {!currentCard?.id && (
-            <div className="form__group">
-              <label htmlFor="paymentSystem">Payment System (Oson/Telegram)</label>
-              <select
-                id="paymentSystem"
-                value={currentCard?.paymentSystem}
-                onChange={(e) =>
-                  setCurrentCard({
-                    ...currentCard,
-                    paymentSystem: e.target.value,
-                  })
-                }
-                required
-              >
-                <option key={1} value={"HUMO"}>
-                  TELEGRAM
-                </option>
-                <option key={2} value={"UZCARD"}>
-                  OSON
-                </option>
-              </select>
-            </div>
-          )}
+          <div className="form__group">
+            <label htmlFor="paymentSystem">Payment System (Oson/Telegram)</label>
+            <select
+              id="paymentSystem"
+              value={currentCard?.paymentSystem}
+              onChange={(e) =>
+                setCurrentCard({
+                  ...currentCard,
+                  paymentSystem: e.target.value,
+                })
+              }
+              required
+            >
+              <option key={1} value={"HUMO"}>
+                TELEGRAM
+              </option>
+              <option key={2} value={"UZCARD"}>
+                OSON
+              </option>
+            </select>
+          </div>
 
           <div className="form__group">
             <label htmlFor="cardNumber">Card Number (16 digits)</label>
