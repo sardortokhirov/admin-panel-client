@@ -259,7 +259,7 @@ const CardsPage = () => {
                 <img
                   className="cardType"
                   src={card.paymentSystem === "HUMO" ? HumoLogo : UzcardLogo}
-                  alt=""
+                  alt={card.paymentSystem}
                 />
               </div>
             </div>
@@ -310,9 +310,9 @@ const CardsPage = () => {
 
           {!currentCard?.id && (
             <div className="form__group">
-              <label htmlFor="osonConfig">Humo/Uzcard</label>
+              <label htmlFor="paymentSystem">Payment System (Oson/Telegram)</label>
               <select
-                id="osonConfig"
+                id="paymentSystem"
                 value={currentCard?.paymentSystem}
                 onChange={(e) =>
                   setCurrentCard({
@@ -322,17 +322,11 @@ const CardsPage = () => {
                 }
                 required
               >
-                {/* {osonConfigs.map((config) => (
-                  <option key={config.id} value={config.id}>
-                    {config.deviceName} {config.primaryConfig && "(Primary)"}
-                  </option>
-                ))} */}
-
                 <option key={1} value={"HUMO"}>
-                  HUMO
+                  OSON
                 </option>
                 <option key={2} value={"UZCARD"}>
-                  UZCARD
+                  TELEGRAM
                 </option>
               </select>
             </div>
