@@ -258,9 +258,9 @@ const CardsPage = () => {
                 </div>
                 {card.paymentSystem === "UZCARD" && (
                    <div style={{ marginLeft: '1rem', borderLeft: '1px solid rgba(255,255,255,0.1)', paddingLeft: '1rem' }}>
-                      <span style={{ fontSize: '0.7rem', color: '#a0a0a0', display: 'block', textTransform: 'uppercase' }}>Lane</span>
+                      <span style={{ fontSize: '0.7rem', color: '#a0a0a0', display: 'block', textTransform: 'uppercase' }}>Verified via</span>
                       <p style={{ margin: 0, fontSize: '0.9rem', color: card.uzcardRail === 'OSON' ? '#53bf9d' : '#e94560', fontWeight: 'bold' }}>
-                         {card.uzcardRail || 'OSON'}
+                         {card.uzcardRail === 'CARDXABAR' ? '2806 BOT' : 'OSON API'}
                       </p>
                    </div>
                 )}
@@ -342,7 +342,7 @@ const CardsPage = () => {
 
           {currentCard?.paymentSystem === "UZCARD" && (
             <div className="form__group">
-               <label htmlFor="uzcardRail">Lane (Oson API / CardXabar)</label>
+               <label htmlFor="uzcardRail">Verified via (Oson API / CardXabar)</label>
                <select
                   id="uzcardRail"
                   name="uzcardRail"

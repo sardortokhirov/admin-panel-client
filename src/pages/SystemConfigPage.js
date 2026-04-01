@@ -224,7 +224,7 @@ const SystemConfigPage = () => {
                                 <option value="CARDXABAR">CARDXABAR (2806 bot)</option>
                                 <option value="OFF">OFF (UZCARD o'chiq)</option>
                             </select>
-                            <small>Barcha UZCARD kartalari uchun to'lovni tasdiqlash usuli. "OFF" tanlansa, Uzcard kartalari botda ko'rinmaydi.</small>
+                            <small>Barcha UZCARD plastik kartalari uchun to'lovni tasdiqlash usuli. "OFF" tanlansa, Uzcard kartalari do'kondan o'chiriladi. (Humo alohida ishlayveradi).</small>
                         </div>
                         
                         <div className="form__group" style={{ marginBottom: 0 }}>
