@@ -220,8 +220,8 @@ const SystemConfigPage = () => {
                                     outline: 'none'
                                 }}
                             >
-                                <option value="OSON">OSON API</option>
-                                <option value="CARDXABAR">CARDXABAR (2806 bot)</option>
+                                <option value="OSON">Oson (Port: API/UZ)</option>
+                                <option value="CARDXABAR">CardXabar (Port: 2806)</option>
                                 <option value="OFF">OFF (UZCARD o'chiq)</option>
                             </select>
                             <small>Barcha UZCARD plastik kartalari uchun to'lovni tasdiqlash usuli. "OFF" tanlansa, Uzcard kartalari do'kondan o'chiriladi. (Humo alohida ishlayveradi).</small>
