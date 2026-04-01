@@ -19,6 +19,7 @@ import {
   FiServer,
   FiSend,
   FiSmartphone,
+  FiSearch,
 } from "react-icons/fi";
 
 
@@ -203,7 +204,7 @@ const CardsPage = () => {
         <div className="header-actions-group">
           {/* Search Bar */}
           <div className="search-bar-container">
-            <FiCreditCard className="search-icon" />
+            <FiSearch className="search-icon" />
             <input
               type="text"
               placeholder="Search by name or card number..."
@@ -502,7 +503,7 @@ const CardsPage = () => {
 
         .custom-search-input {
           width: 100%;
-          padding: 12px 12px 12px 42px;
+          padding: 12px 16px 12px 46px;
           background: #1a1a2e;
           border: 1px solid rgba(255, 255, 255, 0.1);
           border-radius: 12px;
