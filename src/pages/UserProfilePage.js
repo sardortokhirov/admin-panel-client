@@ -167,7 +167,7 @@ const UserProfilePage = () => {
         try {
             await usersService.deleteUser(chatId, deleteType);
             alert("Foydalanuvchi o'chirildi.");
-            navigate('/users');
+            navigate('/users-list');
         } catch (err) {
             alert("O'chirishda xatolik: " + err.message);
         }
