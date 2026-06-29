@@ -86,6 +86,14 @@ const ToggleController = {
     );
     return res.data;
   },
+
+  // POST - Toggle Bonus auto-approve
+  toggleBonusAutoApprove: async (enabled) => {
+    const res = await apiService.post(
+      `/features/toggle/bonus-auto-approve?enabled=${enabled}`
+    );
+    return res.data;
+  },
 };
 const getWalletBalances = () => {
   return apiService.get(`${API_URL}/wallet-balances`);

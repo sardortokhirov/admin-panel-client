@@ -1,66 +1,47 @@
-
 import apiService from './apiService';
 
-const PROMO_USERS_URL = '/admin/promo/users';
+const PROMO_BASE = '/admin/promo';
 
-const PROMO_CHATS_URL = '/admin/promo/chats';
+const getChats = (page = 0, size = 10) => {
+    return apiService.get(`${PROMO_BASE}/chats`, { params: { page, size } });
+};
 
-const addPromoUser = (userId) => {
-    return apiService.post(`${PROMO_USERS_URL}`, null, {
-        params: {
-            userId
-        }
+const addChat = (chatId) => {
+    return apiService.post(`${PROMO_BASE}/chats`, null, { params: { chatId } });
+};
+
+const deleteChat = (chatId) => {
+    return apiService.delete(`${PROMO_BASE}/chats`, { params: { chatId } });
+};
+
+const getChatLinks = (chatId) => {
+    return apiService.get(`${PROMO_BASE}/chats/${chatId}/links`);
+};
+
+const addChatLink = (chatId, { platformUserId, platformName }) => {
+    return apiService.post(`${PROMO_BASE}/chats/${chatId}/links`, {
+        platformUserId,
+        platformName,
     });
 };
 
-const removePromoUser = (userId) => {
-    return apiService.delete(`${PROMO_USERS_URL}`, {
-        params: {
-            userId
-        }
-    });
+const deleteChatLink = (chatId, linkId) => {
+    return apiService.delete(`${PROMO_BASE}/chats/${chatId}/links/${linkId}`);
 };
 
-const getAllPromoUsers = (page = 0, size = 10) => {
-    return apiService.get(`${PROMO_USERS_URL}`, {
-        params: {
-            page,
-            size
-        }
-    });
-};
-
-// Chat ID methods
-const addPromoChat = (chatId) => {
-    return apiService.post(`${PROMO_CHATS_URL}`, null, {
-        params: {
-            chatId
-        }
-    });
-};
-
-const removePromoChat = (chatId) => {
-    return apiService.delete(`${PROMO_CHATS_URL}`, {
-        params: {
-            chatId
-        }
-    });
-};
-
-const getAllPromoChats = (page = 0, size = 10) => {
-    return apiService.get(`${PROMO_CHATS_URL}`, {
-        params: {
-            page,
-            size
-        }
-    });
+const searchPromo = ({ chatId, platformUserId }) => {
+    const params = {};
+    if (chatId != null && chatId !== '') params.chatId = chatId;
+    if (platformUserId != null && platformUserId !== '') params.platformUserId = platformUserId;
+    return apiService.get(`${PROMO_BASE}/search`, { params });
 };
 
 export const promoService = {
-    addPromoUser,
-    removePromoUser,
-    getAllPromoUsers,
-    addPromoChat,
-    removePromoChat,
-    getAllPromoChats
+    getChats,
+    addChat,
+    deleteChat,
+    getChatLinks,
+    addChatLink,
+    deleteChatLink,
+    searchPromo,
 };

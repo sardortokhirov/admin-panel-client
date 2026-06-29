@@ -177,6 +177,8 @@ const DashboardPage = () => {
       res = await dashboardService?.ToggleController?.togglePay(!value);
     } else if (key === "walletEnabled") {
       res = await dashboardService?.ToggleController?.toggleWallet(!value);
+    } else if (key === "bonusAutoApproveEnabled") {
+      res = await dashboardService?.ToggleController?.toggleBonusAutoApprove(!value);
     }
     const toggles = await dashboardService.GetToggles();
 
@@ -364,6 +366,14 @@ const DashboardPage = () => {
           <p><FiUsers /> Hamyon Tizimi:</p>
           <div className="toggle-switch">
             <div className={`toggle-slider ${toggleState.walletEnabled ? "on" : "off"}`}>
+              <span className="toggle-knob"></span>
+            </div>
+          </div>
+        </div>
+        <div className="toggle-element" onClick={() => changeTogle("bonusAutoApproveEnabled", toggleState.bonusAutoApproveEnabled)}>
+          <p><FiAward /> Bonus avto tasdiq:</p>
+          <div className="toggle-switch">
+            <div className={`toggle-slider ${toggleState.bonusAutoApproveEnabled ? "on" : "off"}`}>
               <span className="toggle-knob"></span>
             </div>
           </div>
