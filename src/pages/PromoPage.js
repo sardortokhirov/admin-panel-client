@@ -278,9 +278,10 @@ const PromoPage = () => {
                                                         type="button"
                                                         onClick={() => setDetailChatId(chat.chatId)}
                                                         className={`view-btn ${chat.filled ? 'view-btn-filled' : ''}`}
-                                                        title="Ko'rish"
+                                                        title="Ko'rish va platforma qo'shish"
                                                     >
                                                         <FiEye />
+                                                        <span className="action-label">Ko'rish</span>
                                                     </button>
                                                     <button
                                                         type="button"
@@ -336,7 +337,7 @@ const PromoPage = () => {
             <div className="info-card">
                 <h3>Eslatma</h3>
                 <p>
-                    Avval <strong>Chat ID</strong> qo'shing, keyin ko'z tugmasi orqali ichkarida kontora nomi va platforma ID bog'lang.
+                    Avval <strong>Chat ID</strong> qo'shing, keyin <strong>Ko'rish</strong> tugmasi orqali bir yoki bir nechta kontora va platforma ID bog'lang.
                     Promo yoqilganda bonus faqat shu bog'langan juftliklar uchun ruxsat etiladi.
                 </p>
             </div>
@@ -388,12 +389,13 @@ const PromoPage = () => {
                 .status-empty { color: #a0a0a0; display: flex; align-items: center; gap: 0.35rem; }
                 .actions-cell { display: flex; gap: 0.5rem; }
                 .view-btn, .delete-btn {
-                    border: none; cursor: pointer; padding: 0.5rem; border-radius: 6px;
-                    display: flex; align-items: center; justify-content: center; width: 32px; height: 32px;
+                    border: none; cursor: pointer; padding: 0.45rem 0.65rem; border-radius: 8px;
+                    display: flex; align-items: center; justify-content: center; gap: 0.35rem;
+                    font-size: 0.85rem;
                 }
-                .view-btn { background: rgba(83,191,157,0.15); color: #53bf9d; }
+                .view-btn { background: rgba(83,191,157,0.15); color: #53bf9d; min-width: 32px; height: 34px; }
                 .view-btn-filled { background: rgba(83,191,157,0.35); color: #53bf9d; box-shadow: inset 0 0 0 1px rgba(83,191,157,0.5); }
-                .delete-btn { background: rgba(233,69,96,0.1); color: #e94560; }
+                .delete-btn { width: 34px; height: 34px; padding: 0.5rem; background: rgba(233,69,96,0.1); color: #e94560; }
                 .pagination { display: flex; justify-content: center; align-items: center; gap: 1rem; padding: 1rem; }
                 .pagination-btn {
                     background: #0f3460; border: 1px solid rgba(255,255,255,0.1); color: #fff;
