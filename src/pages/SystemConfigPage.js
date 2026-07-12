@@ -17,7 +17,11 @@ const SystemConfigPage = () => {
         maxTickets: 400,
         referralCommissionPercentage: 0.001,
         ticketCalculationAmount: 10000,
-        withdrawFeePercentage: 1
+        withdrawFeePercentage: 1,
+        walletMinWithdrawAmount: 10000,
+        walletWithdrawRatio: 1,
+        walletTransferMinAmount: 5000,
+        walletTransferMaxAmount: 10000000
     });
     const [isLoading, setIsLoading] = useState(true);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -39,7 +43,11 @@ const SystemConfigPage = () => {
                     maxTickets: data.maxTickets,
                     referralCommissionPercentage: data.referralCommissionPercentage,
                     ticketCalculationAmount: data.ticketCalculationAmount,
-                    withdrawFeePercentage: data.withdrawFeePercentage !== null ? data.withdrawFeePercentage : 1
+                    withdrawFeePercentage: data.withdrawFeePercentage !== null ? data.withdrawFeePercentage : 1,
+                    walletMinWithdrawAmount: data.walletMinWithdrawAmount != null ? data.walletMinWithdrawAmount : 10000,
+                    walletWithdrawRatio: data.walletWithdrawRatio != null ? data.walletWithdrawRatio : 1,
+                    walletTransferMinAmount: data.walletTransferMinAmount != null ? data.walletTransferMinAmount : 5000,
+                    walletTransferMaxAmount: data.walletTransferMaxAmount != null ? data.walletTransferMaxAmount : 10000000
                 });
             }
         } catch (err) {
@@ -224,6 +232,57 @@ const SystemConfigPage = () => {
                                 Percentage deducted from the withdrawn amount before the amount credited to the user. 1 = 1% commission.
                                 {config && config.withdrawFeePercentage === null && <span style={{ color: '#d97706', fontWeight: 'bold' }}> Default 1% until saved.</span>}
                             </small>
+                        </div>
+                    </div>
+
+                    <h3 style={{ margin: '1.5rem 0 0.5rem' }}>Hamyon (Wallet) sozlamalari</h3>
+                    <div className="form-grid">
+                        <div className="form__group">
+                            <label>Hamyondan kartaga minimal yechish (UZS)</label>
+                            <input
+                                type="number"
+                                min="0"
+                                name="walletMinWithdrawAmount"
+                                value={formState.walletMinWithdrawAmount}
+                                onChange={handleInputChange}
+                                required
+                            />
+                        </div>
+                        <div className="form__group">
+                            <label>Yechish kvotasi nisbati (1 UZS o'tkazma uchun)</label>
+                            <input
+                                type="number"
+                                min="0"
+                                name="walletWithdrawRatio"
+                                value={formState.walletWithdrawRatio}
+                                onChange={handleInputChange}
+                                required
+                            />
+                            <small className="form-helper" style={{ display: 'block', marginTop: '0.25rem', color: '#666', fontSize: '0.8rem' }}>
+                                Hamyondan kontoraga o'tkazilgan har 1 UZS uchun beriladigan yechish kvotasi.
+                            </small>
+                        </div>
+                        <div className="form__group">
+                            <label>Hamyondan kontoraga minimal o'tkazma (UZS)</label>
+                            <input
+                                type="number"
+                                min="0"
+                                name="walletTransferMinAmount"
+                                value={formState.walletTransferMinAmount}
+                                onChange={handleInputChange}
+                                required
+                            />
+                        </div>
+                        <div className="form__group">
+                            <label>Hamyondan kontoraga maksimal o'tkazma (UZS)</label>
+                            <input
+                                type="number"
+                                min="0"
+                                name="walletTransferMaxAmount"
+                                value={formState.walletTransferMaxAmount}
+                                onChange={handleInputChange}
+                                required
+                            />
                         </div>
                     </div>
 

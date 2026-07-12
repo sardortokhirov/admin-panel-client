@@ -18,7 +18,7 @@ const requestStatuses = [
     "FAILED",
     "PENDING_SCREENSHOT"
 ];
-const requestTypes = ["TOP_UP", "WITHDRAWAL"];
+const requestTypes = ["TOP_UP", "WITHDRAWAL", "WALLET_WITHDRAWAL", "WALLET_TO_PLATFORM"];
 
 const TransactionsPage = () => {
     const { isAuthenticated } = useAuth();

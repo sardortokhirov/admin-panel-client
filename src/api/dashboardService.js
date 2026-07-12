@@ -46,10 +46,26 @@ const ToggleController = {
     );
     return res.data;
   },
+
+  // POST - Toggle Wallet (hamyon)
+  toggleWallet: async (enabled) => {
+    const res = await apiService.post(
+      `/features/toggle/wallet?enabled=${enabled}`
+    );
+    return res.data;
+  },
 };
+
+// GET - All users' wallet balances and grand total (UZS)
+const getWalletBalances = async () => {
+  const res = await apiService.get(`${API_URL}/wallet-balances`);
+  return res.data;
+};
+
 export const dashboardService = {
   getDashboardStats,
   getTotalApprovedBonusAmount, // Export the new function
   GetToggles,
   ToggleController,
+  getWalletBalances,
 };

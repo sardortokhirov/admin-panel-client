@@ -63,6 +63,8 @@ const DashboardPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
   const [toggleState, setToggleState] = useState(false);
+  const [walletData, setWalletData] = useState(null);
+  const [showWalletList, setShowWalletList] = useState(false);
 
   // Date filter state
   const [filterPeriod, setFilterPeriod] = useState("30d");
@@ -107,6 +109,15 @@ const DashboardPage = () => {
             setIsLoading(false);
         }
     };
+    const fetchWalletBalances = async () => {
+        try {
+            const data = await dashboardService.getWalletBalances();
+            setWalletData(data);
+        } catch (err) {
+            console.error("Failed to fetch wallet balances:", err);
+        }
+    };
+
     useEffect(() => {
         const token = localStorage.getItem("authToken");
         if (token) {
@@ -115,6 +126,7 @@ const DashboardPage = () => {
             setError("No authentication token found. Please log in.");
         }
         fetchData();
+        fetchWalletBalances();
     }, []);
 
     useEffect(() => {
@@ -160,6 +172,8 @@ const DashboardPage = () => {
       res = await dashboardService?.ToggleController?.toggleWithdraw(!value);
     } else if (key === "bonusEnabled") {
       res = await dashboardService?.ToggleController?.toggleBonus(!value);
+    } else if (key === "walletEnabled") {
+      res = await dashboardService?.ToggleController?.toggleWallet(!value);
     }
     const toggles = await dashboardService.GetToggles();
 
@@ -344,7 +358,85 @@ const DashboardPage = () => {
             </div>
           </div>
         </div>
+        <div className="toggle-element">
+          <p>Hamyon:</p>
+          <div className="toggle-switch">
+            <div
+              className={`toggle-slider ${
+                toggleState.walletEnabled ? "on" : "off"
+              }`}
+              onClick={() =>
+                changeTogle("walletEnabled", toggleState.walletEnabled)
+              }
+            >
+              <span className="toggle-knob"></span>
+            </div>
+          </div>
+        </div>
       </div>
+      {walletData && (
+        <div
+          className="wallet-summary-card"
+          style={{
+            background: "#fff",
+            borderRadius: 12,
+            padding: "16px 20px",
+            marginBottom: 20,
+            boxShadow: "0 1px 4px rgba(0,0,0,0.08)",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              cursor: "pointer",
+            }}
+            onClick={() => setShowWalletList((v) => !v)}
+          >
+            <div>
+              <p style={{ margin: 0, color: "#6b7280", fontSize: 13 }}>
+                Hamyonlardagi umumiy mablag'
+              </p>
+              <h2 style={{ margin: "4px 0 0", color: "#111827" }}>
+                {(walletData.totalWalletMoney || 0).toLocaleString()} UZS
+              </h2>
+            </div>
+            <span style={{ color: "#2563eb", fontSize: 14 }}>
+              {showWalletList
+                ? "Yashirish ▲"
+                : `Ko'rsatish (${(walletData.userBalances || []).length}) ▼`}
+            </span>
+          </div>
+          {showWalletList && (
+            <div style={{ marginTop: 12, maxHeight: 320, overflowY: "auto" }}>
+              <table style={{ width: "100%", borderCollapse: "collapse" }}>
+                <thead>
+                  <tr style={{ textAlign: "left", color: "#6b7280", fontSize: 13 }}>
+                    <th style={{ padding: "6px 4px" }}>Chat ID</th>
+                    <th style={{ padding: "6px 4px", textAlign: "right" }}>
+                      Hamyon (UZS)
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {(walletData.userBalances || []).map((u) => (
+                    <tr
+                      key={u.chatId}
+                      style={{ borderTop: "1px solid #f0f0f0", fontSize: 14 }}
+                    >
+                      <td style={{ padding: "6px 4px" }}>{u.chatId}</td>
+                      <td style={{ padding: "6px 4px", textAlign: "right" }}>
+                        {(u.walletBalance || 0).toLocaleString()}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+      )}
       <header className="dashboard-header">
         <h1>Boshqaruv Paneli</h1>
         <div className="filter-controls">
