@@ -5,20 +5,29 @@ import { cardService } from '../api/cardService';
 import { platformService } from '../api/platformService';
 import Loader from '../components/common/Loader';
 import Button from '../components/common/Button';
+import { STATUS_MAP, TRANSACTION_TYPE_MAP, getStatusInfo, getTypeInfo } from '../constants/statusConstants';
 import { FaTrash, FaFilter, FaTimes } from 'react-icons/fa'; // Added FaTimes for the clear button
 
-const requestStatuses = [
-    "PENDING",
-    "PENDING_SMS",
-    "PENDING_ADMIN",
-    "APPROVED",
-    "BONUS_APPROVED",
-    "CANCELED",
-    "PENDING_PAYMENT",
-    "FAILED",
-    "PENDING_SCREENSHOT"
-];
-const requestTypes = ["TOP_UP", "WITHDRAWAL", "WALLET_WITHDRAWAL", "WALLET_TO_PLATFORM"];
+const requestStatuses = Object.keys(STATUS_MAP);
+const requestTypes = Object.keys(TRANSACTION_TYPE_MAP);
+
+const formatAmount = (amount) => {
+    const value = Number(amount || 0);
+    return `${value.toLocaleString('uz-UZ')} so'm`;
+};
+
+const formatCardNumber = (cardNumber) => {
+    if (!cardNumber) return '-';
+    if (cardNumber === 'WALLET') return 'Hamyon';
+    if (cardNumber.length <= 4) return cardNumber;
+    return `...${cardNumber.slice(-4)}`;
+};
+
+const formatDate = (date) => {
+    if (!date) return '-';
+    const parsed = new Date(date);
+    return Number.isNaN(parsed.getTime()) ? '-' : parsed.toLocaleString('uz-UZ');
+};
 
 const TransactionsPage = () => {
     const { isAuthenticated } = useAuth();
@@ -129,9 +138,39 @@ const TransactionsPage = () => {
         }
     };
 
-    const StatusBadge = ({ status }) => (
-        <span className={`status-badge status--${status.toLowerCase()}`}>{status}</span>
-    );
+    const TypeBadge = ({ type }) => {
+        const info = getTypeInfo(type);
+        return (
+            <span style={{ color: info.color, display: 'inline-flex', alignItems: 'center', gap: '8px', fontWeight: 700, fontSize: '0.85rem' }}>
+                {info.icon}
+                {info.label}
+            </span>
+        );
+    };
+
+    const StatusBadge = ({ status }) => {
+        const info = getStatusInfo(status);
+        return (
+            <span
+                className={`status-badge-v2 ${info.className}`}
+                style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    padding: '4px 12px',
+                    borderRadius: '20px',
+                    fontSize: '0.75rem',
+                    fontWeight: 600,
+                    background: `${info.color}15`,
+                    color: info.color,
+                    border: `1px solid ${info.color}30`,
+                    whiteSpace: 'nowrap',
+                }}
+            >
+                {info.icon} {info.label}
+            </span>
+        );
+    };
 
     return (
         <div className="page-container transactions-page">
@@ -154,11 +193,11 @@ const TransactionsPage = () => {
                     </select>
                     <select name="status" value={filters.status} onChange={handleFilterChange}>
                         <option value="">Barcha Statuslar</option> {/* Translated */}
-                        {requestStatuses.map(s => <option key={s} value={s}>{s}</option>)}
+                        {requestStatuses.map(s => <option key={s} value={s}>{STATUS_MAP[s].label}</option>)}
                     </select>
                     <select name="type" value={filters.type} onChange={handleFilterChange}>
                         <option value="">Barcha Turlar</option> {/* Translated */}
-                        {requestTypes.map(t => <option key={t} value={t}>{t}</option>)}
+                        {requestTypes.map(t => <option key={t} value={t}>{TRANSACTION_TYPE_MAP[t].label}</option>)}
                     </select>
                 </div>
                 <div className="filter-actions">
@@ -200,13 +239,13 @@ const TransactionsPage = () => {
                             <tr key={t.id} className={selectedIds.includes(t.id) ? 'selected' : ''}>
                                 <td><input type="checkbox" checked={selectedIds.includes(t.id)} onChange={() => handleSelect(t.id)} /></td>
                                 <td>{t.id}</td>
-                                <td>{t.platform}</td>
+                                <td>{t.platform || '-'}</td>
                                 <td>{t.fullName || `ChatID: ${t.chatId}`}</td>
-                                <td>...{t.cardNumber?.slice(-4)}</td>
-                                <td>{t.uniqueAmount}</td>
-                                <td>{t.type}</td>
+                                <td>{formatCardNumber(t.cardNumber)}</td>
+                                <td>{formatAmount(t.uniqueAmount ?? t.amount)}</td>
+                                <td><TypeBadge type={t.type} /></td>
                                 <td><StatusBadge status={t.status} /></td>
-                                <td>{new Date(t.createdAt).toLocaleString()}</td>
+                                <td>{formatDate(t.createdAt)}</td>
                                 <td>
                                     <button className="action-btn-icon" onClick={() => handleDelete(t.id)} title="O'chirish">
                                         <FaTrash />

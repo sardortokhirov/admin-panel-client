@@ -303,61 +303,67 @@ const DashboardPage = () => {
   return (
     <div className="page-container dashboard-v2">
       <div className="ToggleContainer">
-        <div className="toggle-element">
-          <p>Bonus:</p>
+        <div
+          className="toggle-element"
+          onClick={() => changeTogle("bonusEnabled", toggleState.bonusEnabled)}
+        >
+          <p><FiAward /> Bonus Tizimi:</p>
           <div className="toggle-switch">
             <div
               className={`toggle-slider ${
                 toggleState.bonusEnabled ? "on" : "off"
               }`}
-              onClick={() =>
-                changeTogle("bonusEnabled", toggleState.bonusEnabled)
-              }
             >
               <span className="toggle-knob"></span>
             </div>
           </div>
         </div>
-        <div className="toggle-element">
-          <p>Pul yechish:</p>
+        <div
+          className="toggle-element"
+          onClick={() =>
+            changeTogle("withdrawEnabled", toggleState.withdrawEnabled)
+          }
+        >
+          <p><FiArrowUpCircle /> Pul Yechish:</p>
           <div className="toggle-switch">
             <div
               className={`toggle-slider ${
                 toggleState.withdrawEnabled ? "on" : "off"
               }`}
-              onClick={() =>
-                changeTogle("withdrawEnabled", toggleState.withdrawEnabled)
-              }
             >
               <span className="toggle-knob"></span>
             </div>
           </div>
         </div>
-        <div className="toggle-element">
-          <p>To'ldirish:</p>
+        <div
+          className="toggle-element"
+          onClick={() =>
+            changeTogle("topUpEnabled", toggleState.topUpEnabled)
+          }
+        >
+          <p><FiArrowDownCircle /> Hisob To'ldirish:</p>
           <div className="toggle-switch">
             <div
               className={`toggle-slider ${
                 toggleState.topUpEnabled ? "on" : "off"
               }`}
-              onClick={() =>
-                changeTogle("topUpEnabled", toggleState.topUpEnabled)
-              }
             >
               <span className="toggle-knob"></span>
             </div>
           </div>
         </div>
-        <div className="toggle-element">
-          <p>Hamyon:</p>
+        <div
+          className="toggle-element"
+          onClick={() =>
+            changeTogle("walletEnabled", toggleState.walletEnabled !== false)
+          }
+        >
+          <p><FiUsers /> Hamyon Tizimi:</p>
           <div className="toggle-switch">
             <div
               className={`toggle-slider ${
                 toggleState.walletEnabled !== false ? "on" : "off"
               }`}
-              onClick={() =>
-                changeTogle("walletEnabled", toggleState.walletEnabled !== false)
-              }
             >
               <span className="toggle-knob"></span>
             </div>
