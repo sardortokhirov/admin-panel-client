@@ -252,6 +252,7 @@ const PromoPage = () => {
                             <table className="transaction-table">
                                 <thead>
                                     <tr>
+                                        <th>Ko'rish</th>
                                         <th>Chat ID</th>
                                         <th>Holat</th>
                                         <th>Amallar</th>
@@ -261,6 +262,17 @@ const PromoPage = () => {
                                     {chats.length > 0 ? (
                                         chats.map((chat) => (
                                             <tr key={chat.chatId}>
+                                                <td className="view-cell">
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => setDetailChatId(chat.chatId)}
+                                                        className={`view-btn ${chat.filled ? 'view-btn-filled' : ''}`}
+                                                        title="Ko'rish va platforma qo'shish"
+                                                    >
+                                                        <FiEye />
+                                                        <span className="action-label">Ko'rish</span>
+                                                    </button>
+                                                </td>
                                                 <td className="user-id-cell">{chat.chatId}</td>
                                                 <td>
                                                     {chat.filled ? (
@@ -276,15 +288,6 @@ const PromoPage = () => {
                                                 <td className="actions-cell">
                                                     <button
                                                         type="button"
-                                                        onClick={() => setDetailChatId(chat.chatId)}
-                                                        className={`view-btn ${chat.filled ? 'view-btn-filled' : ''}`}
-                                                        title="Ko'rish va platforma qo'shish"
-                                                    >
-                                                        <FiEye />
-                                                        <span className="action-label">Ko'rish</span>
-                                                    </button>
-                                                    <button
-                                                        type="button"
                                                         onClick={() => handleRemoveChat(chat.chatId)}
                                                         className="delete-btn"
                                                         title="O'chirish"
@@ -296,7 +299,7 @@ const PromoPage = () => {
                                         ))
                                     ) : (
                                         <tr>
-                                            <td colSpan="3" className="empty-text">Ro'yxat bo'sh</td>
+                                            <td colSpan="4" className="empty-text">Ro'yxat bo'sh</td>
                                         </tr>
                                     )}
                                 </tbody>
@@ -388,6 +391,7 @@ const PromoPage = () => {
                 .status-filled { color: #53bf9d; display: flex; align-items: center; gap: 0.35rem; }
                 .status-empty { color: #a0a0a0; display: flex; align-items: center; gap: 0.35rem; }
                 .actions-cell { display: flex; gap: 0.5rem; }
+                .view-cell { white-space: nowrap; width: 1%; }
                 .view-btn, .delete-btn {
                     border: none; cursor: pointer; padding: 0.45rem 0.65rem; border-radius: 8px;
                     display: flex; align-items: center; justify-content: center; gap: 0.35rem;
