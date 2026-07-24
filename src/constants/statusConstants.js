@@ -54,6 +54,12 @@ export const STATUS_MAP = {
         icon: <FaBan />,
         className: 'status--canceled',
     },
+    CANCELED_NO_REFUND: {
+        label: 'Bekor (Qaytarilmadi)',
+        color: '#b45309',
+        icon: <FaBan />,
+        className: 'status--canceled-no-refund',
+    },
     USER_CANCELED: {
         label: 'Foydalanuvchi Bekor Qildi',
         color: '#64748b',

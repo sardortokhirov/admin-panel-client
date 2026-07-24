@@ -231,6 +231,8 @@ const DashboardPage = () => {
     PENDING_PAYMENT: "#fca130",
     FAILED: "#ff5c5c",
     CANCELED: "#6c757d",
+    CANCELED_NO_REFUND: "#b45309",
+    USER_CANCELED: "#64748b",
     BONUS_APPROVED: "#9b59b6",
     default: "#16213e",
   };
