@@ -1648,7 +1648,7 @@ select {
   }
 
   .react-datepicker-popper {
-    z-index: 10;
+    z-index: 5000 !important;
   }
 
   .react-datepicker__triangle {
@@ -1907,7 +1907,7 @@ select {
   }
 
   .react-datepicker-popper {
-    z-index: 10;
+    z-index: 5000 !important;
   }
 
   .react-datepicker__triangle {
@@ -4607,3 +4607,93 @@ $border-radius: 8px;
 }
 
 @import "pages/ApkLinkBot";
+
+// ===============================================
+// UI fixes: dashboard datepicker + transactions scroll
+// ===============================================
+
+.react-datepicker-popper,
+.dashboard-datepicker-popper {
+  z-index: 5000 !important;
+}
+
+.react-datepicker__portal {
+  position: fixed;
+  inset: 0;
+  z-index: 5000 !important;
+  background-color: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .react-datepicker {
+    background-color: $bg-light !important;
+    border: 1px solid $border-color !important;
+    font-family: $font-family !important;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+  }
+
+  .react-datepicker__header {
+    background-color: $bg-lighter !important;
+    border-bottom: 1px solid $border-color !important;
+  }
+
+  .react-datepicker__current-month,
+  .react-datepicker__day-name,
+  .react-datepicker__day {
+    color: $text-primary !important;
+  }
+
+  .react-datepicker__day:hover {
+    background-color: $bg-lighter !important;
+  }
+
+  .react-datepicker__day--selected,
+  .react-datepicker__day--in-selecting-range,
+  .react-datepicker__day--in-range,
+  .react-datepicker__day--keyboard-selected {
+    background-color: $primary-color !important;
+    color: #fff !important;
+  }
+}
+
+.dashboard-v2 {
+  .dashboard-header,
+  .filter-controls {
+    position: relative;
+    z-index: 20;
+  }
+
+  .stats-grid {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+.page-container.transactions-page {
+  max-width: none;
+  width: 100%;
+}
+
+.transactions-page {
+  .transaction-list-container {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto !important;
+    overflow-y: visible !important;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+  }
+
+  .transaction-table {
+    width: max-content;
+    min-width: 1200px;
+    table-layout: auto;
+
+    thead th,
+    tbody td {
+      white-space: nowrap;
+    }
+  }
+}

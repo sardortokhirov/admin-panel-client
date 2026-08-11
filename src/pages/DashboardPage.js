@@ -412,6 +412,8 @@ const DashboardPage = () => {
             placeholderText="Maxsus oraliq"
             className={`custom-datepicker ${filterPeriod === "custom" ? "active" : ""
               }`}
+            withPortal
+            popperClassName="dashboard-datepicker-popper"
           />
         </div>
       </header>
