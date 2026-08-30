@@ -26,6 +26,7 @@ const SystemConfigPage = () => {
         walletMinWithdrawAmount: 0,
         walletTransferMinAmount: 0,
         walletTransferMaxAmount: 0,
+        walletToWalletFeePercentage: 0,
         uzcardRail: "OSON"
     });
 
@@ -38,16 +39,20 @@ const SystemConfigPage = () => {
         try {
             setIsLoading(true);
             setError('');
-            const [configRes, limitsRes] = await Promise.all([
+            const [configRes, limitsRes, feeRes] = await Promise.all([
                 systemConfigService.getConfiguration(),
-                systemConfigService.getWalletTransferAmountLimits()
+                systemConfigService.getWalletTransferAmountLimits(),
+                systemConfigService.getWalletToWalletFee()
             ]);
 
             if (configRes.data) {
                 const combinedConfig = {
                     ...configRes.data,
                     walletTransferMinAmount: limitsRes.data?.walletTransferMinAmount || 0,
-                    walletTransferMaxAmount: limitsRes.data?.walletTransferMaxAmount || 0
+                    walletTransferMaxAmount: limitsRes.data?.walletTransferMaxAmount || 0,
+                    walletToWalletFeePercentage: feeRes.data?.walletToWalletFeePercentage
+                        ?? configRes.data.walletToWalletFeePercentage
+                        ?? 0
                 };
                 setConfig(combinedConfig);
             }
@@ -104,6 +109,9 @@ const SystemConfigPage = () => {
             }
             if (config.walletTransferMaxAmount !== undefined) {
                 await systemConfigService.updateWalletTransferMax(config.walletTransferMaxAmount);
+            }
+            if (config.walletToWalletFeePercentage !== undefined && config.walletToWalletFeePercentage !== '') {
+                await systemConfigService.updateWalletToWalletFee(config.walletToWalletFeePercentage);
             }
 
             setConfig(response.data);
@@ -403,6 +411,24 @@ const SystemConfigPage = () => {
                                 <span className="currency">%</span>
                             </div>
                             <small>Masalan: 0.001 = 0.1%</small>
+                        </div>
+
+                        <div className="form__group">
+                            <label>Hamyondan hamyonga komissiya</label>
+                            <div className="input-wrapper">
+                                <input
+                                    type="number"
+                                    step="0.0001"
+                                    name="walletToWalletFeePercentage"
+                                    value={config.walletToWalletFeePercentage}
+                                    onChange={handleInputChange}
+                                    min="0"
+                                    max="1"
+                                    required
+                                />
+                                <span className="currency">%</span>
+                            </div>
+                            <small>Masalan: 0.05 = 5%. Yuboruvchi to'liq summani to'laydi, oluvchi komissiyasiz qolganini oladi.</small>
                         </div>
                     </div>
                 </div>

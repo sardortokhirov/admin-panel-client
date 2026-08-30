@@ -41,6 +41,8 @@ const LotteryPage = () => {
     // Config State
     const [purchaseCooldown, setPurchaseCooldown] = useState(0);
     const [winningsPercentage, setWinningsPercentage] = useState(0);
+    const [p2pMinPricePerTicket, setP2pMinPricePerTicket] = useState(1);
+    const [p2pFeePercentage, setP2pFeePercentage] = useState(0);
 
     // --- Data Fetching ---
     const fetchData = useCallback(async () => {
@@ -85,6 +87,14 @@ const LotteryPage = () => {
                 setWinningsPercentage(winningsRes.data.percentage || 0);
             } catch (ignored) {
                 console.warn("Winnings endpoint not available yet");
+            }
+
+            try {
+                const p2pRes = await lotteryService.getP2pSettings();
+                setP2pMinPricePerTicket(p2pRes.data.minPricePerTicket || 1);
+                setP2pFeePercentage(p2pRes.data.feePercentage || 0);
+            } catch (ignored) {
+                console.warn("P2P settings endpoint not available yet");
             }
 
         } catch (err) {
@@ -184,6 +194,22 @@ const LotteryPage = () => {
             } else {
                 setError("Foizni yangilab bo'lmadi.");
             }
+        }
+    };
+
+    const handleUpdateP2pSettings = async () => {
+        setError('');
+        setSuccessMessage('');
+        try {
+            await lotteryService.setP2pSettings(
+                parseInt(p2pMinPricePerTicket, 10),
+                parseFloat(p2pFeePercentage)
+            );
+            setSuccessMessage("P2P savdo sozlamalari saqlandi!");
+            setTimeout(() => setSuccessMessage(''), 3000);
+        } catch (err) {
+            console.error(err);
+            setError("P2P sozlamalarini yangilab bo'lmadi.");
         }
     };
 
@@ -382,6 +408,31 @@ const LotteryPage = () => {
                                     onChange={(e) => setWinningsPercentage(e.target.value)}
                                 />
                                 <Button onClick={handleUpdateWinningsPercentage} primary>Saqlash</Button>
+                            </div>
+                        </div>
+                        <div className="setting-item">
+                            <label>P2P min narx / chipta (UZS)</label>
+                            <div style={{ display: 'flex', gap: '10px' }}>
+                                <input
+                                    type="number"
+                                    min="1"
+                                    value={p2pMinPricePerTicket}
+                                    onChange={(e) => setP2pMinPricePerTicket(e.target.value)}
+                                />
+                            </div>
+                        </div>
+                        <div className="setting-item">
+                            <label>P2P savdo komissiyasi (0.05 = 5%)</label>
+                            <div style={{ display: 'flex', gap: '10px' }}>
+                                <input
+                                    type="number"
+                                    step="0.0001"
+                                    min="0"
+                                    max="1"
+                                    value={p2pFeePercentage}
+                                    onChange={(e) => setP2pFeePercentage(e.target.value)}
+                                />
+                                <Button onClick={handleUpdateP2pSettings} primary>P2P Saqlash</Button>
                             </div>
                         </div>
                     </div>

@@ -105,6 +105,16 @@ export const TRANSACTION_TYPE_MAP = {
         label: 'Platformaga O\'tkazish',
         color: '#9b59b6',
         icon: <FaExchangeAlt />
+    },
+    WALLET_TO_WALLET: {
+        label: 'Hamyondan Hamyonga',
+        color: '#1abc9c',
+        icon: <FaExchangeAlt />
+    },
+    TICKET_TRADE: {
+        label: 'Chipta Savdosi',
+        color: '#8e44ad',
+        icon: <FaCoins />
     }
 };
 

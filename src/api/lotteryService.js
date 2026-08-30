@@ -55,5 +55,10 @@ export const lotteryService = {
 
     // Winnings Percentage
     getWinningsPercentage: () => apiService.get(`${LOTTERY_URL}/winnings-percentage`),
-    setWinningsPercentage: (percentage) => apiService.put(`${LOTTERY_URL}/winnings-percentage`, { percentage: percentage })
+    setWinningsPercentage: (percentage) => apiService.put(`${LOTTERY_URL}/winnings-percentage`, { percentage: percentage }),
+
+    // P2P ticket trade settings
+    getP2pSettings: () => apiService.get(`${LOTTERY_URL}/p2p-settings`),
+    setP2pSettings: (minPricePerTicket, feePercentage) =>
+        apiService.put(`${LOTTERY_URL}/p2p-settings`, { minPricePerTicket, feePercentage })
 };

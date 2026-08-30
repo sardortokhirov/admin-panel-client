@@ -27,8 +27,10 @@ import {
   FiArrowDownCircle,
   FiUsers,
   FiAward,
-  FiHeart
+  FiHeart,
+  FiGift
 } from "react-icons/fi";
+import { FaExchangeAlt as FiExchange } from "react-icons/fa";
 import { STATUS_MAP } from "../constants/statusConstants";
 
 // Register Chart.js components
@@ -449,6 +451,22 @@ const DashboardPage = () => {
             } so'm`}
           detail="Bot rivojiga qilingan hissa"
           color="#f39c12"
+        />
+        <StatCard
+          icon={<FiExchange />}
+          title="Hamyon P2P komissiya"
+          value={`${stats.totalWalletToWalletFees?.toLocaleString("uz-UZ") || 0
+            } so'm`}
+          detail="Yig'ilgan (uyga o'tkazilmaydi)"
+          color="#1abc9c"
+        />
+        <StatCard
+          icon={<FiGift />}
+          title="Chipta savdo komissiya"
+          value={`${stats.totalTicketTradeFees?.toLocaleString("uz-UZ") || 0
+            } so'm`}
+          detail="Yig'ilgan (uyga o'tkazilmaydi)"
+          color="#8e44ad"
         />
         <StatCard
           icon={<FiTrendingUp />}

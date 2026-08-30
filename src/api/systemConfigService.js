@@ -21,6 +21,11 @@ const updateWalletTransferMin = (amount) => apiService.patch(`/config/wallet-tra
 
 const updateWalletTransferMax = (amount) => apiService.patch(`/config/wallet-transfer-max?amount=${amount}`);
 
+const getWalletToWalletFee = () => apiService.get('/config/wallet-to-wallet-fee');
+
+const updateWalletToWalletFee = (percentage) =>
+    apiService.patch(`/config/wallet-to-wallet-fee?percentage=${percentage}`);
+
 export const systemConfigService = {
     getConfiguration,
     updateConfiguration,
@@ -31,5 +36,7 @@ export const systemConfigService = {
     updateWalletMinWithdraw,
     getWalletTransferAmountLimits,
     updateWalletTransferMin,
-    updateWalletTransferMax
+    updateWalletTransferMax,
+    getWalletToWalletFee,
+    updateWalletToWalletFee
 };

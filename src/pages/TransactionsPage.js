@@ -21,7 +21,7 @@ const requestStatuses = [
     "PROCESSING",
     "USER_CANCELED"
 ];
-const requestTypes = ["TOP_UP", "WITHDRAWAL", "TIP", "WALLET_DEPOSIT", "WALLET_WITHDRAWAL", "WALLET_TO_PLATFORM"];
+const requestTypes = ["TOP_UP", "WITHDRAWAL", "TIP", "WALLET_DEPOSIT", "WALLET_WITHDRAWAL", "WALLET_TO_PLATFORM", "WALLET_TO_WALLET", "TICKET_TRADE"];
 
 const TransactionsPage = () => {
     const { isAuthenticated } = useAuth();
