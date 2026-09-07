@@ -226,8 +226,11 @@ const TransactionsPage = () => {
                             <th>ID</th>
                             <th>Platforma</th>
                             <th>Foydalanuvchi</th>
+                            <th>Oluvchi</th>
                             <th>Karta</th>
                             <th>Miqdor</th>
+                            <th>Komissiya</th>
+                            <th>Sof</th>
                             <th>Tur</th>
                             <th>Status</th>
                             <th>Sana</th>
@@ -240,9 +243,12 @@ const TransactionsPage = () => {
                                 <td><input type="checkbox" checked={selectedIds.includes(t.id)} onChange={() => handleSelect(t.id)} /></td>
                                 <td>{t.id}</td>
                                 <td>{t.platform || '-'}</td>
-                                <td>{t.fullName || `ChatID: ${t.chatId}`}</td>
+                                <td>{t.type === 'WALLET_TO_WALLET' ? `From: ${t.chatId}` : (t.fullName || `ChatID: ${t.chatId}`)}</td>
+                                <td>{t.recipientChatId != null ? t.recipientChatId : '-'}</td>
                                 <td>{formatCardNumber(t.cardNumber)}</td>
                                 <td>{formatAmount(t.uniqueAmount ?? t.amount)}</td>
+                                <td>{t.feeAmount != null ? formatAmount(t.feeAmount) : '-'}</td>
+                                <td>{t.netAmount != null ? formatAmount(t.netAmount) : '-'}</td>
                                 <td><TypeBadge type={t.type} /></td>
                                 <td><StatusBadge status={t.status} /></td>
                                 <td>{formatDate(t.createdAt)}</td>
@@ -254,7 +260,7 @@ const TransactionsPage = () => {
                             </tr>
                         )) : (
                             <tr>
-                                <td colSpan="10" className="no-data">Tranzaksiyalar topilmadi.</td>
+                                <td colSpan="13" className="no-data">Tranzaksiyalar topilmadi.</td>
                             </tr>
                         )}
                         </tbody>

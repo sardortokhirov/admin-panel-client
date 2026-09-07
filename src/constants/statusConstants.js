@@ -119,6 +119,11 @@ export const TRANSACTION_TYPE_MAP = {
         color: '#9b59b6',
         icon: <FaExchangeAlt />,
     },
+    WALLET_TO_WALLET: {
+        label: "Hamyondan hamyonga",
+        color: '#0ea5e9',
+        icon: <FaExchangeAlt />,
+    },
 };
 
 export const getStatusInfo = (status) => STATUS_MAP[status] || {

@@ -21,7 +21,8 @@ const SystemConfigPage = () => {
         walletMinWithdrawAmount: 10000,
         walletWithdrawRatio: 1,
         walletTransferMinAmount: 5000,
-        walletTransferMaxAmount: 10000000
+        walletTransferMaxAmount: 10000000,
+        walletToWalletFeePercentage: 0
     });
     const [isLoading, setIsLoading] = useState(true);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -47,7 +48,8 @@ const SystemConfigPage = () => {
                     walletMinWithdrawAmount: data.walletMinWithdrawAmount != null ? data.walletMinWithdrawAmount : 10000,
                     walletWithdrawRatio: data.walletWithdrawRatio != null ? data.walletWithdrawRatio : 1,
                     walletTransferMinAmount: data.walletTransferMinAmount != null ? data.walletTransferMinAmount : 5000,
-                    walletTransferMaxAmount: data.walletTransferMaxAmount != null ? data.walletTransferMaxAmount : 10000000
+                    walletTransferMaxAmount: data.walletTransferMaxAmount != null ? data.walletTransferMaxAmount : 10000000,
+                    walletToWalletFeePercentage: data.walletToWalletFeePercentage != null ? data.walletToWalletFeePercentage : 0
                 });
             }
         } catch (err) {
@@ -283,6 +285,22 @@ const SystemConfigPage = () => {
                                 onChange={handleInputChange}
                                 required
                             />
+                        </div>
+                        <div className="form__group">
+                            <label>Hamyondan hamyonga komissiya (0–1)</label>
+                            <input
+                                type="number"
+                                step="0.0001"
+                                min="0"
+                                max="1"
+                                name="walletToWalletFeePercentage"
+                                value={formState.walletToWalletFeePercentage}
+                                onChange={handleInputChange}
+                                required
+                            />
+                            <small className="form-helper" style={{ display: 'block', marginTop: '0.25rem', color: '#666', fontSize: '0.8rem' }}>
+                                Masalan: 0.05 = 5%. Yuboruvchi to'liq summani to'laydi, oluvchi komissiyasiz qolganini oladi. Komissiya yoziladi, lekin house walletga tushmaydi.
+                            </small>
                         </div>
                     </div>
 

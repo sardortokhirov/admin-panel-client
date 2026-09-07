@@ -59,6 +59,18 @@ const systemConfigService = {
             console.error("Error updating system config:", error);
             throw error;
         }
+    },
+
+    getWalletToWalletFee: async () => {
+        const response = await configApi.get('config/wallet-to-wallet-fee');
+        return response.data;
+    },
+
+    updateWalletToWalletFee: async (percentage) => {
+        const response = await configApi.patch('config/wallet-to-wallet-fee', null, {
+            params: { percentage }
+        });
+        return response.data;
     }
 };
 
