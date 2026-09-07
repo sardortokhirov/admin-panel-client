@@ -228,9 +228,9 @@ const TransactionsPage = () => {
                             <th>Foydalanuvchi</th>
                             <th>Oluvchi</th>
                             <th>Karta</th>
-                            <th>Miqdor</th>
+                            <th>Miqdor (brutto)</th>
                             <th>Komissiya</th>
-                            <th>Sof</th>
+                            <th>Sof (oluvchiga)</th>
                             <th>Tur</th>
                             <th>Status</th>
                             <th>Sana</th>
@@ -239,7 +239,13 @@ const TransactionsPage = () => {
                         </thead>
                         <tbody>
                         {transactions.length > 0 ? transactions.map(t => (
-                            <tr key={t.id} className={selectedIds.includes(t.id) ? 'selected' : ''}>
+                            <tr
+                                key={t.id}
+                                className={[
+                                    selectedIds.includes(t.id) ? 'selected' : '',
+                                    t.type === 'WALLET_TO_WALLET' ? 'wallet-p2p-row' : '',
+                                ].filter(Boolean).join(' ')}
+                            >
                                 <td><input type="checkbox" checked={selectedIds.includes(t.id)} onChange={() => handleSelect(t.id)} /></td>
                                 <td>{t.id}</td>
                                 <td>{t.platform || '-'}</td>

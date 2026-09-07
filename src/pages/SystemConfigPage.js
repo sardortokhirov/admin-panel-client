@@ -287,7 +287,15 @@ const SystemConfigPage = () => {
                             />
                         </div>
                         <div className="form__group">
-                            <label>Hamyondan hamyonga komissiya (0–1)</label>
+                            <label>
+                                Hamyondan hamyonga komissiya ulushi (0–1)
+                                {' '}
+                                <strong>
+                                    ({Number.isFinite(Number(formState.walletToWalletFeePercentage))
+                                        ? `${(Number(formState.walletToWalletFeePercentage) * 100).toLocaleString('uz-UZ', { maximumFractionDigits: 2 })}%`
+                                        : '—'})
+                                </strong>
+                            </label>
                             <input
                                 type="number"
                                 step="0.0001"
@@ -299,7 +307,9 @@ const SystemConfigPage = () => {
                                 required
                             />
                             <small className="form-helper" style={{ display: 'block', marginTop: '0.25rem', color: '#666', fontSize: '0.8rem' }}>
-                                Masalan: 0.05 = 5%. Yuboruvchi to'liq summani to'laydi, oluvchi komissiyasiz qolganini oladi. Komissiya yoziladi, lekin house walletga tushmaydi.
+                                Masalan: <strong>0.05 = 5%</strong>. Yuboruvchi brutto summani to'laydi,
+                                oluvchi komissiya ayrilgan sof summani oladi. Komissiya yozuvda saqlanadi,
+                                lekin alohida hamyonga tushmaydi.
                             </small>
                         </div>
                     </div>
