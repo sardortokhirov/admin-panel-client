@@ -42,10 +42,8 @@ export const AuthProvider = ({ children }) => {
     setAuthHeader(token);
 
     try {
-      // 3. THE CRITICAL STEP: Make a "test" call to a protected endpoint.
-      // We use getLoginEvents() because it requires authentication.
-      // If this call fails with a 401, the 'catch' block will run.
-      await loginService.getLoginEvents();
+      // Probe a protected endpoint. Wrong credentials return 401 and stay on login.
+      await loginService.verifyAuth();
 
       // 4. If the call succeeded, the credentials are valid! Now we can proceed.
       // Permanently save the token

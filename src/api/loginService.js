@@ -18,7 +18,10 @@ const recordLogin = (loginData) => apiService.post('/admin/login-info', loginDat
  */
 const getLoginEvents = () => apiService.get('/admin/login');
 
+const verifyAuth = () => apiService.get('/features');
+
 export const loginService = {
     recordLogin,
     getLoginEvents,
+    verifyAuth,
 };
