@@ -11,6 +11,14 @@ import TransactionsPage from "./pages/TransactionsPage";
 import LotteryPage from "./pages/LotteryPage";
 import LoginDevicesPage from "./pages/LoginDevicesPage"; // <-- Import the new page
 import UsersPage from "./pages/UsersPage"; // <-- Import the new page
+import UserManagementPage from "./pages/UserManagementPage";
+import UserProfilePage from "./pages/UserProfilePage";
+import PromoPage from "./pages/PromoPage";
+import BlockedUsersPage from "./pages/BlockedUsersPage";
+import UserPermissionsPage from "./pages/UserPermissionsPage";
+import BotRestartPage from "./pages/BotRestartPage";
+import ApkLinkBotPage from "./pages/ApkLinkBotPage";
+import TipsPage from "./pages/TipsPage";
 
 // Components
 import PrivateRoute from "./components/Auth/PrivateRoute";
@@ -143,6 +151,78 @@ function App() {
             element={
               <PrivateRoute>
                 <SystemConfigPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/config"
+            element={
+              <PrivateRoute>
+                <SystemConfigPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/users-list"
+            element={
+              <PrivateRoute>
+                <UserManagementPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/users/:chatId"
+            element={
+              <PrivateRoute>
+                <UserProfilePage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/promo"
+            element={
+              <PrivateRoute>
+                <PromoPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/blocked-users"
+            element={
+              <PrivateRoute>
+                <BlockedUsersPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/user-permissions"
+            element={
+              <PrivateRoute>
+                <UserPermissionsPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/bot-restart"
+            element={
+              <PrivateRoute>
+                <BotRestartPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/apk-link-bot"
+            element={
+              <PrivateRoute>
+                <ApkLinkBotPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/tips-config"
+            element={
+              <PrivateRoute>
+                <TipsPage />
               </PrivateRoute>
             }
           />

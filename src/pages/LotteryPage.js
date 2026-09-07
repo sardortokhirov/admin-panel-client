@@ -4,8 +4,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { lotteryService } from '../api/lotteryService';
 import Loader from '../components/common/Loader';
 import Button from '../components/common/Button';
-import { FiGift, FiUserCheck, FiChevronRight } from 'react-icons/fi';
-import { Link } from 'react-router-dom';
+import { FiGift, FiUserCheck } from 'react-icons/fi';
 
 const LotteryPage = () => {
     // General Page State

@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 
 const UsersPage = () => {
     const [page, setPage] = useState(0);
-    const [size, setSize] = useState(10);
+    const [size] = useState(10);
     const [sortBy, setSortBy] = useState('balance');
     const [sortDirection, setSortDirection] = useState('DESC');
     const [pageData, setPageData] = useState(null);

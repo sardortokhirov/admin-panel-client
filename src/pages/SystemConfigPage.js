@@ -1,6 +1,7 @@
 // src/pages/SystemConfigPage.js
 import React, { useState, useEffect, useCallback } from 'react';
 import systemConfigService from '../api/systemConfigService';
+import { lotteryService } from '../api/lotteryService';
 import Loader from '../components/common/Loader';
 import Button from '../components/common/Button';
 import { FiSave, FiClock, FiSettings } from 'react-icons/fi';
@@ -22,12 +23,19 @@ const SystemConfigPage = () => {
         walletWithdrawRatio: 1,
         walletTransferMinAmount: 5000,
         walletTransferMaxAmount: 10000000,
-        walletToWalletFeePercentage: 0
+        walletToWalletFeePercentage: 0,
+        dailyBonusTransferLimit: 100000,
+        topUpDailyLimitIncreasePercentage: 0,
+        depositDailyLimitIncreasePercentage: 0,
+        humoEnabled: true,
+        uzcardRail: 'OSON'
     });
     const [isLoading, setIsLoading] = useState(true);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
+    const [p2pForm, setP2pForm] = useState({ minPricePerTicket: 1, feePercentage: 0 });
+    const [p2pSaving, setP2pSaving] = useState(false);
 
     const fetchConfig = useCallback(async () => {
         try {
@@ -49,7 +57,12 @@ const SystemConfigPage = () => {
                     walletWithdrawRatio: data.walletWithdrawRatio != null ? data.walletWithdrawRatio : 1,
                     walletTransferMinAmount: data.walletTransferMinAmount != null ? data.walletTransferMinAmount : 5000,
                     walletTransferMaxAmount: data.walletTransferMaxAmount != null ? data.walletTransferMaxAmount : 10000000,
-                    walletToWalletFeePercentage: data.walletToWalletFeePercentage != null ? data.walletToWalletFeePercentage : 0
+                    walletToWalletFeePercentage: data.walletToWalletFeePercentage != null ? data.walletToWalletFeePercentage : 0,
+                    dailyBonusTransferLimit: data.dailyBonusTransferLimit != null ? data.dailyBonusTransferLimit : 100000,
+                    topUpDailyLimitIncreasePercentage: data.topUpDailyLimitIncreasePercentage != null ? data.topUpDailyLimitIncreasePercentage : 0,
+                    depositDailyLimitIncreasePercentage: data.depositDailyLimitIncreasePercentage != null ? data.depositDailyLimitIncreasePercentage : 0,
+                    humoEnabled: data.humoEnabled !== false,
+                    uzcardRail: data.uzcardRail || 'OSON'
                 });
             }
         } catch (err) {
@@ -69,6 +82,17 @@ const SystemConfigPage = () => {
 
     useEffect(() => {
         fetchConfig();
+        lotteryService.getP2pSettings()
+            .then((res) => {
+                const data = res?.data ?? res;
+                if (data) {
+                    setP2pForm({
+                        minPricePerTicket: data.minPricePerTicket != null ? data.minPricePerTicket : 1,
+                        feePercentage: data.feePercentage != null ? data.feePercentage : 0
+                    });
+                }
+            })
+            .catch(() => {});
     }, [fetchConfig]);
 
     const handleInputChange = (e) => {
@@ -312,6 +336,69 @@ const SystemConfigPage = () => {
                                 lekin alohida hamyonga tushmaydi.
                             </small>
                         </div>
+                        <div className="form__group">
+                            <label>Kunlik bonus o'tkazma limiti (UZS)</label>
+                            <input
+                                type="number"
+                                min="0"
+                                name="dailyBonusTransferLimit"
+                                value={formState.dailyBonusTransferLimit}
+                                onChange={handleInputChange}
+                            />
+                        </div>
+                        <div className="form__group">
+                            <label>Top-up orqali kunlik limit oshishi (0–1)</label>
+                            <input
+                                type="number"
+                                step="0.0001"
+                                min="0"
+                                max="1"
+                                name="topUpDailyLimitIncreasePercentage"
+                                value={formState.topUpDailyLimitIncreasePercentage}
+                                onChange={handleInputChange}
+                            />
+                        </div>
+                        <div className="form__group">
+                            <label>Depozit orqali kunlik limit oshishi (0–1)</label>
+                            <input
+                                type="number"
+                                step="0.0001"
+                                min="0"
+                                max="1"
+                                name="depositDailyLimitIncreasePercentage"
+                                value={formState.depositDailyLimitIncreasePercentage}
+                                onChange={handleInputChange}
+                            />
+                        </div>
+                        <div className="form__group">
+                            <label>HUMO kartalar (to'lov rotatsiyasi)</label>
+                            <select
+                                name="humoEnabled"
+                                value={formState.humoEnabled ? 'true' : 'false'}
+                                onChange={(e) => setFormState((prev) => ({
+                                    ...prev,
+                                    humoEnabled: e.target.value === 'true'
+                                }))}
+                            >
+                                <option value="true">Yoqilgan</option>
+                                <option value="false">O'chirilgan</option>
+                            </select>
+                        </div>
+                        <div className="form__group">
+                            <label>UZCARD tekshiruv yo'li</label>
+                            <select
+                                name="uzcardRail"
+                                value={formState.uzcardRail}
+                                onChange={handleInputChange}
+                            >
+                                <option value="OSON">OSON</option>
+                                <option value="CARDXABAR">CARDXABAR</option>
+                                <option value="OFF">OFF (avto-tekshiruv yo'q)</option>
+                            </select>
+                            <small className="form-helper" style={{ display: 'block', marginTop: '0.25rem', color: '#666', fontSize: '0.8rem' }}>
+                                Global rejim: Oson API, CardXabar yoki avto-tekshiruvni o'chirish (skrinshot).
+                            </small>
+                        </div>
                     </div>
 
                     <div className="form-actions">
@@ -341,6 +428,62 @@ const SystemConfigPage = () => {
                         )}
                     </div>
                 </form>
+            </div>
+
+            <div className="config-panel" style={{ marginTop: '2rem' }}>
+                <h2>Bozor (chipta savdosi)</h2>
+                <p className="config-description">Lotereya o'ynash qoidalari o'zgarmaydi. Faqat Bozor min narxi va komissiyasi.</p>
+                <div className="form-grid">
+                    <div className="form__group">
+                        <label>Chipta uchun min narx (UZS)</label>
+                        <input
+                            type="number"
+                            min="1"
+                            value={p2pForm.minPricePerTicket}
+                            onChange={(e) => setP2pForm((prev) => ({ ...prev, minPricePerTicket: parseFloat(e.target.value) }))}
+                        />
+                    </div>
+                    <div className="form__group">
+                        <label>
+                            Bozor komissiyasi (0–1)
+                            {' '}
+                            <strong>
+                                ({Number.isFinite(Number(p2pForm.feePercentage))
+                                    ? `${(Number(p2pForm.feePercentage) * 100).toLocaleString('uz-UZ', { maximumFractionDigits: 2 })}%`
+                                    : '—'})
+                            </strong>
+                        </label>
+                        <input
+                            type="number"
+                            step="0.0001"
+                            min="0"
+                            max="1"
+                            value={p2pForm.feePercentage}
+                            onChange={(e) => setP2pForm((prev) => ({ ...prev, feePercentage: parseFloat(e.target.value) }))}
+                        />
+                    </div>
+                </div>
+                <div className="form-actions">
+                    <Button
+                        type="button"
+                        primary
+                        disabled={p2pSaving}
+                        onClick={async () => {
+                            setP2pSaving(true);
+                            setError('');
+                            try {
+                                await lotteryService.setP2pSettings(p2pForm.minPricePerTicket, p2pForm.feePercentage);
+                                setSuccessMessage('Bozor sozlamalari saqlandi.');
+                            } catch (e) {
+                                setError(e.response?.data || e.message || 'Bozor sozlamalarini saqlab bo\'lmadi');
+                            } finally {
+                                setP2pSaving(false);
+                            }
+                        }}
+                    >
+                        <FiSave /> {p2pSaving ? 'Saqlanmoqda...' : 'Bozor sozlamalarini saqlash'}
+                    </Button>
+                </div>
             </div>
             
         </div>

@@ -41,6 +41,10 @@ const getUserBalancesPaginated = (page = 0, size = 20, sortBy = 'balance', sortD
 
 
 
+const getP2pSettings = () => apiService.get(`${API_URL}/p2p-settings`);
+const setP2pSettings = (minPricePerTicket, feePercentage) =>
+    apiService.put(`${API_URL}/p2p-settings`, { minPricePerTicket, feePercentage });
+
 export const lotteryService = {
     getPrizes,
     addPrize,
@@ -52,4 +56,6 @@ export const lotteryService = {
     awardRandomUsers,
     getApprovedUsersChatIds,    // Export
     getUserBalancesPaginated,   // Export
+    getP2pSettings,
+    setP2pSettings,
 };

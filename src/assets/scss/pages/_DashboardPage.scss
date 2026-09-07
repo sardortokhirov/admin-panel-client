@@ -1,0 +1,342 @@
+@import "../variables";
+@import "../mixins";
+
+.dashboard-v2 {
+    padding: 2rem;
+
+    .dashboard-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2.5rem;
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, $text-primary 0%, rgba($text-primary, 0.6) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    }
+
+    .filter-controls {
+        display: flex;
+        gap: 0.75rem;
+        background: rgba($bg-light, 0.4);
+        backdrop-filter: blur(10px);
+        padding: 0.5rem;
+        border-radius: 1.5rem;
+        border: 1px solid rgba($text-primary, 0.05);
+
+        button,
+        .custom-datepicker {
+            background: transparent;
+            border: none;
+            color: $text-secondary;
+            padding: 0.6rem 1.2rem;
+            border-radius: 1.25rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+            &:hover {
+                color: $text-primary;
+                background: rgba($text-primary, 0.05);
+            }
+
+            &.active {
+                background: $primary-color;
+                color: $text-primary;
+                box-shadow: 0 4px 15px rgba($primary-color, 0.35);
+            }
+        }
+
+        .custom-datepicker {
+            width: auto;
+            min-width: 150px;
+            text-align: center;
+
+            &.active {
+                background: $primary-color;
+                color: $text-primary;
+            }
+        }
+    }
+
+    .ToggleContainer {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 3rem;
+        background: rgba($bg-light, 0.25);
+        padding: 2rem;
+        border-radius: 2rem;
+        border: 1px solid rgba($text-primary, 0.05);
+        position: relative;
+
+        &::before {
+            content: 'Tizim Holati';
+            position: absolute;
+            top: 0;
+            left: 2rem;
+            transform: translateY(-50%);
+            background: $bg-color;
+            padding: 0 1rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: $text-secondary;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .toggle-element {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.25rem;
+            background: rgba($bg-color, 0.6);
+            border-radius: 1.25rem;
+            border: 1px solid rgba($text-primary, 0.05);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            user-select: none;
+
+            &:hover {
+                background: rgba($bg-color, 0.8);
+                border-color: rgba($primary-color, 0.3);
+                transform: translateY(-2px);
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+
+                p {
+                    color: $text-primary;
+
+                    svg {
+                        color: $primary-color;
+                        transform: scale(1.1);
+                    }
+                }
+            }
+
+            p {
+                margin: 0;
+                font-size: 0.9rem;
+                font-weight: 600;
+                color: $text-secondary;
+                display: flex;
+                align-items: center;
+                gap: 0.75rem;
+                transition: all 0.3s;
+
+                svg {
+                    font-size: 1.2rem;
+                    transition: all 0.3s;
+                }
+            }
+        }
+
+        .toggle-switch {
+            pointer-events: none;
+        }
+
+        .toggle-slider {
+            width: 50px;
+            height: 26px;
+            background: #334155;
+            border-radius: 20px;
+            position: relative;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+            &.on {
+                background: $secondary-color;
+                box-shadow: 0 0 15px rgba($secondary-color, 0.4);
+
+                .toggle-knob {
+                    transform: translateX(24px);
+                }
+            }
+
+            .toggle-knob {
+                position: absolute;
+                width: 20px;
+                height: 20px;
+                background: white;
+                border-radius: 50%;
+                top: 3px;
+                left: 3px;
+                transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            }
+        }
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2.5rem;
+
+        .stat-card-v2 {
+            background: rgba($bg-light, 0.4);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem;
+            border-radius: 1.5rem;
+            border: 1px solid rgba($text-primary, 0.05);
+            border-bottom: 4px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            transition: all 0.3s ease;
+
+            &:hover {
+                transform: translateY(-5px);
+                background: rgba($bg-light, 0.6);
+                border-color: rgba($text-primary, 0.1);
+            }
+
+            &__icon {
+                width: 60px;
+                height: 60px;
+                background: rgba($text-primary, 0.05);
+                border-radius: 1.25rem;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.75rem;
+            }
+
+            &__info {
+                display: flex;
+                flex-direction: column;
+
+                .stat-card-v2__title {
+                    font-size: 0.85rem;
+                    color: $text-secondary;
+                    font-weight: 500;
+                    text-transform: uppercase;
+                    letter-spacing: 0.5px;
+                }
+
+                .stat-card-v2__value {
+                    font-size: 1.5rem;
+                    font-weight: 800;
+                    color: $text-primary;
+                    margin: 0.25rem 0;
+                }
+
+                .stat-card-v2__detail {
+                    font-size: 0.75rem;
+                    color: rgba($text-secondary, 0.7);
+                    font-weight: 400;
+                }
+            }
+        }
+    }
+
+    .dashboard-main-content-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 2rem;
+
+        @include mobile {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .chart-container-v2 {
+        background: rgba($bg-light, 0.4);
+        backdrop-filter: blur(10px);
+        padding: 1.5rem;
+        border-radius: 1.5rem;
+        border: 1px solid rgba($text-primary, 0.05);
+        margin-bottom: 2rem;
+
+        h3 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            color: $text-primary;
+        }
+    }
+
+    .table-container-v2 {
+        background: rgba($bg-light, 0.4);
+        backdrop-filter: blur(10px);
+        padding: 1.5rem;
+        border-radius: 1.5rem;
+        border: 1px solid rgba($text-primary, 0.05);
+
+        h3 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+
+            table {
+                width: 100%;
+                border-collapse: collapse;
+
+                th {
+                    text-align: left;
+                    padding: 1rem;
+                    font-size: 0.75rem;
+                    color: $text-secondary;
+                    text-transform: uppercase;
+                    border-bottom: 1px solid rgba($text-primary, 0.05);
+                }
+
+                td {
+                    padding: 1rem;
+                    font-size: 0.9rem;
+                    border-bottom: 1px solid rgba($text-primary, 0.02);
+                    color: $text-primary;
+
+                    &:first-child {
+                        font-family: monospace;
+                        color: $primary-color;
+                        font-weight: 600;
+                    }
+                }
+
+                tr:hover td {
+                    background: rgba($text-primary, 0.02);
+                }
+            }
+        }
+    }
+}
+
+// Global Badge Styles (if not defined elsewhere)
+.status-badge-v2 {
+    animation: fadeInScale 0.3s ease-out;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.1);
+        opacity: 0.7;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}

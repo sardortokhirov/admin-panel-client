@@ -54,6 +54,41 @@ const ToggleController = {
     );
     return res.data;
   },
+
+  togglePromo: async (enabled) => {
+    const res = await apiService.post(
+      `/features/toggle/promo?enabled=${enabled}`
+    );
+    return res.data;
+  },
+
+  toggleBonusLimit: async (enabled) => {
+    const res = await apiService.post(
+      `/features/toggle/bonus-limit?enabled=${enabled}`
+    );
+    return res.data;
+  },
+
+  toggleBonusAutoApprove: async (enabled) => {
+    const res = await apiService.post(
+      `/features/toggle/bonus-auto-approve?enabled=${enabled}`
+    );
+    return res.data;
+  },
+
+  togglePay: async (enabled) => {
+    const res = await apiService.post(
+      `/features/toggle/pay?enabled=${enabled}`
+    );
+    return res.data;
+  },
+
+  toggleHumo: async (enabled) => {
+    const res = await apiService.post(
+      `/features/toggle/humo?enabled=${enabled}`
+    );
+    return res.data;
+  },
 };
 
 // GET - All users' wallet balances and grand total (UZS)

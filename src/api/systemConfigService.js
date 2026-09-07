@@ -32,6 +32,11 @@ const systemConfigService = {
         }
     },
 
+    getConfiguration: async () => {
+        const response = await configApi.get('config');
+        return response;
+    },
+
     /**
      * POST /api/config
      * Saves a new config entity (history).
@@ -74,4 +79,5 @@ const systemConfigService = {
     }
 };
 
+export { systemConfigService };
 export default systemConfigService;

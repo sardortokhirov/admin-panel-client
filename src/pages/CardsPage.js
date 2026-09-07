@@ -70,6 +70,7 @@ const CardsPage = () => {
         cardNumber: "",
         ownerName: "",
         paymentSystem: "HUMO",
+        uzcardRail: "OSON",
         balance: 0,
       });
       // Set default selection to the first available config, if any
@@ -183,7 +184,12 @@ const CardsPage = () => {
               <div className="card-info-item">
                 <div className="card-info-text">
                   <span>Karta turi</span>
-                  <p>{card.paymentSystem}</p>
+                  <p>
+                    {card.paymentSystem}
+                    {card.paymentSystem === "UZCARD" && card.uzcardRail
+                      ? ` / ${card.uzcardRail}`
+                      : ""}
+                  </p>
                 </div>
                 <img
                   className="cardType"
@@ -263,6 +269,26 @@ const CardsPage = () => {
                 <option key={2} value={"UZCARD"}>
                   UZCARD
                 </option>
+              </select>
+            </div>
+          )}
+
+          {currentCard?.paymentSystem === "UZCARD" && (
+            <div className="form__group">
+              <label htmlFor="uzcardRail">UZCARD tekshiruv yo'li</label>
+              <select
+                id="uzcardRail"
+                name="uzcardRail"
+                value={currentCard?.uzcardRail || "OSON"}
+                onChange={(e) =>
+                  setCurrentCard({
+                    ...currentCard,
+                    uzcardRail: e.target.value,
+                  })
+                }
+              >
+                <option value="OSON">OSON</option>
+                <option value="CARDXABAR">CARDXABAR</option>
               </select>
             </div>
           )}

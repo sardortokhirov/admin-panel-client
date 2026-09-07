@@ -4,20 +4,20 @@ import React, { useState, useEffect } from 'react';
 import { platformService } from '../api/platformService';
 import { FiGrid, FiBox } from 'react-icons/fi'; // Import icons for the toggle
 
+const INITIAL_FORM_STATE = {
+    name: '',
+    currency: 'UZS',
+    apiKey: '',
+    login: '',
+    password: '',
+    workplaceId: '',
+    secret: '',
+};
+
 const PlatformForm = ({ platform, onSave, id, setFormIsSubmitting }) => {
     const [platformType, setPlatformType] = useState('common');
 
-    const initialFormState = {
-        name: '',
-        currency: 'UZS',
-        apiKey: '',
-        login: '',
-        password: '',
-        workplaceId: '',
-        secret: '',
-    };
-
-    const [formData, setFormData] = useState(initialFormState);
+    const [formData, setFormData] = useState(INITIAL_FORM_STATE);
     const [error, setError] = useState('');
 
     useEffect(() => {
@@ -36,7 +36,7 @@ const PlatformForm = ({ platform, onSave, id, setFormIsSubmitting }) => {
             });
         } else {
             setPlatformType('common');
-            setFormData(initialFormState);
+            setFormData(INITIAL_FORM_STATE);
         }
     }, [platform]);
 
@@ -50,7 +50,7 @@ const PlatformForm = ({ platform, onSave, id, setFormIsSubmitting }) => {
         setPlatformType(newType);
         setError('');
         setFormData(prev => ({
-            ...initialFormState,
+            ...INITIAL_FORM_STATE,
             name: prev.name,
             currency: prev.currency,
             apiKey: prev.apiKey,

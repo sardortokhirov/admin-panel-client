@@ -1,0 +1,172 @@
+@import "../variables";
+@import "../mixins";
+
+.transactions-page {
+    padding: 2rem;
+
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2.5rem;
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, $text-primary 0%, rgba($text-primary, 0.6) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    }
+
+    .mobile-filter-toggle {
+        display: none;
+        background: $bg-light;
+        border: 1px solid rgba($text-primary, 0.1);
+        color: $text-primary;
+        padding: 0.75rem 1.5rem;
+        border-radius: 1rem;
+        font-weight: 600;
+
+        @include mobile {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+    }
+
+    .filter-panel {
+        background: rgba($bg-light, 0.4);
+        backdrop-filter: blur(10px);
+        padding: 1.5rem;
+        border-radius: 1.5rem;
+        border: 1px solid rgba($text-primary, 0.05);
+        margin-bottom: 2.5rem;
+
+        @include mobile {
+            display: none;
+
+            &.open {
+                display: block;
+            }
+        }
+
+        .filter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 1.5rem;
+
+            select {
+                background: rgba($bg-color, 0.5);
+                border: 1px solid rgba($text-primary, 0.1);
+                border-radius: 0.75rem;
+                padding: 0.75rem 1rem;
+                color: $text-primary;
+                font-size: 0.9rem;
+                outline: none;
+                transition: border-color 0.2s;
+
+                &:focus {
+                    border-color: $primary-color;
+                }
+
+                option {
+                    background: $bg-light;
+                }
+            }
+        }
+
+        .filter-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+
+            @include mobile {
+                flex-direction: column;
+            }
+        }
+    }
+
+    .transaction-list-container {
+        background: rgba($bg-light, 0.4);
+        backdrop-filter: blur(10px);
+        border-radius: 1.5rem;
+        border: 1px solid rgba($text-primary, 0.05);
+        overflow: hidden;
+
+        .transaction-table {
+            width: 100%;
+            border-collapse: collapse;
+
+            thead {
+                background: rgba($bg-lighter, 0.2);
+
+                th {
+                    text-align: left;
+                    padding: 1.25rem 1rem;
+                    font-size: 0.75rem;
+                    font-weight: 700;
+                    color: $text-secondary;
+                    text-transform: uppercase;
+                    letter-spacing: 1px;
+                }
+            }
+
+            tbody {
+                tr {
+                    border-bottom: 1px solid rgba($text-primary, 0.03);
+                    transition: background 0.2s;
+
+                    &:hover {
+                        background: rgba($text-primary, 0.02);
+                    }
+
+                    &.selected {
+                        background: rgba($primary-color, 0.05);
+                    }
+
+                    td {
+                        padding: 1.25rem 1rem;
+                        font-size: 0.9rem;
+                        color: $text-primary;
+
+                        &:nth-child(2) {
+                            font-family: monospace;
+                            color: $primary-color;
+                            font-weight: 600;
+                        }
+                    }
+                }
+            }
+        }
+
+        .no-data {
+            padding: 4rem;
+            text-align: center;
+            color: $text-secondary;
+            font-style: italic;
+        }
+    }
+
+    .action-btn-icon {
+        background: rgba($danger-color, 0.1);
+        border: 1px solid rgba($danger-color, 0.2);
+        color: $danger-color;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s;
+
+        &:hover {
+            background: $danger-color;
+            color: white;
+            transform: scale(1.1);
+        }
+    }
+}

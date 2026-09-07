@@ -124,6 +124,16 @@ export const TRANSACTION_TYPE_MAP = {
         color: '#0ea5e9',
         icon: <FaExchangeAlt />,
     },
+    TIP: {
+        label: "Rivoj / Tip",
+        color: '#f59e0b',
+        icon: <FaExchangeAlt />,
+    },
+    TICKET_TRADE: {
+        label: "Bozor savdosi",
+        color: '#e11d48',
+        icon: <FaExchangeAlt />,
+    },
 };
 
 export const getStatusInfo = (status) => STATUS_MAP[status] || {

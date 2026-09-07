@@ -53,7 +53,15 @@ const Navbar = () => {
                         <NavLink to="/users" onClick={closeMobileMenu}>
                             Foydalanuvchi Balanslari
                         </NavLink>
-                        {/* YANGI LINK TUGADI */}
+                        <NavLink to="/users-list" onClick={closeMobileMenu}>
+                            Foydalanuvchilar
+                        </NavLink>
+                        <NavLink to="/bot-restart" onClick={closeMobileMenu}>
+                            Bot Restart
+                        </NavLink>
+                        <NavLink to="/apk-link-bot" onClick={closeMobileMenu}>
+                            APK/Link Bot
+                        </NavLink>
                     </Dropdown>
                 </div>
 
@@ -65,6 +73,9 @@ const Navbar = () => {
                         </NavLink>
                         <NavLink to="/login-devices" onClick={closeMobileMenu}>
                             Kirishlar Tarixi
+                        </NavLink>
+                        <NavLink to="/blocked-users" onClick={closeMobileMenu}>
+                            Bloklangan Foydalanuvchilar
                         </NavLink>
                     </Dropdown>
                 </div>
@@ -86,6 +97,15 @@ const Navbar = () => {
                         </NavLink>
                         <NavLink to="/system-config" onClick={closeMobileMenu}>
                             Tizim Sozlamalari
+                        </NavLink>
+                        <NavLink to="/promo" onClick={closeMobileMenu}>
+                            Promo
+                        </NavLink>
+                        <NavLink to="/tips-config" onClick={closeMobileMenu}>
+                            Bot Rivoji Sozlamalari
+                        </NavLink>
+                        <NavLink to="/user-permissions" onClick={closeMobileMenu}>
+                            Huquqlar
                         </NavLink>
                     </Dropdown>
                 </div>

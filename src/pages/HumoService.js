@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 // import { apiService } from "../api/apiService";
 // import Loader from "../components/common/Loader";
 // import Button from "../components/common/Button";
-import { FiPhone, FiLock, FiArrowRight, FiX } from "react-icons/fi";
+import { FiLock, FiX } from "react-icons/fi";
 import apiService from "../api/HumoService";
 import Loader from "../components/common/Loader";
 import Button from "../components/common/Button";
@@ -17,7 +17,7 @@ const HumoService = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loading, setLoading] = useState(false);
   const [notification, setNotification] = useState(null); // { type: 'success'|'error', message: '...' }
-  const [notificationError, setNotificationError] = useState(null); // { type: 'success'|'error', message: '...' }
+  const [, setNotificationError] = useState(null);
   const [accounts, setAccounts] = useState(null); // { type: 'success'|'error', message: '...' }
 
   useEffect(() => {

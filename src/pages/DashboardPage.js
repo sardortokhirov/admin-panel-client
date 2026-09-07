@@ -29,6 +29,9 @@ import {
   FiUsers,
   FiAward,
   FiCreditCard,
+  FiGift,
+  FiShield,
+  FiZap,
 } from "react-icons/fi";
 
 // Register Chart.js components
@@ -149,29 +152,34 @@ const DashboardPage = () => {
   }, []);
 
   const changeTogle = async (key, value) => {
-    // topUpEnabled,withdrawEnabled,bonusEnabled
-
-    setIsLoading(1);
-    let res;
-    if (key === "topUpEnabled") {
-      res = await dashboardService?.ToggleController?.toggleTopUp(!value);
-    } else if (key === "withdrawEnabled") {
-      res = await dashboardService?.ToggleController?.toggleWithdraw(!value);
-    } else if (key === "bonusEnabled") {
-      res = await dashboardService?.ToggleController?.toggleBonus(!value);
-    } else if (key === "walletEnabled") {
-      res = await dashboardService?.ToggleController?.toggleWallet(!value);
+    try {
+      if (key === "topUpEnabled") {
+        await dashboardService?.ToggleController?.toggleTopUp(!value);
+      } else if (key === "withdrawEnabled") {
+        await dashboardService?.ToggleController?.toggleWithdraw(!value);
+      } else if (key === "bonusEnabled") {
+        await dashboardService?.ToggleController?.toggleBonus(!value);
+      } else if (key === "walletEnabled") {
+        await dashboardService?.ToggleController?.toggleWallet(!value);
+      } else if (key === "promoEnabled") {
+        await dashboardService?.ToggleController?.togglePromo(!value);
+      } else if (key === "bonusLimitEnabled") {
+        await dashboardService?.ToggleController?.toggleBonusLimit(!value);
+      } else if (key === "bonusAutoApproveEnabled") {
+        await dashboardService?.ToggleController?.toggleBonusAutoApprove(!value);
+      } else if (key === "payToggleEnabled") {
+        await dashboardService?.ToggleController?.togglePay(!value);
+      } else if (key === "humoEnabled") {
+        await dashboardService?.ToggleController?.toggleHumo(!value);
+      }
+      const toggles = await dashboardService.GetToggles();
+      setToggleState({
+        ...toggles,
+        walletEnabled: toggles.walletEnabled !== false,
+      });
+    } catch (err) {
+      console.error("Toggle failed:", err?.response?.data || err.message);
     }
-    const toggles = await dashboardService.GetToggles();
-
-    console.log("togglestoggles", toggles);
-    console.log("togglestogglesRes", res);
-
-    setToggleState({
-      ...toggles,
-      walletEnabled: toggles.walletEnabled !== false,
-    });
-    setIsLoading(0);
   };
 
   const handleFilterChange = (period) => {
@@ -371,6 +379,81 @@ const DashboardPage = () => {
             </div>
           </div>
         </div>
+        <div
+          className="toggle-element"
+          onClick={() => changeTogle("promoEnabled", toggleState.promoEnabled)}
+        >
+          <p><FiGift /> Promo:</p>
+          <div className="toggle-switch">
+            <div
+              className={`toggle-slider ${
+                toggleState.promoEnabled ? "on" : "off"
+              }`}
+            >
+              <span className="toggle-knob"></span>
+            </div>
+          </div>
+        </div>
+        <div
+          className="toggle-element"
+          onClick={() => changeTogle("bonusLimitEnabled", toggleState.bonusLimitEnabled !== false)}
+        >
+          <p><FiShield /> Bonus limiti:</p>
+          <div className="toggle-switch">
+            <div
+              className={`toggle-slider ${
+                toggleState.bonusLimitEnabled !== false ? "on" : "off"
+              }`}
+            >
+              <span className="toggle-knob"></span>
+            </div>
+          </div>
+        </div>
+        <div
+          className="toggle-element"
+          onClick={() => changeTogle("bonusAutoApproveEnabled", toggleState.bonusAutoApproveEnabled)}
+        >
+          <p><FiZap /> Bonus avto tasdiq:</p>
+          <div className="toggle-switch">
+            <div
+              className={`toggle-slider ${
+                toggleState.bonusAutoApproveEnabled ? "on" : "off"
+              }`}
+            >
+              <span className="toggle-knob"></span>
+            </div>
+          </div>
+        </div>
+        <div
+          className="toggle-element"
+          onClick={() => changeTogle("payToggleEnabled", toggleState.payToggleEnabled)}
+        >
+          <p><FiCreditCard /> Pay toggle:</p>
+          <div className="toggle-switch">
+            <div
+              className={`toggle-slider ${
+                toggleState.payToggleEnabled ? "on" : "off"
+              }`}
+            >
+              <span className="toggle-knob"></span>
+            </div>
+          </div>
+        </div>
+        <div
+          className="toggle-element"
+          onClick={() => changeTogle("humoEnabled", toggleState.humoEnabled)}
+        >
+          <p><FiCreditCard /> HUMO:</p>
+          <div className="toggle-switch">
+            <div
+              className={`toggle-slider ${
+                toggleState.humoEnabled ? "on" : "off"
+              }`}
+            >
+              <span className="toggle-knob"></span>
+            </div>
+          </div>
+        </div>
       </div>
       <header className="dashboard-header">
         <h1>Boshqaruv Paneli</h1>
@@ -436,6 +519,33 @@ const DashboardPage = () => {
           } so'm`}
           detail="Tasdiqlangan Bonus"
           color="#9b59b6"
+        />
+        <StatCard
+          icon={<FiGift />}
+          title="Jami Tip"
+          value={`${
+            stats.totalApprovedTipAmount?.toLocaleString("uz-UZ") || 0
+          } so'm`}
+          detail="Akkaunt rivoji"
+          color="#e67e22"
+        />
+        <StatCard
+          icon={<FiTrendingUp />}
+          title="P2P komissiya"
+          value={`${
+            stats.totalWalletToWalletFees?.toLocaleString("uz-UZ") || 0
+          } so'm`}
+          detail="Hamyondan hamyonga"
+          color="#8e44ad"
+        />
+        <StatCard
+          icon={<FiAward />}
+          title="Bozor komissiya"
+          value={`${
+            stats.totalTicketTradeFees?.toLocaleString("uz-UZ") || 0
+          } so'm`}
+          detail="Chipta savdosi"
+          color="#16a085"
         />
         <StatCard
           icon={<FiCreditCard />}

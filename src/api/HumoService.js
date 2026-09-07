@@ -12,4 +12,6 @@ const active = (data) => apiService.get(API_URLActive);
 const deleteAccount = (number) =>
   apiService.delete(`/humo/delete?phone=${number}`);
 
-export default { newNumber, smsCode, twoStep, active, deleteAccount };
+const humoService = { newNumber, smsCode, twoStep, active, deleteAccount };
+
+export default humoService;
