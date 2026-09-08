@@ -1,25 +1,22 @@
-// src/context/AuthContext.js
-
-import React, { createContext, useState, useContext, useEffect } from "react";
+import React, { createContext, useState, useContext, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { setAuthHeader, clearAuthHeader } from "../api/apiService";
-import { loginService } from "../api/loginService"; // We need this to make our test call
+import { loginService } from "../api/loginService";
+import {
+  AUTH_UNAUTHORIZED_EVENT,
+  clearAuthToken,
+  encodeBasicToken,
+  getAuthToken,
+  isAuthFailure,
+  setAuthToken,
+} from "../api/authStorage";
 
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(
-    !!localStorage.getItem("authToken")
-  );
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [authReady, setAuthReady] = useState(false);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const token = localStorage.getItem("authToken");
-    if (token) {
-      setAuthHeader(token);
-      setIsAuthenticated(true);
-    }
-  }, []);
 
   const getDeviceName = (userAgent) => {
     if (/windows/i.test(userAgent)) return "Windows PC";
@@ -31,67 +28,101 @@ export const AuthProvider = ({ children }) => {
     return "Unknown Device";
   };
 
-  // ===================================================================
-  // THE NEW, SECURE LOGIN FUNCTION
-  // ===================================================================
-  const login = async (username, password) => {
-    // 1. Create the potential auth token
-    const token = btoa(`${username}:${password}`);
+  const logout = useCallback((redirect = true) => {
+    clearAuthToken();
+    clearAuthHeader();
+    setIsAuthenticated(false);
+    setAuthReady(true);
+    if (redirect && window.location.pathname !== "/login") {
+      navigate("/login", { replace: true });
+    }
+  }, [navigate]);
 
-    // 2. Set the header TEMPORARILY for our test API call
+  useEffect(() => {
+    let cancelled = false;
+
+    const boot = async () => {
+      const token = getAuthToken();
+      if (!token) {
+        if (!cancelled) {
+          setIsAuthenticated(false);
+          setAuthReady(true);
+        }
+        return;
+      }
+
+      setAuthHeader(token);
+      try {
+        await loginService.verifyAuth();
+        if (!cancelled) {
+          setIsAuthenticated(true);
+          setAuthReady(true);
+        }
+      } catch (err) {
+        if (!cancelled) {
+          if (isAuthFailure(err)) {
+            clearAuthToken();
+            clearAuthHeader();
+            setIsAuthenticated(false);
+            setAuthReady(true);
+            if (window.location.pathname !== "/login") {
+              navigate("/login", { replace: true });
+            }
+          } else {
+            setIsAuthenticated(true);
+            setAuthReady(true);
+          }
+        }
+      }
+    };
+
+    boot();
+    return () => {
+      cancelled = true;
+    };
+  }, [navigate]);
+
+  useEffect(() => {
+    const onUnauthorized = () => logout(true);
+    window.addEventListener(AUTH_UNAUTHORIZED_EVENT, onUnauthorized);
+    return () => window.removeEventListener(AUTH_UNAUTHORIZED_EVENT, onUnauthorized);
+  }, [logout]);
+
+  const login = async (username, password) => {
+    const token = encodeBasicToken(username, password);
     setAuthHeader(token);
 
     try {
-      // Probe a protected endpoint. Wrong credentials return 401 and stay on login.
       await loginService.verifyAuth();
-
-      // 4. If the call succeeded, the credentials are valid! Now we can proceed.
-      // Permanently save the token
-      localStorage.setItem("authToken", token);
-
-      // Set the state to re-render the app
+      setAuthToken(token);
       setIsAuthenticated(true);
+      setAuthReady(true);
 
-      // Record the successful login event (this can run in the background)
       try {
         const geoResponse = await fetch("https://ipapi.co/json/");
         const geoData = await geoResponse.json();
-        const loginData = {
-          username: username,
+        await loginService.recordLogin({
+          username,
           userAgent: navigator.userAgent,
           ipAddress: geoData.ip,
           deviceName: getDeviceName(navigator.userAgent),
           city: geoData.city,
           country: geoData.country_name,
-        };
-        await loginService.recordLogin(loginData);
+        });
       } catch (recordError) {
-        console.error(
-          "Failed to record login event, but login is successful:",
-          recordError
-        );
+        console.error("Failed to record login event, but login is successful:", recordError);
       }
 
-      // 5. Navigate to the dashboard
       navigate("/");
     } catch (error) {
-      // 6. If the test call failed, the credentials are bad.
-      // Clear the temporary (and incorrect) auth header
+      clearAuthToken();
       clearAuthHeader();
-
-      // Throw a new error that the LoginPage component can catch and display.
+      setIsAuthenticated(false);
       throw new Error("Authentication failed");
     }
   };
 
-  const logout = () => {
-    localStorage.removeItem("authToken");
-    clearAuthHeader();
-    setIsAuthenticated(false);
-    navigate("/login");
-  };
-
-  const value = { isAuthenticated, login, logout };
+  const value = { isAuthenticated, authReady, login, logout };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

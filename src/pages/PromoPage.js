@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { promoService } from '../api/promoService';
 import { dashboardService } from '../api/dashboardService';
 import { setAuthHeader } from '../api/apiService';
+import { getAuthToken } from '../api/authStorage';
 import Button from '../components/common/Button';
 import Loader from '../components/common/Loader';
 import PromoChatDetailModal from '../components/promo/PromoChatDetailModal';
@@ -61,7 +62,7 @@ const PromoPage = () => {
     };
 
     useEffect(() => {
-        const storedAuth = localStorage.getItem('authToken');
+        const storedAuth = getAuthToken();
         if (storedAuth) {
             setAuthHeader(storedAuth);
         }
@@ -381,9 +382,20 @@ const PromoPage = () => {
                     width: 100%; padding: 0.8rem 1rem; background: #0f3460;
                     border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #fff;
                 }
-                .transaction-table { width: 100%; border-collapse: collapse; }
+                .transaction-list-container {
+                    width: 100%;
+                    overflow-x: auto;
+                    -webkit-overflow-scrolling: touch;
+                }
+                .transaction-table {
+                    width: max-content;
+                    min-width: 100%;
+                    border-collapse: collapse;
+                }
                 .transaction-table th, .transaction-table td {
-                    padding: 1rem; border-bottom: 1px solid rgba(255,255,255,0.05);
+                    padding: 1rem;
+                    border-bottom: 1px solid rgba(255,255,255,0.05);
+                    white-space: nowrap;
                 }
                 .transaction-table th { color: #a0a0a0; font-size: 0.85rem; text-transform: uppercase; }
                 .user-id-cell { font-family: monospace; color: #e94560; }

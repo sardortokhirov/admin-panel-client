@@ -141,7 +141,7 @@ $telegram-success: #4caf50;
   }
 
   .transaction-list-container {
-    overflow-x: auto;
+    @include scroll-x;
     background-color: $bg-light;
     border-radius: $border-radius;
   }
@@ -3504,13 +3504,29 @@ hr {
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     border: 1px solid $border-color;
     border-radius: $border-radius;
-    overflow: hidden;
+    @include scroll-x;
     background-color: $bg-color;
+  }
+
+  .responsive-filters-form {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 12px;
+    align-items: end;
+
+    @include mobile {
+      grid-template-columns: 1fr;
+
+      .btn {
+        width: 100%;
+        justify-content: center;
+      }
+    }
   }
 
   // 2. Table Structure (UNCHANGED)
   .transaction-table {
-    width: 100%; min-width: 600px; border-collapse: separate; border-spacing: 0 0.5rem; font-size: 1rem;
+    width: max-content; min-width: 100%; border-collapse: separate; border-spacing: 0 0.5rem; font-size: 1rem;
     thead {
       tr { background-color: $primary-color; color: white; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); td, th { border: none !important; padding: 1.2rem 1.5rem; } }
       th { cursor: pointer; user-select: none; font-size: 1rem; white-space: nowrap; font-weight: 600;
@@ -3593,29 +3609,42 @@ hr {
       &:disabled {
         opacity: 0.5;
         cursor: not-allowed;
-        background-color: $bg-color; // Dim background for disabled
+        background-color: $bg-color;
         color: $text-secondary;
       }
     }
+  }
 
-    // 4. Mobile Responsiveness (UNCHANGED)
-    @include mobile {
-      .page-header { flex-direction: column; align-items: stretch; gap: 1rem; h1 { text-align: center; } a .btn { width: 100%; justify-content: center; } }
-      .table-actions .btn { width: 100%; justify-content: center; }
-      .transaction-table { min-width: 550px; font-size: 0.9rem; }
+  @include mobile {
+    .page-header {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 1rem;
 
-      .pagination-controls {
-        flex-direction: column;
-        gap: 1rem;
-        padding: 1rem;
+      h1 { text-align: center; }
+      a .btn { width: 100%; justify-content: center; }
+    }
 
-        span { font-size: 0.9rem; text-align: center; }
+    .table-actions .btn {
+      width: 100%;
+      justify-content: center;
+    }
 
-        .btn {
-          width: 100%;
-          justify-content: center;
-          padding: 0.6rem 1rem;
-        }
+    .transaction-table {
+      font-size: 0.9rem;
+    }
+
+    .pagination-controls {
+      flex-direction: column;
+      gap: 1rem;
+      padding: 1rem;
+
+      span { font-size: 0.9rem; text-align: center; }
+
+      .btn {
+        width: 100%;
+        justify-content: center;
+        padding: 0.6rem 1rem;
       }
     }
   }

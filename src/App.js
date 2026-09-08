@@ -1,6 +1,7 @@
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useAuth } from "./context/AuthContext";
+import Loader from "./components/common/Loader";
 
 // Pages
 import LoginPage from "./pages/LoginPage";
@@ -32,7 +33,11 @@ import HumoService from "./pages/HumoService";
 import SystemConfigPage from "./pages/SystemConfigPage"; // <-- IMPORT original system config
 
 function App() {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, authReady } = useAuth();
+
+  if (!authReady) {
+    return <Loader />;
+  }
 
   return (
     <>

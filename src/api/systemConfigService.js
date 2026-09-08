@@ -1,78 +1,33 @@
-// src/api/systemConfigService.js
-import axios from 'axios';
-import { API_BASE_URL } from './apiService';
-
-// Ensure baseURL ends with /api/ (one slash at the end)
-const CLEAN_BASE_URL = API_BASE_URL.endsWith('/') ? API_BASE_URL : `${API_BASE_URL}/`;
-
-const configApi = axios.create({
-    baseURL: CLEAN_BASE_URL,
-    auth: {
-        username: 'MaxUp1000',
-        password: 'MaxUp1000'
-    },
-    headers: {
-        'Content-Type': 'application/json'
-    }
-});
+import apiService from './apiService';
 
 const systemConfigService = {
-    /**
-     * GET /api/config
-     * Returns the latest config or creates and returns defaults.
-     */
     getLatestConfig: async () => {
-        try {
-            // Using 'config' because baseURL already ends in '/api/'
-            const response = await configApi.get('config');
-            return response.data;
-        } catch (error) {
-            console.error("Error fetching system config:", error);
-            throw error;
-        }
+        const response = await apiService.get('/config');
+        return response.data;
     },
 
     getConfiguration: async () => {
-        const response = await configApi.get('config');
-        return response;
+        return apiService.get('/config');
     },
 
-    /**
-     * POST /api/config
-     * Saves a new config entity (history).
-     */
     createConfig: async (configData) => {
-        try {
-            const { id, createdAt, ...data } = configData;
-            const response = await configApi.post('config', data);
-            return response.data;
-        } catch (error) {
-            console.error("Error creating system config:", error);
-            throw error;
-        }
+        const { id, createdAt, ...data } = configData;
+        const response = await apiService.post('/config', data);
+        return response.data;
     },
 
-    /**
-     * PUT /api/config/{id}
-     * Updates an existing config row.
-     */
     updateConfig: async (id, configData) => {
-        try {
-            const response = await configApi.put(`config/${id}`, configData);
-            return response.data;
-        } catch (error) {
-            console.error("Error updating system config:", error);
-            throw error;
-        }
+        const response = await apiService.put(`/config/${id}`, configData);
+        return response.data;
     },
 
     getWalletToWalletFee: async () => {
-        const response = await configApi.get('config/wallet-to-wallet-fee');
+        const response = await apiService.get('/config/wallet-to-wallet-fee');
         return response.data;
     },
 
     updateWalletToWalletFee: async (percentage) => {
-        const response = await configApi.patch('config/wallet-to-wallet-fee', null, {
+        const response = await apiService.patch('/config/wallet-to-wallet-fee', null, {
             params: { percentage }
         });
         return response.data;

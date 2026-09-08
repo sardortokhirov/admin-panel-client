@@ -1,28 +1,42 @@
-// src/api/apiService.js
 import axios from 'axios';
+import { emitUnauthorized, getAuthToken, isAuthFailure } from './authStorage';
 
-// IMPORTANT: Replace with your actual backend URL
 // const API_BASE_URL = 'http://localhost:8080/api';
 // const API_BASE_URL = 'http://128.199.44.140:8080/api';
 export const API_BASE_URL = 'https://misterpey.uz:8082/api';
 
-
 const apiService = axios.create({
     baseURL: API_BASE_URL,
+    timeout: 25000,
 });
 
-// This function sets the auth header for all future requests
 export const setAuthHeader = (token) => {
     if (token) {
-        // We add the "Basic " prefix here as required by the spec
         apiService.defaults.headers.common['Authorization'] = `Basic ${token}`;
     }
 };
 
-// This function clears the auth header on logout
 export const clearAuthHeader = () => {
     delete apiService.defaults.headers.common['Authorization'];
 };
 
-// This is the line that was missing. It makes this the "default" export.
+apiService.interceptors.request.use((config) => {
+    const token = getAuthToken();
+    if (token) {
+        config.headers = config.headers || {};
+        config.headers.Authorization = `Basic ${token}`;
+    }
+    return config;
+});
+
+apiService.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        if (isAuthFailure(error) && getAuthToken()) {
+            emitUnauthorized();
+        }
+        return Promise.reject(error);
+    }
+);
+
 export default apiService;

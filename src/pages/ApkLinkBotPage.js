@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { apkLinkBotService } from '../api/apkLinkBotService';
 import { setAuthHeader } from '../api/apiService';
+import { getAuthToken } from '../api/authStorage';
 import Modal from '../components/common/Modal';
 import Loader from '../components/common/Loader';
 import Button from '../components/common/Button';
@@ -91,7 +92,7 @@ const ApkLinkBotPage = () => {
     }, []);
 
     useEffect(() => {
-        const storedAuth = localStorage.getItem("authToken");
+        const storedAuth = getAuthToken();
         if (storedAuth) {
             setAuthHeader(storedAuth);
         }

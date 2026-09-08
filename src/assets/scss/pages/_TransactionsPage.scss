@@ -94,7 +94,7 @@
         backdrop-filter: blur(10px);
         border-radius: 1.5rem;
         border: 1px solid rgba($text-primary, 0.05);
-        overflow: hidden;
+        @include scroll-x;
 
         .transaction-table {
             width: 100%;
@@ -168,5 +168,9 @@
             color: white;
             transform: scale(1.1);
         }
+    }
+
+    @include mobile {
+        padding: 1rem;
     }
 }

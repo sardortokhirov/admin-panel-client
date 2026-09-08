@@ -20,7 +20,7 @@ import {
   Title,
 } from "chart.js";
 import { Doughnut, Bar, Line } from "react-chartjs-2";
-import { setAuthHeader } from "../api/apiService";
+import { isAuthFailure } from "../api/authStorage";
 // Import icons
 import {
   FiTrendingUp,
@@ -105,6 +105,13 @@ const DashboardPage = () => {
       setStats(combinedStats);
     } catch (err) {
       console.error("Failed to fetch dashboard data:", err);
+      if (isAuthFailure(err)) {
+        return;
+      }
+      if (!err.response) {
+        setError("Serverga ulanib bo'lmadi. Internet yoki Wi-Fi ni tekshiring.");
+        return;
+      }
       setError("Ma'lumotlarni yuklashda xatolik yuz berdi.");
     } finally {
       setIsLoading(false);
@@ -116,16 +123,9 @@ const DashboardPage = () => {
       const data = await dashboardService.getWalletBalances();
       setWalletData(data);
     } catch (err) {
-      console.error("Failed to fetch wallet balances:", err);
-    }
-  }, []);
-
-  useEffect(() => {
-    const token = localStorage.getItem("authToken");
-    if (token) {
-      setAuthHeader(token);
-    } else {
-      setError("No authentication token found. Please log in.");
+      if (!isAuthFailure(err)) {
+        console.error("Failed to fetch wallet balances:", err);
+      }
     }
   }, []);
 

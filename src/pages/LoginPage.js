@@ -1,6 +1,7 @@
 // src/pages/LoginPage.js
 
 import React, { useState } from 'react';
+import { Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import Button from '../components/common/Button';
 
@@ -9,7 +10,7 @@ const LoginPage = () => {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const { login } = useAuth();
+    const { login, isAuthenticated } = useAuth();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -17,19 +18,16 @@ const LoginPage = () => {
         setIsSubmitting(true);
 
         try {
-            // This now correctly attempts a real login.
-            // It will only complete if the credentials are valid.
             await login(username, password);
-
         } catch (err) {
-            // This 'catch' block will now run if the credentials are bad,
-            // because our new login function throws an error on failure.
             setError('Foydalanuvchi nomi yoki parol xato. Qaytadan urining.');
-
-            // Re-enable the button so the user can try again
             setIsSubmitting(false);
         }
     };
+
+    if (isAuthenticated) {
+        return <Navigate to="/" replace />;
+    }
 
     return (
         <div className="login-page">

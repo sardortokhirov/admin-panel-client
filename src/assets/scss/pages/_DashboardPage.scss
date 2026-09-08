@@ -273,11 +273,17 @@
         }
 
         .table-wrapper {
-            overflow-x: auto;
+            @include scroll-x;
 
             table {
-                width: 100%;
+                width: max-content;
+                min-width: 100%;
                 border-collapse: collapse;
+
+                th,
+                td {
+                    white-space: nowrap;
+                }
 
                 th {
                     text-align: left;
@@ -305,6 +311,22 @@
                     background: rgba($text-primary, 0.02);
                 }
             }
+        }
+    }
+}
+
+@include mobile {
+    .dashboard-v2 {
+        padding: 1rem;
+
+        .dashboard-header {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 1rem;
+        }
+
+        .filter-controls {
+            flex-wrap: wrap;
         }
     }
 }

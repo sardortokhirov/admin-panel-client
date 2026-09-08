@@ -2,6 +2,7 @@
 import React, { useState, useCallback } from 'react';
 import { blockedUsersService } from '../api/blockedUsersService';
 import { setAuthHeader } from '../api/apiService';
+import { getAuthToken } from '../api/authStorage';
 import Loader from '../components/common/Loader';
 import { FiCheckCircle, FiShield, FiChevronLeft, FiChevronRight, FiUnlock } from 'react-icons/fi';
 
@@ -41,7 +42,7 @@ const BlockedUsersPage = () => {
     }, [size]);
 
     React.useEffect(() => {
-        const storedAuth = localStorage.getItem("authToken");
+        const storedAuth = getAuthToken();
         if (storedAuth) {
             setAuthHeader(storedAuth);
         }
@@ -319,7 +320,8 @@ const BlockedUsersPage = () => {
                     }
 
                     .transaction-table {
-                        width: 100%;
+                        width: max-content;
+                        min-width: 100%;
                         border-collapse: collapse;
                         text-align: left;
                         font-size: 0.95rem;
@@ -330,6 +332,7 @@ const BlockedUsersPage = () => {
                         padding: 1rem 1.5rem;
                         color: #fff;
                         border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+                        white-space: nowrap;
                     }
 
                     .transaction-table th {

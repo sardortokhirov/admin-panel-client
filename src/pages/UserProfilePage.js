@@ -4,6 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { usersService } from '../api/usersService';
 import { systemConfigService } from '../api/systemConfigService';
 import { setAuthHeader } from '../api/apiService';
+import { getAuthToken } from '../api/authStorage';
 import Loader from '../components/common/Loader';
 import Button from '../components/common/Button';
 import {
@@ -122,7 +123,7 @@ const UserProfilePage = () => {
     }, [chatId, dailyStatsPage, dailyStatsSize, dailyStatsFilters]);
 
     useEffect(() => {
-        const storedAuth = localStorage.getItem("authToken");
+        const storedAuth = getAuthToken();
         if (storedAuth) {
             setAuthHeader(storedAuth);
         }

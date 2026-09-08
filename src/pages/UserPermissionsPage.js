@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { userPermissionsService } from '../api/userPermissionsService';
 import { setAuthHeader } from '../api/apiService';
+import { getAuthToken } from '../api/authStorage';
 import Button from '../components/common/Button';
 import Loader from '../components/common/Loader';
 import {
@@ -50,7 +51,7 @@ const UserPermissionsPage = () => {
     }, [size]);
 
     useEffect(() => {
-        const storedAuth = localStorage.getItem("authToken");
+        const storedAuth = getAuthToken();
         if (storedAuth) {
             setAuthHeader(storedAuth);
         }
@@ -494,7 +495,8 @@ const UserPermissionsPage = () => {
                 }
 
                 .transaction-table {
-                    width: 100%;
+                    width: max-content;
+                    min-width: 100%;
                     border-collapse: collapse;
                     text-align: left;
                     font-size: 0.95rem;
@@ -505,6 +507,7 @@ const UserPermissionsPage = () => {
                     padding: 1rem 1.5rem;
                     color: #fff;
                     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+                    white-space: nowrap;
                 }
 
                 .transaction-table th {

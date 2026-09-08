@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { usersService } from '../api/usersService';
 import { setAuthHeader } from '../api/apiService';
+import { getAuthToken } from '../api/authStorage';
 import Loader from '../components/common/Loader';
 import Button from '../components/common/Button';
 import { FaBan, FaCheck, FaEye, FaSearch } from 'react-icons/fa';
@@ -59,7 +60,7 @@ const UserManagementPage = () => {
     }, [page, size, appliedFilters]);
 
     useEffect(() => {
-        const storedAuth = localStorage.getItem("authToken");
+        const storedAuth = getAuthToken();
         if (storedAuth) {
             setAuthHeader(storedAuth);
         }
