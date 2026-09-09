@@ -28,12 +28,15 @@ const OsonConfigsListPage = () => {
     }, [fetchConfigs]);
 
     const handleDelete = async (id) => {
-        if (window.confirm('Are you sure you want to delete this config?')) {
+        if (window.confirm("Bu akkauntni o'chirasizmi? Unga bog'langan kartalar ham o'chiriladi.")) {
             try {
                 await osonConfigService.deleteConfig(id);
                 fetchConfigs();
             } catch (err) {
-                alert(err.response?.data || 'Failed to delete. Ensure it is not primary.');
+                const message = typeof err.response?.data === 'string'
+                    ? err.response.data
+                    : (err.response?.data?.error || 'O\'chirib bo\'lmadi. Primary akkauntni o\'chirib bo\'lmaydi.');
+                alert(message);
             }
         }
     };
